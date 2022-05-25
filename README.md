@@ -1,14 +1,3 @@
-# flow
+# Flow
 
-## Getting Started
-
-### Setup
-
-    git clone https://github.com/scattered-systems/flow.git
-    cargo build --package flow
-
-### Testing the Library
-
-    cargo test --package flow
-
-###  
+Find your flow with a next-generation profile management portal

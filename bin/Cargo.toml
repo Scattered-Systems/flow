@@ -1,21 +1,17 @@
 [package]
 authors = ["FL03 <jo3mccain@icloud.com>"]
-description = "A multi-faceted identity management solution powered by Ethereum"
+description = "A complete decentralized cloud storage solution"
 edition = "2021"
 license = "MIT"
-license-file = "LICENSE"
 name = "flow"
 repository = "https://github.com/scattered-systems/flow.git"
 version = "0.1.0"
 
-[lib]
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[[bin]]
 bench = false
-crate-type = ["cdylib", "rlib"]
 name = "flow"
-test = true
-
-[[test]]
-name = "simple"
-path = "tests/simple.rs"
+path = "src/main.rs"
+test = false
 
 [dependencies]
