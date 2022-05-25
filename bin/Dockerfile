@@ -10,7 +10,7 @@ RUN cargo build --release
 
 FROM debian:buster-slim
 
-COPY --from=builder /bin/target/release/chaos /bin/chaos
+COPY --from=builder /bin/target/release/flow /bin/flow
 EXPOSE 8080:8080
 
-CMD ["./bin/chaos"]
+CMD ["./bin/flow"]
