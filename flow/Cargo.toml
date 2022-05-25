@@ -2,7 +2,10 @@
 authors = ["FL03 <jo3mccain@icloud.com>"]
 description = "A multi-faceted identity management solution powered by Ethereum"
 edition = "2021"
+license = "MIT"
+license-file = "LICENSE"
 name = "flow"
+readme = "README.md"
 repository = "https://github.com/scattered-systems/flow.git"
 version = "0.1.0"
 
