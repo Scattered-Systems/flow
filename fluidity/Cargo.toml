@@ -4,14 +4,12 @@ description = "Enabling users to quickly adapt to any environment with a complet
 edition = "2021"
 license = "MIT"
 name = "fluidity"
-repository = "https://github.com/scattered-systems/fluidity.git"
+repository = "https://github.com/scattered-systems/flow/fluidity.git"
 version = "0.1.0"
 
 [lib]
 bench = false
 crate-type = ["cdylib", "rlib"]
-name = "fluidity"
-path = "src/lib.rs"
 test = true
 
 [[test]]
