@@ -1,8 +1,8 @@
 job("Build and Push: Flow") {
     docker {
         build {
-            context = "./bin"
-            file = "./bin/Dockerfile"
+            context = "./flow"
+            file = "./flow/Dockerfile"
             args["HTTP_PROXY"] = "http://0.0.0.0:8080"
             labels["vendor"] = "scattered-systems"
         }
