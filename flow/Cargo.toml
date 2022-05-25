@@ -5,7 +5,6 @@ edition = "2021"
 license = "MIT"
 license-file = "LICENSE"
 name = "flow"
-readme = "README.md"
 repository = "https://github.com/scattered-systems/flow.git"
 version = "0.1.0"
 
