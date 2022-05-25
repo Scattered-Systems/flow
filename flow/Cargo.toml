@@ -1,0 +1,19 @@
+[package]
+authors = ["FL03 <jo3mccain@icloud.com>"]
+description = "A multi-faceted identity management solution powered by Ethereum"
+edition = "2021"
+name = "flow"
+repository = "https://github.com/scattered-systems/flow.git"
+version = "0.1.0"
+
+[lib]
+bench = false
+crate-type = ["cdylib", "rlib"]
+name = "flow"
+test = true
+
+[[test]]
+name = "simple"
+path = "tests/simple.rs"
+
+[dependencies]
