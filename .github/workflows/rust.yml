@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 env:
-  CARGO_PACKAGE: flow
+  CARGO_PACKAGE: fluidity
   CARGO_TERM_COLOR: always
 
 jobs:
