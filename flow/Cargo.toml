@@ -1,5 +1,5 @@
 [package]
-authors = ["FL03 <jo3mccain@icloud.com>"]
+authors = ["FL03 <jo3mccain@icloud.com>", "Scattered-Systems <jo3mccain@scattered-systems.com>"]
 description = "Enabling users to quickly adapt to any environment with a complete DiD Toolkit"
 edition = "2021"
 license = "MIT"
@@ -7,7 +7,6 @@ name = "flow"
 repository = "https://github.com/scattered-systems/flow.git"
 version = "0.1.0"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [[bin]]
 bench = false
 name = "flow"
