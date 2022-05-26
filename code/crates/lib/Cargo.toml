@@ -4,8 +4,8 @@ description = "Enabling users to quickly adapt to any environment with a complet
 edition = "2021"
 license = "MIT"
 name = "fluidity"
-repository = "https://github.com/scattered-systems/flow/fluidity.git"
-version = "0.1.0"
+repository = "https://github.com/scattered-systems/flow.git"
+version = "0.1.1"
 
 [lib]
 bench = false
