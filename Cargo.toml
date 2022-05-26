@@ -1,2 +1,5 @@
 [workspace]
-members = ["flow", "fluidity"]
+members = [
+    "code/crates/bin",
+    "code/crates/lib"
+]
