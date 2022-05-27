@@ -14,7 +14,11 @@ pub struct Interface {
 }
 
 impl Interface {
-    pub async fn new(settings: crate::api::settings::Settings) -> Self {
+    pub async fn new() -> Self {
+        let settings = match crate::api::settings::Settings::new() {
+            Ok(value) => value,
+            Err(err) => panic!("ConfigurationError: {:#?}", err)
+        };
         crate::api::logger::Logger::setup(&settings);
 
         let host = [0, 0, 0, 0];
