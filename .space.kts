@@ -16,7 +16,7 @@ job("Flow: Build and Push Docker") {
         }
         build {
             context = "."
-            customPlatform = "linux/arm"
+            customPlatform = "linux/arm64"
             file = "Dockerfile"
             labels["vendor"] = "scattered-systems"
         }
