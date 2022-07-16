@@ -13,6 +13,14 @@ async fn main() {
 }
 
 mod app {
+    pub type AppError = Box<dyn std::error::Error + Send + Sync + 'static>;
+
+    pub trait ApplicationProgramInterface {
+        fn client(&self) -> Result<axum::Router, AppError> where Self: Sized;
+        fn constructor(&self) -> Result<Self, AppError> where Self: Sized;
+        fn run(&self) -> Self where Self: Sized;
+    }
+
     #[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
     pub struct Application {
         pub mode: String,
