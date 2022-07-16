@@ -1,7 +1,4 @@
 job("Flow: Build and Push Docker") {
-    startOn {
-        gitPush { enabled = false }
-    }
     docker {
         // get auth data from secrets and put it to env vars
         env["DOCKERHUB_USER"] = Secrets("dockerhub_user")

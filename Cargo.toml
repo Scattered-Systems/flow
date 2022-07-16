@@ -16,7 +16,9 @@ bench = false
 name = "flow"
 
 [lib]
+crate-type = ["cdylib", "rlib"]
 name = "fluidity"
+test = true
 
 [dependencies]
 axum = { features = ["headers"], version = "0.5.13" }
