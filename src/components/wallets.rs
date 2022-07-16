@@ -1,6 +1,6 @@
 /*
     Appellation: wallets
-    Context: 
+    Context:
     Description:
         ... Summary ...
 */

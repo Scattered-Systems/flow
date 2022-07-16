@@ -1,10 +1,10 @@
 /*
-    Appellation: flow
-    Context: binary
-    Description:
-        Flow is designed to support a myriad of unique workflows by establish a secure profile for
-        users to manage their complete digital identity.
- */
+   Appellation: flow
+   Context: binary
+   Description:
+       Flow is designed to support a myriad of unique workflows by establish a secure profile for
+       users to manage their complete digital identity.
+*/
 pub use app::*;
 
 #[tokio::main]
@@ -21,19 +21,35 @@ mod app {
     pub type AppError = Box<dyn std::error::Error + Send + Sync + 'static>;
 
     pub trait ApplicationProgramInterface {
-        fn client(&self) -> Result<axum::Router, AppError> where Self: Sized;
-        fn constructor(&self) -> Result<Self, AppError> where Self: Sized;
-        fn run(&self) -> Self where Self: Sized;
+        fn client(&self) -> Result<axum::Router, AppError>
+            where
+                Self: Sized;
+        fn constructor(&self) -> Result<Self, AppError>
+            where
+                Self: Sized;
+        fn run(&self) -> Self
+            where
+                Self: Sized;
     }
 
     pub trait CommandLineInterface<Args, Conf, Data, Cont> {
-        fn arguments(&self) -> Result<Args, AppError> where Self: Sized;
-        fn constructor(&self) -> Result<Self, AppError> where Self: Sized;
-        fn context(&self, settings: Conf) -> Result<Cont, AppError> where Self: Sized;
-        fn data(&self) -> Result<Vec<Data>, AppError> where Self: Sized;
+        fn arguments(&self) -> Result<Args, AppError>
+            where
+                Self: Sized;
+        fn constructor(&self) -> Result<Self, AppError>
+            where
+                Self: Sized;
+        fn context(&self, settings: Conf) -> Result<Cont, AppError>
+            where
+                Self: Sized;
+        fn data(&self) -> Result<Vec<Data>, AppError>
+            where
+                Self: Sized;
     }
 
-    #[derive(clap::ArgEnum, Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+    #[derive(
+    clap::ArgEnum, Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize,
+    )]
     pub enum Args {
         Account,
         Control,
@@ -41,14 +57,16 @@ mod app {
         Discover,
     }
 
-    #[derive(clap::Subcommand, Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+    #[derive(
+    clap::Subcommand, Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize,
+    )]
     pub enum Sub {
         Authorize {
             #[clap(default_value = "", long, required = false, value_parser)]
             username: String,
             #[clap(default_value = "", long, required = false, value_parser)]
             password: String,
-        }
+        },
     }
 
     #[derive(clap::Parser, Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
@@ -81,7 +99,11 @@ mod app {
 
     impl std::fmt::Display for Application {
         fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-            write!(f, "Application(\n\tmode={},\n\tname={}\n)", self.mode, self.name)
+            write!(
+                f,
+                "Application(\n\tmode={},\n\tname={}\n)",
+                self.mode, self.name
+            )
         }
     }
 }

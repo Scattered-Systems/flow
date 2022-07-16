@@ -1,6 +1,6 @@
 /*
     Appellation: lib
-    Context: 
+    Context:
     Description:
         ... Summary ...
 */
