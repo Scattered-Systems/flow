@@ -15,4 +15,4 @@ ENV MODE="development" \
 COPY --from=builder /app/target/release/flow /flow
 
 EXPOSE ${PORT}/tcp
-CMD ["./flow"]
+ENTRYPOINT ["./flow"]
