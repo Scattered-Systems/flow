@@ -1,6 +1,6 @@
 /*
     Appellation: containers
-    Context: 
+    Context:
     Description:
         ... Summary ...
 */
@@ -9,7 +9,7 @@ use std::fmt::Formatter;
 
 #[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum Containers {
-    KV(KeyValue)
+    KV(KeyValue),
 }
 
 #[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
@@ -26,13 +26,19 @@ impl KeyValue {
         Self::constructor(key, value).ok().unwrap()
     }
     pub fn from(key: &str, value: &str) -> Self {
-        Self::constructor(String::from(key), String::from(value)).ok().unwrap()
+        Self::constructor(String::from(key), String::from(value))
+            .ok()
+            .unwrap()
     }
 }
 
 impl std::fmt::Display for KeyValue {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "KeyValue(\n\tkey={},\n\tvalue={}\n)", self.key, self.value)
+        write!(
+            f,
+            "KeyValue(\n\tkey={},\n\tvalue={}\n)",
+            self.key, self.value
+        )
     }
 }
 

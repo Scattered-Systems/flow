@@ -1,8 +1,6 @@
 /*
     Appellation: credentials
-    Context: 
+    Context:
     Description:
         ... Summary ...
 */
-
-
