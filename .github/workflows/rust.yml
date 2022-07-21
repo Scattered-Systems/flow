@@ -13,25 +13,15 @@ on:
       - latest
 
 jobs:
-  login:
+  crate:
+    env:
+      CRATE: flow-sdk
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Login
         run: cargo login ${{ secrets.CARGO_REGISTRY_TOKEN }}
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
       - name: Test
         run: cargo test --workspace --verbose --color always
-  crate:
-    env:
-      CRATE: flow
-    if: ${{ always() }}
-    needs: [ login, test ]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
       - name: Publish
         run: cargo publish --package $CRATE --token ${{ secrets.CARGO_REGISTRY_TOKEN }} --all-features
