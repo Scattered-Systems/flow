@@ -18,34 +18,7 @@ async fn main() -> Result<(), AppError> {
 mod app {
     use clap::Parser;
 
-    pub type AppError = Box<dyn std::error::Error + Send + Sync + 'static>;
-
-    pub trait ApplicationProgramInterface {
-        fn client(&self) -> Result<axum::Router, AppError>
-            where
-                Self: Sized;
-        fn constructor(&self) -> Result<Self, AppError>
-            where
-                Self: Sized;
-        fn run(&self) -> Self
-            where
-                Self: Sized;
-    }
-
-    pub trait CommandLineInterface<Args, Conf, Data, Cont> {
-        fn arguments(&self) -> Result<Args, AppError>
-            where
-                Self: Sized;
-        fn constructor(&self) -> Result<Self, AppError>
-            where
-                Self: Sized;
-        fn context(&self, settings: Conf) -> Result<Cont, AppError>
-            where
-                Self: Sized;
-        fn data(&self) -> Result<Vec<Data>, AppError>
-            where
-                Self: Sized;
-    }
+    pub(crate) type AppError = Box<dyn std::error::Error + Send + Sync + 'static>;
 
     #[derive(
     clap::ArgEnum, Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize,
