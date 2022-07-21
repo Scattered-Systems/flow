@@ -29,6 +29,4 @@ mod common {
 
     /// Establish a consistent temporal reference point with a globally declared Timezone
     pub type AccountTimezone = chrono::Utc;
-
-    pub type DynError = Box<dyn std::error::Error + Send + Sync + 'static>;
 }

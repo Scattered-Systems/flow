@@ -8,17 +8,15 @@
 pub use app::*;
 
 #[tokio::main]
-async fn main() -> Result<(), AppError> {
+async fn main() -> Result<(), scsys::BoxError> {
     let application = Application::new("development".to_string(), "flow".to_string());
     println!("{}", &application);
-    &application.cli();
+    application.cli().expect("Application startup failed...");
     Ok(())
 }
 
 mod app {
     use clap::Parser;
-
-    pub(crate) type AppError = Box<dyn std::error::Error + Send + Sync + 'static>;
 
     #[derive(
     clap::ArgEnum, Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize,
@@ -59,13 +57,13 @@ mod app {
     }
 
     impl Application {
-        fn constructor(mode: String, name: String) -> Result<Self, fluidity::DynError> {
+        fn constructor(mode: String, name: String) -> Result<Self, scsys::BoxError> {
             Ok(Self { mode, name })
         }
         pub fn new(mode: String, name: String) -> Self {
             Self::constructor(mode, name).ok().unwrap()
         }
-        pub fn cli(&self) -> Result<CommandCenter, AppError> {
+        pub fn cli(&self) -> Result<CommandCenter, scsys::BoxError> {
             Ok(CommandCenter::parse())
         }
     }
