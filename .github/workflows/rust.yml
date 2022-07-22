@@ -15,7 +15,7 @@ on:
 jobs:
   crate:
     env:
-      CRATE: flow-sdk
+      CRATE: fluidity
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
