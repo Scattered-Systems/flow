@@ -1,32 +1,16 @@
 /*
-    Appellation: core
-    Context: module
+    Appellation: core <module>
+    Creator: FL03 <jo3mccain@icloud.com>
     Description:
         ... Summary ...
 */
-pub use common::*;
 pub use controls::*;
 pub use credentials::*;
+pub use primitives::*;
+pub use utils::*;
 
 mod controls;
 mod credentials;
+mod primitives;
 
-mod common {
-    /// Establish the aliases a user may partake in
-    #[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
-    pub enum Aliases {
-        Personal,
-        Public,
-        Shared,
-    }
-
-    /// Establish the aliases a user may partake in
-    #[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
-    pub enum Identity {
-        Object(bson::oid::ObjectId),
-        Standard(u64),
-    }
-
-    /// Establish a consistent temporal reference point with a globally declared Timezone
-    pub type AccountTimezone = chrono::Utc;
-}
+mod utils {}
