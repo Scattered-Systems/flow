@@ -7,15 +7,15 @@
 use clap::Parser;
 
 #[derive(clap::ArgEnum, Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
-pub enum Args {
+pub enum FlowArgs {
     Account,
-    Control,
-    Create,
+    Connect,
     Discover,
+    Network,
 }
 
 #[derive(clap::Subcommand, Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
-pub enum Sub {
+pub enum FlowSubcommands {
     Authorize {
         #[clap(default_value = "", long, required = false, value_parser)]
         username: String,
@@ -27,32 +27,34 @@ pub enum Sub {
 #[derive(clap::Parser, Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
 #[clap(about, author, version)]
 #[clap(long_about = "")]
-pub struct CommandCenter {
+pub struct FlowCLI {
     #[clap(arg_enum)]
-    pub options: Args,
+    pub args: FlowArgs,
     #[clap(subcommand)]
-    pub subs: Sub,
+    pub context: FlowSubcommands,
 }
 
 #[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct Application {
+pub struct Flow {
     pub mode: String,
     pub name: String,
 }
 
-impl Application {
+impl Flow {
     fn constructor(mode: String, name: String) -> Result<Self, scsys::BoxError> {
         Ok(Self { mode, name })
     }
     pub fn new(mode: String, name: String) -> Self {
         Self::constructor(mode, name).ok().unwrap()
     }
-    pub fn cli(&self) -> Result<CommandCenter, scsys::BoxError> {
-        Ok(CommandCenter::parse())
+    pub fn cli(&self) -> Result<(), scsys::BoxError> {
+        let data = FlowCLI::parse();
+        println!("Inputs: {:#?}", &data);
+        Ok(())
     }
 }
 
-impl std::fmt::Display for Application {
+impl std::fmt::Display for Flow {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(
             f,

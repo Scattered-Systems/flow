@@ -11,7 +11,7 @@ mod interface;
 
 #[tokio::main]
 async fn main() -> Result<(), scsys::BoxError> {
-    let application = Application::new("development".to_string(), "flow".to_string());
+    let application = Flow::new("development".to_string(), "flow".to_string());
     println!("{}", &application);
     application.cli().expect("Application startup failed...");
     Ok(())
