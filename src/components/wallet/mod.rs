@@ -9,12 +9,14 @@ pub use utils::*;
 
 mod interface;
 
-pub trait TokenSpec<A> {
-    fn appellation(&self) -> Result<(String, String), scsys::BoxError>
-        where
-            Self: Sized;
+/// Outlines the minimum requirements for creating ERC20 tokens
+pub trait IERC20 {
+    fn name(&self) -> String;
+    fn symbol(&self) -> String;
+    fn supply(&self) -> String;
 }
 
+/// Encapsulates a group of possible access grants
 #[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum AccessGrant {
     Alt([String; 16]),
@@ -49,7 +51,8 @@ mod utils {
     use super::*;
     use rand::Rng;
 
-    pub fn generate_passphrase(size: usize) -> AccessGrant {
+    /// Create an Access Grant of length (size)
+    pub fn generate_access_grant(size: usize) -> AccessGrant {
         let mut rng = rand::thread_rng();
         let mut cache: Vec<String> = Vec::with_capacity(size);
         for _ in 0..size {
@@ -66,7 +69,7 @@ mod tests {
 
     #[test]
     fn test_passphrase_generator() {
-        let actual = generate_passphrase(12);
+        let actual = generate_access_grant(12);
         let expected = actual.clone();
         assert_eq!(&actual, &expected)
     }
