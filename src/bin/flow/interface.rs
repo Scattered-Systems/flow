@@ -9,9 +9,8 @@ use clap::Parser;
 #[derive(clap::ArgEnum, Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum FlowArgs {
     Account,
-    Connect,
-    Discover,
-    Network,
+    Vault,
+    Wallet,
 }
 
 #[derive(clap::Subcommand, Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
