@@ -1,55 +1,34 @@
-[package]
-authors = ["FL03 <jo3mccain@icloud.com>", "Scattered-Systems (https://scattered-systems.com)"]
-categories = []
-description = "Flow is a complete digital identity platform"
-edition = "2021"
-homepage = "https://scattered-systems.github.io/flow/"
-keywords = []
-license = "MIT"
-name = "fluidity"
-readme = "README.md"
-repository = "https://github.com/scattered-systems/flow"
-version = "0.1.5"
+[workspace]
+default-members = [
+    "bin/flow",
+    "lib/fluidity"
+]
 
-[[bin]]
-bench = false
-name = "flow"
+members = [
+    "bin/flow",
+    "lib/fluidity"
+]
 
-[features]
-default = []
-full = []
+[profile.dev]
+opt-level = 0
+debug = true
+split-debuginfo = '...'  # Platform-specific.
+debug-assertions = true
+overflow-checks = true
+lto = false
+panic = 'unwind'
+incremental = true
+codegen-units = 256
+rpath = false
 
-[lib]
-crate-type = ["cdylib", "rlib"]
-test = true
-
-[dependencies]
-axum = { features = ["headers"], version = "0.5.13" }
-bson = { features = ["chrono-0_4", "serde_with"], version = "2.3.0" }
-chrono = "0.4.19"
-clap = { features = ["derive"], version = "3.2.12" }
-config = "0.13.1"
-digest = "0.10.3"
-futures = "0.3.21"
-glob = "0.3.0"
-hex = "0.4.3"
-log = "0.4.17"
-openidconnect = "2.3.2"
-rand = "0.8.5"
-rand_core = "0.6.3"
-reqwest = "0.11.11"
-scsys = { features = ["full"], version = ">=0.1.4" }
-serde = { features = ["derive"], version = "1.0.139" }
-serde_json = "1.0.82"
-siwe = "0.3.0"
-tokio = { features = ["full"], version = "1.20.0" }
-tower = "0.4.13"
-tower-http = { features = ["compression-br", "propagate-header", "sensitive-headers", "trace"], version = "0.3.4" }
-tracing = "0.1.35"
-tracing-subscriber = "0.3.14"
-yubikey = "0.5.0"
-web3 = "0.18.0"
-
-[dev-dependencies]
-
-[build-dependencies]
+[profile.release]
+opt-level = "s"
+debug = false
+split-debuginfo = '...'  # Platform-specific.
+debug-assertions = false
+overflow-checks = false
+lto = false
+panic = 'unwind'
+incremental = false
+codegen-units = 16
+rpath = false

@@ -8,3 +8,11 @@ updates:
     directory: /
     schedule:
       interval: daily
+  - package-ecosystem: cargo
+    directory: /bin/flow
+    schedule:
+      interval: daily
+  - package-ecosystem: cargo
+    directory: /lib/fluidity
+    schedule:
+      interval: daily
