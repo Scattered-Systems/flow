@@ -5,9 +5,11 @@
        Powered by ENS, Flow is designed to be your last profile empowering users to seamlessly
        control their entire digital identity.
 */
-pub use crate::interface::*;
 
-mod interface;
+pub use crate::{app::*, core::*};
+
+mod app;
+mod core;
 
 #[tokio::main]
 async fn main() -> Result<(), scsys::BoxError> {
