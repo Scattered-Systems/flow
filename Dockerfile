@@ -4,7 +4,7 @@ ADD . /app
 WORKDIR /app
 
 COPY . .
-RUN cargo build --release
+RUN cargo build --color always --release --verbose --workspace
 
 FROM photon as application
 
