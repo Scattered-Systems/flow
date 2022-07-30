@@ -26,7 +26,7 @@ impl APISettings {
                 "postgres://postgres:example@localhost:5432/postgres",
             )?
             .set_default("logger.level", "info")?
-            .set_default("server.host", "[0, 0, 0, 0]")?
+            .set_default("server.host", "0.0.0.0")?
             .set_default("server.port", 8080)?;
 
         builder = builder.add_source(scsys::collect_config_files("**/*.config.*", false));

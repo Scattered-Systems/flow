@@ -26,7 +26,7 @@ impl FlowAPI {
 
         Logger::setup(&cnf);
 
-        let host: [u8; 4] = scsys::extract::Extractor::new(',', cnf.server.host.clone())
+        let host: [u8; 4] = scsys::extract::Extractor::new('.', cnf.server.host.clone())
             .extract()
             .try_into()
             .ok()
