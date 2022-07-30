@@ -4,13 +4,11 @@
     Description:
         ... Summary ...
 */
+pub use endpoints::*;
 
-///
-pub trait APISpec {
-    fn run(&self) -> Result<(), scsys::BoxError>;
-}
+mod endpoints;
 
 #[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct FlowAPI {
-    pub address: std::net::SocketAddr,
+pub struct ApplicationProgramInterface {
+    pub server: crate::Server,
 }

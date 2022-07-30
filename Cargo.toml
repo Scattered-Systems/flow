@@ -1,11 +1,12 @@
 [workspace]
 default-members = [
-    "bin/flow",
+    "bin/cli",
     "lib/fluidity"
 ]
 
 members = [
-    "bin/flow",
+    "bin/api",
+    "bin/cli",
     "lib/fluidity"
 ]
 

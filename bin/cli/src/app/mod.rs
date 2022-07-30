@@ -6,7 +6,6 @@
 */
 pub use interface::*;
 
-pub mod api;
 pub mod cli;
 
 mod interface;

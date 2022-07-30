@@ -8,11 +8,11 @@
 /// Defines the minimum framework necessary for the system to recognize a currency
 pub trait Currency {
     fn name(&self) -> String
-        where
-            Self: Sized;
+    where
+        Self: Sized;
     fn symbol(&self) -> String
-        where
-            Self: Sized;
+    where
+        Self: Sized;
 }
 
 /// Describes the two versions of currencies
