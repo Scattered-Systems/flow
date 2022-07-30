@@ -4,34 +4,7 @@
     Description:
         ... Summary ...
 */
-use clap::Parser;
-
-#[derive(clap::ArgEnum, Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
-pub enum FlowArgs {
-    Account,
-    Vault,
-    Wallet,
-}
-
-#[derive(clap::Subcommand, Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
-pub enum FlowSubcommands {
-    Authorize {
-        #[clap(default_value = "", long, required = false, value_parser)]
-        username: String,
-        #[clap(default_value = "", long, required = false, value_parser)]
-        password: String,
-    },
-}
-
-#[derive(clap::Parser, Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
-#[clap(about, author, version)]
-#[clap(long_about = "")]
-pub struct FlowCLI {
-    #[clap(arg_enum)]
-    pub args: FlowArgs,
-    #[clap(subcommand)]
-    pub context: FlowSubcommands,
-}
+use crate::cli::{CLISpec, FlowCLI};
 
 #[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Flow {
@@ -47,7 +20,15 @@ impl Flow {
         Self::constructor(mode, name).ok().unwrap()
     }
     pub fn cli(&self) -> Result<(), scsys::BoxError> {
-        let data = FlowCLI::parse();
+        let data = FlowCLI::run();
+        println!("Inputs: {:#?}", &data);
+        Ok(())
+    }
+}
+
+impl CLISpec<FlowCLI> for Flow {
+    fn run(&self) -> Result<(), scsys::BoxError> {
+        let data = FlowCLI::run();
         println!("Inputs: {:#?}", &data);
         Ok(())
     }

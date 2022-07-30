@@ -1,0 +1,33 @@
+/*
+    Appellation: cli <module>
+    Creator: FL03 <jo3mccain@icloud.com>
+    Description:
+        ... Summary ...
+*/
+pub use args::*;
+pub use opts::*;
+
+mod args;
+mod opts;
+
+use clap::Parser;
+
+///
+pub trait CLISpec<App: clap::Parser> {
+    fn run(&self) -> Result<(), scsys::BoxError>;
+}
+
+#[derive(Clone, Debug, Hash, Parser, PartialEq, serde::Deserialize, serde::Serialize)]
+#[clap(about, author, version)]
+pub struct FlowCLI {
+    #[clap(arg_enum)]
+    pub action: Args,
+    #[clap(subcommand)]
+    pub option: Opts,
+}
+
+impl FlowCLI {
+    pub fn run() -> Self {
+        Self::parse()
+    }
+}
