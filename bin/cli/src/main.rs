@@ -10,10 +10,10 @@ pub use crate::{app::*, core::*};
 mod app;
 mod core;
 
-use crate::cli::CLISpec;
+use acme::flavors::CLISpec;
 
 fn main() -> Result<(), scsys::BoxError> {
-    let application = Flow::new("development".to_string(), "cli".to_string());
+    let application = IFlow::new("development".to_string(), "cli".to_string());
     println!("{}", &application);
     application.run()
 }

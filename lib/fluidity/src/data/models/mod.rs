@@ -4,9 +4,21 @@
     Description:
         ... Summary ...
 */
+pub use accounts::*;
+pub use items::*;
 pub use tokens::*;
-pub use utils::*;
 
+mod accounts;
+mod items;
 mod tokens;
 
-mod utils {}
+pub trait FlowModelSpec {
+    fn create(&self) -> Result<Self, scsys::BoxError>
+        where
+            Self: Sized;
+}
+
+#[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct ModelId {
+    temporal: i64,
+}

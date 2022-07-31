@@ -4,6 +4,6 @@
     Description:
         ... Summary ...
 */
-pub use wallet::*;
-
-mod wallet;
+pub mod assets;
+pub mod credentials;
+pub mod wallets;

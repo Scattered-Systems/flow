@@ -4,20 +4,28 @@
     Description:
         ... Summary ...
 */
-use crate::cli::{CLISpec, FlowCLI};
+use crate::cli::FlowCLI;
+use acme::flavors::CLISpec;
 
 #[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct Flow {
+pub struct IFlow {
     pub mode: String,
     pub name: String,
+    pub timestamp: i64,
 }
 
-impl Flow {
-    fn constructor(mode: String, name: String) -> Result<Self, scsys::BoxError> {
-        Ok(Self { mode, name })
+impl IFlow {
+    fn constructor(mode: String, name: String, timestamp: i64) -> Result<Self, scsys::BoxError> {
+        Ok(Self {
+            mode,
+            name,
+            timestamp,
+        })
     }
     pub fn new(mode: String, name: String) -> Self {
-        Self::constructor(mode, name).ok().unwrap()
+        Self::constructor(mode, name, chrono::Utc::now().timestamp())
+            .ok()
+            .unwrap()
     }
     pub fn cli(&self) -> Result<(), scsys::BoxError> {
         let data = FlowCLI::run();
@@ -26,7 +34,7 @@ impl Flow {
     }
 }
 
-impl CLISpec<FlowCLI> for Flow {
+impl CLISpec<FlowCLI> for IFlow {
     fn run(&self) -> Result<(), scsys::BoxError> {
         let data = FlowCLI::run();
         println!("Inputs: {:#?}", &data);
@@ -34,12 +42,8 @@ impl CLISpec<FlowCLI> for Flow {
     }
 }
 
-impl std::fmt::Display for Flow {
+impl std::fmt::Display for IFlow {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(
-            f,
-            "Application(\n\tmode={},\n\tname={}\n)",
-            self.mode, self.name
-        )
+        write!(f, "Flow(mode={}, name={})", self.mode, self.timestamp)
     }
 }

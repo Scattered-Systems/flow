@@ -7,6 +7,9 @@
 pub use constants::*;
 pub use types::*;
 
-mod constants {}
+mod constants {
+    ///
+    pub const COMMON_OAUTH_ENDPOINT: &str = "oauth/token";
+}
 
 mod types {}

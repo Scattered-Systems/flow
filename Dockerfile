@@ -1,20 +1,32 @@
 FROM jo3mccain/rusty as builder
 
-ADD . /app
-WORKDIR /app
+ADD . /workspace
+WORKDIR /workspace
 
 COPY . .
-RUN cargo build --color always --release --verbose --workspace
+RUN cargo build --color always --release --verbose --workspace && \
+    cargo test --all-features --color always --release --verbose --workspace
 
-FROM photon as a
+FROM photon as application-base
 
 ENV MODE="development" \
-    PORT=8080 \
+    SERVER_PORT=8080 \
     RUST_LOG="info"
 
-COPY --from=builder /app/target/release/flow /flow
+FROM application-base as api
 
-EXPOSE ${PORT}/tcp
-EXPOSE ${PORT}/udp
+COPY --from=builder /workspace/target/release/flow-api /flow-api
 
-ENTRYPOINT ["./flow"]
+EXPOSE ${SERVER_PORT}/tcp
+EXPOSE ${SERVER_PORT}/udp
+
+CMD ["./flow-api"]
+
+FROM application-base as cli
+
+ENV MODE="development" \
+    RUST_LOG="info"
+
+COPY --from=builder /workspace/target/release/flow-cli /flow-cli
+
+ENTRYPOINT ["./flow-cli"]

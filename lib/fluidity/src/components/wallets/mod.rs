@@ -1,13 +1,13 @@
 /*
-    Appellation: wallet <module>
+    Appellation: wallets <module>
     Creator: FL03 <jo3mccain@icloud.com>
     Description:
         ... Summary ...
 */
-pub use interface::*;
+pub use wallet::*;
 pub use utils::*;
 
-mod interface;
+mod wallet;
 
 /// Outlines the minimum requirements for creating ERC20 tokens
 pub trait IERC20 {

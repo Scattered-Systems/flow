@@ -33,7 +33,7 @@ jobs:
         id: prepare
         run: |
           DOCKER_IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/flow
-          DOCKER_PLATFORMS=linux/amd64,linux/arm64/v8
+          DOCKER_PLATFORMS=linux/amd64
           VERSION=latest
           TAGS="--tag ${DOCKER_IMAGE}:${VERSION}"
           echo ::set-output name=docker_image::${DOCKER_IMAGE}
@@ -42,7 +42,7 @@ jobs:
             --build-arg VERSION=${VERSION} \
             --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
             --build-arg VCS_REF=${GITHUB_SHA::8} \
-            ${TAGS} --file ./Dockerfile .
+            ${TAGS} --file ./Dockerfile . --target builder
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
       - name: Docker Buildx (build)
@@ -72,15 +72,16 @@ jobs:
         id: prepare
         run: |
           DOCKER_IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/flow
-          DOCKER_PLATFORMS=linux/amd64,linux/arm64/v8
-          TAGS="--tag ${DOCKER_IMAGE}:api"
+          DOCKER_PLATFORMS=linux/amd64
+          VERSION=api
+          TAGS="--tag ${DOCKER_IMAGE}:${VERSION}"
           echo ::set-output name=docker_image::${DOCKER_IMAGE}
           echo ::set-output name=version::${VERSION}
           echo ::set-output name=buildx_args::--platform ${DOCKER_PLATFORMS} \
             --build-arg VERSION=${VERSION} \
             --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
             --build-arg VCS_REF=${GITHUB_SHA::8} \
-            ${TAGS} --file ./api.dockerfile .
+            ${TAGS} --file ./Dockerfile . --target api
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
       - name: Docker Buildx (build)
@@ -101,7 +102,7 @@ jobs:
         run: |
           docker buildx imagetools inspect ${{ steps.prepare.outputs.docker_image }}:${{ steps.prepare.outputs.version }}
   cli:
-    needs: [ login ]
+    needs: [ latest, login ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -110,15 +111,16 @@ jobs:
         id: prepare
         run: |
           DOCKER_IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/flow
-          DOCKER_PLATFORMS=linux/amd64,linux/arm64/v8
-          TAGS="--tag ${DOCKER_IMAGE}:cli"
+          DOCKER_PLATFORMS=linux/amd64
+          VERSION=cli
+          TAGS="--tag ${DOCKER_IMAGE}:${VERSION}"
           echo ::set-output name=docker_image::${DOCKER_IMAGE}
           echo ::set-output name=version::${VERSION}
           echo ::set-output name=buildx_args::--platform ${DOCKER_PLATFORMS} \
             --build-arg VERSION=${VERSION} \
             --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
             --build-arg VCS_REF=${GITHUB_SHA::8} \
-            ${TAGS} --file ./cli.dockerfile .
+            ${TAGS} --file ./Dockerfile . --target cli
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
       - name: Docker Buildx (build)

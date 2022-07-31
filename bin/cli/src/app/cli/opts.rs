@@ -4,11 +4,21 @@
     Description:
         ... Summary ...
 */
+#[derive(clap::ArgEnum, Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+pub enum WalletArgs {
+    Create,
+}
 
 #[derive(clap::Subcommand, Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum Opts {
-    Access {
-        #[clap(long, short, value_parser)]
-        ensname: String,
+    Authorize {
+        #[clap(default_value = "", long, required = false, short, value_parser)]
+        address: String,
+        #[clap(default_value = "", long, required = false, short, value_parser)]
+        transaction: String,
+    },
+    Wallet {
+        #[clap(arg_enum)]
+        action: WalletArgs,
     },
 }

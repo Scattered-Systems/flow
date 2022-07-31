@@ -1,8 +1,9 @@
 /*
-    Appellation: actors <module>
+    Appellation: mod <module>
     Creator: FL03 <jo3mccain@icloud.com>
     Description:
         ... Summary ...
 */
-pub mod access;
-pub mod verify;
+pub use credential::*;
+
+mod credential;
