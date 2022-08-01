@@ -1,18 +1,19 @@
 /*
-   Appellation: api <binary>
+    Appellation: api <binary> (rs-sandbox)
     Creator: FL03 <jo3mccain@icloud.com>
-   Description:
-       Powered by ENS, Flow is designed to be your last profile empowering users to seamlessly
-       control their entire digital identity.
+    Description:
+        ... Summary ...
 */
-pub use crate::{app::*, core::*};
+pub use crate::{context::Context, interface::Flow, settings::Settings};
 
-mod app;
-mod core;
+mod api;
+mod context;
+mod interface;
+mod settings;
+
+use acme::prelude::APISpec;
 
 #[tokio::main]
 async fn main() -> Result<(), scsys::BoxError> {
-    let app = FlowAPI::new();
-    app.run().await;
-    Ok(())
+    Flow::default().run().await
 }

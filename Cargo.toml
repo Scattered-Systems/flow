@@ -1,5 +1,6 @@
 [workspace]
 default-members = [
+    "bin/api",
     "bin/cli",
     "lib/fluidity"
 ]
@@ -7,7 +8,10 @@ default-members = [
 members = [
     "bin/api",
     "bin/cli",
-    "lib/fluidity"
+    "lib/fluidity",
+    "lib/core",
+    "lib/derive",
+    "lib/macros"
 ]
 
 [profile.dev]
@@ -23,7 +27,7 @@ codegen-units = 256
 rpath = false
 
 [profile.release]
-opt-level = "s"
+opt-level = "z"
 debug = false
 split-debuginfo = '...'  # Platform-specific.
 debug-assertions = false
