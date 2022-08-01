@@ -2,13 +2,9 @@ name: Rust
 
 on:
   push:
-    branches:
-      - latest
     tags:
       - v*.*.*
   pull_request:
-    branches:
-      - latest
     tags:
       - v*.*.*
 
@@ -55,7 +51,7 @@ jobs:
   crate:
     env:
       CRATE: fluidity
-    needs: [ login, test ]
+    needs: [ core, derive, login, macros, test ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
