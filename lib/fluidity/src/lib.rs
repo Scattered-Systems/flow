@@ -5,9 +5,14 @@
         ... Summary ...
 */
 #[doc(inline)]
-pub use crate::{actors::*, components::*, core::*, data::*};
+#[cfg(feature = "core")]
+pub use fluidity_core as core;
+#[cfg(feature = "derive")]
+pub use fluidity_derive::*;
+#[cfg(feature = "macros")]
+pub use fluidity_macros::*;
 
-mod actors;
-mod components;
-mod core;
-mod data;
+pub mod prelude {
+    #[cfg(feature = "core")]
+    pub use super::core::prelude::*;
+}

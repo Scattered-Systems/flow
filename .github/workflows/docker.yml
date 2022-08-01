@@ -3,14 +3,16 @@ name: Docker
 on:
   push:
     branches:
-      - master
-    tags:
       - latest
+      - next
+    tags:
+      - v*.*.*
   pull_request:
     branches:
-      - master
-    tags:
       - latest
+      - next
+    tags:
+      - v*.*.*
 
 jobs:
   login:

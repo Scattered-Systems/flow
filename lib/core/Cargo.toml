@@ -1,0 +1,27 @@
+[package]
+authors = [
+    "FL03 <jo3mccain@icloud.com> (https://github.com/FL03)",
+    "Scattered-Systems (https://github.com/scattered-systems)"
+]
+categories = []
+description = "The core package for fluidity is a complete digital identity management solution."
+edition = "2021"
+homepage = "https://scattered-systems.github.io/fluidity"
+keywords = ["core", "scsys"]
+license = "MIT"
+name = "fluidity-core"
+repository = "https://github.com/scattered-systems/fluidity"
+version = "0.1.0" # TODO - Update cargo package version
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+test = true
+
+[dependencies]
+chrono = "0.4.19"
+rand = "0.8.5"
+serde = { features = ["derive"], version = "1.0.140" }
+serde_json = "1.0.82"
+
+[dependencies.scsys]
+version = "0.1.9"

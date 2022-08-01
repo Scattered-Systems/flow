@@ -1,5 +1,8 @@
 [package]
-authors = ["FL03 <jo3mccain@icloud.com>", "Scattered-Systems (https://scattered-systems.com)"]
+authors = [
+    "FL03 <jo3mccain@icloud.com> (https://github.com/FL03)",
+    "Scattered-Systems (https://github.com/scattered-systems)"
+]
 categories = []
 description = "Flow is a complete digital identity platform"
 edition = "2021"
@@ -18,27 +21,23 @@ test = false
 [build-dependencies]
 
 [dependencies]
-bson = { features = ["chrono-0_4", "serde_with"], version = "2.3.0" }
-chrono = "0.4.19"
 clap = { features = ["derive"], version = "3.2.12" }
-config = "0.13.1"
-digest = "0.10.3"
 futures = "0.3.21"
-glob = "0.3.0"
 serde = { features = ["derive"], version = "1.0.140" }
 serde_json = "1.0.82"
+tokio = { features = ["full"], version = "1.20.1" }
 
 [dependencies.acme]
 features = ["full"]
-version = "0.1.51"
+version = "0.2.0"
 
 [dependencies.fluidity]
 features = ["full"]
 path = "../../lib/fluidity"
-version = "0.1.6"
+version = "0.1.7"
 
 [dependencies.scsys]
 features = ["full"]
-version = "0.1.7"
+version = "0.1.9"
 
 [dev-dependencies]
