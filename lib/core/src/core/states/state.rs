@@ -4,6 +4,29 @@
     Description:
         ... Summary ...
 */
+#[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct State {
+    pub id: scsys::Id,
+    pub message: String,
+    pub timestamp: i64,
+}
+
+impl State {
+    fn constructor(id: scsys::Id, message: String, timestamp: i64) -> Self {
+        Self {
+            id,
+            message,
+            timestamp,
+        }
+    }
+    pub fn new(message: String) -> Self {
+        Self::constructor(
+            scsys::Id::generate_object_id(),
+            message,
+            scsys::Temporal::now().timestamp(),
+        )
+    }
+}
 
 #[cfg(test)]
 mod tests {

@@ -9,7 +9,11 @@ pub use types::*;
 
 mod constants {
     ///
-    pub const COMMON_OAUTH_ENDPOINT: &str = "oauth/token";
+    pub const FLOW_MAINNET_PORT: u16 = 9090;
+    ///
+    pub const FLOW_SERVER_PORT: u16 = 8000;
+    ///
+    pub const FLOW_PROXY_PORT: u16 = 8080;
 }
 
 mod types {}
