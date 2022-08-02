@@ -13,7 +13,7 @@ pub(crate) mod core;
 pub(crate) mod data;
 
 pub mod prelude {
-    pub use super::actors::{access::*, verify};
+    pub use super::actors::{access::*, auth};
     pub use super::components::{assets::*, credentials::*, wallets::*};
     pub use super::core::*;
     pub use super::data::models::*;

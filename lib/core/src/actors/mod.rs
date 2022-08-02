@@ -5,4 +5,4 @@
         ... Summary ...
 */
 pub mod access;
-pub mod verify;
+pub mod auth;

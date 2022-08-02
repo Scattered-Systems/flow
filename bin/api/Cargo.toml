@@ -44,10 +44,10 @@ version = "0.2.0"
 [dependencies.fluidity]
 features = ["full"]
 path = "../../lib/fluidity"
-version = "0.1.7"
+version = "0.1.8"
 
 [dependencies.scsys]
 features = ["full"]
-version = "0.1.9"
+version = "0.1.10"
 
 [dev-dependencies]

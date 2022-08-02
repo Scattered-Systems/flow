@@ -11,7 +11,7 @@ keywords = ["derive", "proc-macros"]
 license = "MIT"
 name = "fluidity-derive"
 repository = "https://github.com/scattered-systems/fluidity"
-version = "0.1.1" # TODO - Update cargo package version
+version = "0.1.2" # TODO - Update cargo package version
 
 [lib]
 proc-macro = true
@@ -20,3 +20,7 @@ proc-macro = true
 proc-macro2 = "1.0.40"
 quote = "1.0.20"
 syn = { features = ["full"], version = "1.0.98" }
+
+[package.metadata.docs.rs]
+all-features = true
+rustc-args = ["--cfg", "docsrs"]
