@@ -24,6 +24,13 @@ impl TokenStandard {
     }
 }
 
+impl Default for TokenStandard {
+    // Migrate the generative token to here
+    fn default() -> Self {
+        Self::new(Vec::<String>::new(), String::new())
+    }
+}
+
 /// Generate a secure, single use token
 pub fn generate_token(n: usize) -> String {
     let cache: String = String::new();
