@@ -10,7 +10,7 @@ pub use wallet::*;
 mod wallet;
 
 /// Outlines the minimum requirements for creating ERC20 tokens
-pub trait IERC20 {
+pub trait ERC20Spec {
     fn name(&self) -> String;
     fn symbol(&self) -> String;
     fn supply(&self) -> String;
@@ -30,13 +30,13 @@ impl Grant {
     pub fn from(data: Vec<String>) -> Self {
         let len = data.clone().len();
         if len == 16 {
-            let res: [String; 16] = data.clone().try_into().unwrap_or_else(|v: Vec<String>| {
+            let res: [String; 16] = data.try_into().unwrap_or_else(|v: Vec<String>| {
                 panic!("Expected a Vec of length {} but it was {}", 16, v.len())
             });
 
             Self::Alt(res)
         } else if len == 12 {
-            let res: [String; 12] = data.clone().try_into().unwrap_or_else(|v: Vec<String>| {
+            let res: [String; 12] = data.try_into().unwrap_or_else(|v: Vec<String>| {
                 panic!("Expected a Vec of length {} but it was {}", 12, v.len())
             });
 
@@ -68,9 +68,9 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_passphrase_generator() {
+    fn test_gen_access_grant() {
         let actual = generate_access_grant(12);
         let expected = actual.clone();
-        assert_eq!(&actual, &expected)
+        assert_eq!(actual, expected)
     }
 }
