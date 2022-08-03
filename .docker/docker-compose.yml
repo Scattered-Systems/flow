@@ -3,13 +3,14 @@ services:
   api:
     build:
       context: ..
-      dockerfile: api.dockerfile
+      dockerfile: Dockerfile
+      target: api
     container_name: flow-api
     ports:
       - "8080:8080"
     restart: always
     volumes:
-      - ../artifacts/docker/data/bin:/data
+      - /data:/data
 
   cache:
     container_name: cache

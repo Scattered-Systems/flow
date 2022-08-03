@@ -6,35 +6,28 @@
 */
 #[derive(clap::ArgEnum, Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum FlowArgs {
-    Connect,
-    Generate,
-}
-
-impl FlowArgs {
-    pub fn actor(data: Self) -> Self {
-        match data {
-            Self::Connect => Self::Connect,
-            Self::Generate => Self::Generate,
-        }
-    }
+    Account,
+    Sign,
 }
 
 impl Default for FlowArgs {
     fn default() -> Self {
-        Self::Generate
+        Self::Account
     }
 }
 
 #[derive(
 clap::ArgEnum, Clone, Copy, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize,
 )]
-pub enum WalletArgs {
-    Access,
-    Generate,
+pub enum WalletAction {
+    Create,
+    Login,
+    Manage,
+    Transact,
 }
 
-impl Default for WalletArgs {
+impl Default for WalletAction {
     fn default() -> Self {
-        Self::Generate
+        Self::Manage
     }
 }

@@ -9,7 +9,7 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: cargo
-    directory: /bin/cli
+    directory: /cargo/cli
     schedule:
       interval: daily
   - package-ecosystem: cargo

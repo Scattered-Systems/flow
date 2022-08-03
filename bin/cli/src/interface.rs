@@ -4,7 +4,7 @@
     Description:
         ... Summary ...
 */
-use crate::cli::FlowCLI;
+use crate::cli::{FlowArgs, FlowCLI, FlowOptions, WalletAction};
 use acme::prelude::CLISpec;
 use scsys::BoxError;
 
@@ -46,7 +46,26 @@ impl CLISpec<FlowCLI> for Flow {
         where
             Self: Sized,
     {
-        FlowCLI::build().expect("Interface error");
+        let data = FlowCLI::default();
+        println!("{:#?}", data.clone());
+        match data.action {
+            FlowArgs::Account => match data.command {
+                FlowOptions::Wallet {
+                    context,
+                    filepath,
+                    label,
+                } => {
+                    if context == WalletAction::Create {
+                        let keypair = fluidity::prelude::generate_keypair();
+                        let wallet = fluidity::prelude::Wallet::from(&keypair.1, &keypair.0, label);
+                        wallet.save_to_file(filepath.as_str());
+                        println!("Created a new wallet at: {}", filepath.clone());
+                    }
+                }
+            },
+            FlowArgs::Sign => {}
+        };
+
         Ok(())
     }
 }

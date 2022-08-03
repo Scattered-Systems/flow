@@ -4,23 +4,26 @@
     Description:
         ... Summary ...
 */
-use crate::cli::args::WalletArgs;
+use crate::cli::args::WalletAction;
 
 #[derive(clap::Subcommand, Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum FlowOptions {
-    Point {
+    Wallet {
         #[clap(arg_enum)]
-        action: WalletArgs,
-        #[clap(default_value_t = 0, long, short, value_parser)]
-        amount: usize,
+        context: WalletAction,
+        #[clap(default_value = "", long, short, value_parser)]
+        filepath: String,
+        #[clap(default_value = "", long, short, value_parser)]
+        label: String,
     },
 }
 
 impl Default for FlowOptions {
     fn default() -> Self {
-        Self::Point {
-            action: WalletArgs::default(),
-            amount: 0,
+        Self::Wallet {
+            context: WalletAction::default(),
+            filepath: String::new(),
+            label: String::new(),
         }
     }
 }
