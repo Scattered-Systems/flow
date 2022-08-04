@@ -4,6 +4,9 @@
     Description:
         ... Summary ...
 */
+
+pub const BIP0039: Vec<&str> = vec![];
+
 /// Encapsulates a group of possible access grants
 #[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum Grant {

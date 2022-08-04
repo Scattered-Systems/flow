@@ -56,9 +56,11 @@ impl CLISpec<FlowCLI> for Flow {
                     label,
                 } => {
                     if context == WalletAction::Create {
-                        let keypair = fluidity::prelude::generate_keypair();
+                        let keypair = fluidity::prelude::WalletKey::generate_keypair();
                         let wallet = fluidity::prelude::Wallet::from(&keypair.1, &keypair.0, label);
-                        wallet.save_to_file(filepath.as_str());
+                        wallet
+                            .save_to_file(filepath.as_str())
+                            .expect("Interface error");
                         println!("Created a new wallet at: {}", filepath.clone());
                     }
                 }
