@@ -24,6 +24,7 @@ test = false
 axum = { features = ["headers"], version = "0.5.13" }
 bson = { features = ["chrono-0_4", "serde_with"], version = "2.3.0" }
 chrono = "0.4.19"
+clap = { features = ["derive"], optional = true, version = "3.2.16" }
 config = "0.13.1"
 futures = "0.3.21"
 glob = "0.3.0"

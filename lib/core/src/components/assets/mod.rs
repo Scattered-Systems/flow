@@ -4,9 +4,10 @@
     Description:
         ... Summary ...
 */
-pub use asset::*;
+pub use digital::*;
 
 mod asset;
+mod digital;
 
 /// Defines the minimum framework necessary for the system to recognize a currency
 pub trait Currency {
