@@ -4,8 +4,6 @@
     Description:
         ... Summary ...
 */
-pub use utils::*;
-
 use secp256k1::{PublicKey, SecretKey};
 use std::str::FromStr;
 
@@ -18,6 +16,13 @@ pub struct WalletKey {
 impl WalletKey {
     fn constructor(public: String, secret: String) -> Self {
         Self { public, secret }
+    }
+    pub fn generate_keypair() -> crate::SecpKeypair {
+        let secp = secp256k1::Secp256k1::new();
+        secp.generate_keypair(&mut rand::rngs::OsRng)
+    }
+    pub fn from_keypair(keypair: crate::SecpKeypair) -> Self {
+        Self::new(keypair.1.to_string(), format!("{:?}", keypair.0))
     }
     pub fn new(public: String, secret: String) -> Self {
         Self::constructor(public, secret)
@@ -46,8 +51,17 @@ impl Wallet {
             key,
         }
     }
+    pub fn new(label: String) -> Self {
+        let keypair = WalletKey::generate_keypair();
+        let address: web3::types::Address = crate::public_key_address(&keypair.1);
+        Self::constructor(
+            format!("{:?}", address),
+            WalletKey::from_keypair(keypair),
+            label,
+        )
+    }
     pub fn from(public: &PublicKey, secret: &SecretKey, label: String) -> Self {
-        let addr: web3::types::Address = public_key_address(&public);
+        let addr: web3::types::Address = crate::public_key_address(&public);
         Self::constructor(
             format!("{:?}", addr),
             WalletKey::new(public.to_string(), format!("{:?}", secret)),
@@ -77,34 +91,22 @@ impl Wallet {
     }
 }
 
-mod utils {
-    use secp256k1::{PublicKey, SecretKey};
-    use web3::{signing::keccak256, types::Address};
-
-    /// Generate a random keypair
-    pub fn generate_keypair() -> (SecretKey, PublicKey) {
-        let secp = secp256k1::Secp256k1::new();
-        secp.generate_keypair(&mut rand::rngs::OsRng)
-    }
-
-    pub fn public_key_address(public_key: &PublicKey) -> Address {
-        let public_key = public_key.serialize_uncompressed();
-        debug_assert_eq!(public_key[0], 0x04);
-        let hash = keccak256(&public_key[1..]);
-        Address::from_slice(&hash[12..])
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
-    fn test_generate_keypair() {
-        let actual = generate_keypair();
+    fn test_wallet() {
+        let actual = Wallet::new("test".to_string());
         let expected = actual.clone();
         println!("{:#?}", actual.clone());
-        assert_eq!(&format!("{:#?}", actual.0), &format!("{:#?}", expected.0));
-        assert_eq!(&format!("{:#?}", actual.1), &format!("{:#?}", expected.1))
+        assert_eq!(
+            &format!("{:#?}", actual.key),
+            &format!("{:#?}", expected.key)
+        );
+        assert_eq!(
+            &format!("{:#?}", actual.label),
+            &format!("{:#?}", expected.label)
+        )
     }
 }
