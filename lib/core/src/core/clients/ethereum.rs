@@ -4,7 +4,19 @@
     Description:
         ... Summary ...
 */
+#[derive(Clone, Debug, Hash, PartialEq, scsys::Deserialize, scsys::Serialize)]
+pub enum Web3Endpoint {
+    HTTP,
+    WSS,
+}
 
+impl Default for Web3Endpoint {
+    fn default() -> Self {
+        Self::HTTP
+    }
+}
+
+#[derive(Clone, Debug, Hash, PartialEq, scsys::Deserialize, scsys::Serialize)]
 pub struct Web3Client {
     pub endpoint: String,
 }

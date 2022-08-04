@@ -12,7 +12,7 @@ license = "MIT"
 name = "fluidity"
 readme = "README.md"
 repository = "https://github.com/scattered-systems/flow"
-version = "0.1.8"
+version = "0.1.9"
 
 [features]
 default = ["core"]
@@ -29,17 +29,17 @@ test = true
 [dependencies.fluidity-core]
 optional = true
 path = "../core"
-version = "0.1.1"
+version = "0.1.2"
 
 [dependencies.fluidity-derive]
 optional = true
 path = "../derive"
-version = "0.1.2"
+version = "0.1.3"
 
 [dependencies.fluidity-macros]
 optional = true
 path = "../macros"
-version = "0.1.2"
+version = "0.1.3"
 
 [package.metadata.docs.rs]
 all-features = true
