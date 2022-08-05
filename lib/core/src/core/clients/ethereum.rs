@@ -4,42 +4,36 @@
     Description:
         ... Summary ...
 */
-#[derive(Clone, Debug, Hash, PartialEq, scsys::Deserialize, scsys::Serialize)]
-pub enum Web3Endpoint {
-    HTTP,
-    WSS,
-}
-
-impl Default for Web3Endpoint {
-    fn default() -> Self {
-        Self::HTTP
-    }
-}
 
 #[derive(Clone, Debug, Hash, PartialEq, scsys::Deserialize, scsys::Serialize)]
 pub struct Web3Client {
     pub endpoint: String,
+    pub version: String,
 }
 
 impl Web3Client {
-    fn constructor(endpoint: String) -> Self {
-        Self { endpoint }
+    fn constructor(endpoint: String, version: String) -> Self {
+        Self { endpoint, version }
     }
-    pub fn new(endpoint: String) -> Self {
-        Self::constructor(endpoint)
+    async fn connect(&self) -> anyhow::Result<web3::Web3<web3::transports::Http>> {
+        connect_to_web3(self.endpoint.clone().as_str()).await
     }
-    pub async fn http(self) -> web3::Web3<web3::transports::Http> {
-        web3::Web3::new(
-            web3::transports::Http::new(self.endpoint.as_str())
-                .ok()
-                .unwrap(),
-        )
+    pub fn new(endpoint: String, version: String) -> Self {
+        Self::constructor(endpoint, version)
+    }
+}
+
+impl Default for Web3Client {
+    fn default() -> Self {
+        Self::new("https://rpc.ankr.com/eth".to_string(), String::new())
     }
 }
 
 /// Quickly connect to Web3 Providers
-pub async fn connect_to_web3(endpoint: &str) -> web3::Web3<web3::transports::Http> {
-    web3::Web3::new(web3::transports::Http::new(endpoint).ok().unwrap())
+pub async fn connect_to_web3(endpoint: &str) -> anyhow::Result<web3::Web3<web3::transports::Http>> {
+    Ok(web3::Web3::new(
+        web3::transports::Http::new(endpoint).ok().unwrap(),
+    ))
 }
 
 #[cfg(test)]
@@ -47,10 +41,8 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_web3_client_version() {
-        let url = "https://rpc.ankr.com/eth";
-        let client = Web3Client::new("https://rpc.ankr.com/eth".to_string());
-        let actual = "".to_string();
+    fn test_web3_client_default() {
+        let actual = Web3Client::default();
         let expected = actual.clone();
         assert_eq!(actual, expected)
     }

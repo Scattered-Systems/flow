@@ -52,6 +52,24 @@ impl Item {
 
 impl Default for Item {
     fn default() -> Self {
-        todo!()
+        Self::new(
+            String::new(),
+            scsys::ObjectId::new(),
+            String::new(),
+            String::new(),
+            String::new(),
+        )
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_items() {
+        let actual = Item::default();
+        let expected = actual.clone();
+        assert_eq!(actual, expected)
     }
 }

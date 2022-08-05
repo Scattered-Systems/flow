@@ -25,7 +25,13 @@ mod constants {
 
 mod types {
     use secp256k1::{PublicKey, SecretKey};
+    pub use web3::types::Address as Web3Address;
 
-    ///
+    /// Type alias for a tuple ([secp256k1::SecretKey], [secp256k1::PublicKey])
     pub type SecpKeypair = (SecretKey, PublicKey);
+
+    pub type Web3Http = web3::Web3<web3::transports::Http>;
+    pub type Web3HttpResult = anyhow::Result<Web3Http>;
+    pub type Web3WS = web3::Web3<web3::transports::WebSocket>;
+    pub type Web3WSResult = anyhow::Result<Web3WS>;
 }

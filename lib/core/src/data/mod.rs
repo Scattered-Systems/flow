@@ -4,8 +4,4 @@
     Description:
         ... Summary ...
 */
-pub use utils::*;
-
 pub mod models;
-
-mod utils {}

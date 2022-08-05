@@ -14,5 +14,5 @@ pub use fluidity_macros::*;
 
 pub mod prelude {
     #[cfg(feature = "core")]
-    pub use fluidity_core::prelude::*;
+    pub use super::{access::*, assets::*, auth::*, credentials::*, models::*, wallets::*};
 }
