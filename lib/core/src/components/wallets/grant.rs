@@ -4,13 +4,13 @@
     Description:
         ... Summary ...
 */
+use crate::PATH_TO_BIP0039_DATA;
+
 use rand::Rng;
 use scsys::{Deserialize, Serialize};
 use std::io::Read;
 
-/// Define the default filepath for locating the BIP0039 english text file
-pub const PATH_TO_BIP0039_DATA: &str = "../../.artifacts/data/BIP0039/english.txt";
-
+/// Implement the BIP0039 standard, defaulting searching for the file at the project root
 #[derive(Clone, Debug, Hash, PartialEq, Deserialize, Serialize)]
 pub struct BIP0039 {
     pub data: Vec<String>,
