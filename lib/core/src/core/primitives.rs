@@ -7,31 +7,25 @@
 pub use constants::*;
 pub use types::*;
 
+
 mod constants {
-    ///
-    pub const FLOW_MAINNET_PORT: u16 = 9090;
-    ///
-    pub const FLOW_SERVER_PORT: u16 = 8080;
-    ///
-    pub const FLOW_PROXY_PORT: u16 = 8080;
-
-    pub struct Port(u16);
-
-    #[derive(Clone, Debug, Hash, PartialEq, scsys::Deserialize, scsys::Serialize)]
-    pub struct Constants {
-        pub name: String,
-    }
+    /// Define the default filepath for locating the BIP0039 english text file
+    pub const PATH_TO_BIP0039_DATA: &str = "../../.artifacts/data/BIP0039/english.txt";
 }
 
 mod types {
     use secp256k1::{PublicKey, SecretKey};
-    pub use web3::types::Address as Web3Address;
 
     /// Type alias for a tuple ([secp256k1::SecretKey], [secp256k1::PublicKey])
     pub type SecpKeypair = (SecretKey, PublicKey);
-
+    /// Type alias for a Web3 address [web3::Address]
+    pub type Web3Address = web3::types::Address;
+    /// Type alias for [web3::Web3] leveraging an HTTP transport [web3::transports::Http]
     pub type Web3Http = web3::Web3<web3::transports::Http>;
+    /// Type alias for [anyhow::Result] of type [Web3Http]
     pub type Web3HttpResult = anyhow::Result<Web3Http>;
+    /// Type alias for [web3::Web3] leveraging an WebSocket transport [web3::transports::WebSocket]
     pub type Web3WS = web3::Web3<web3::transports::WebSocket>;
+    /// Type alias for [anyhow::Result] of type [Web3WS]
     pub type Web3WSResult = anyhow::Result<Web3WS>;
 }
