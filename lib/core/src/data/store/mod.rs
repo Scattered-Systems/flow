@@ -1,8 +1,6 @@
 /*
-    Appellation: data <module>
+    Appellation: store <module>
     Creator: FL03 <jo3mccain@icloud.com>
     Description:
         ... Summary ...
 */
-pub mod models;
-pub mod store;

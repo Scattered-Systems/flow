@@ -25,16 +25,14 @@ impl WalletKey {
         }
     }
     pub fn generate_keypair() -> crate::SecpKeypair {
-        let secp = Secp256k1::new();
-        secp.generate_keypair(&mut OsRng)
+        Secp256k1::new().generate_keypair(&mut OsRng)
     }
     // TODO: Find a better method of converting a SecretKey into a String
     pub fn from_keypair(keypair: crate::SecpKeypair) -> Self {
         Self::new(keypair.1.to_string(), format!("{:?}", keypair.0))
     }
     pub fn new(public: String, secret: String) -> Self {
-        let timestamp: i64 = Temporal::now().timestamp();
-        Self::constructor(public, secret, timestamp)
+        Self::constructor(public, secret, Temporal::now().timestamp())
     }
 }
 

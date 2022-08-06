@@ -15,7 +15,7 @@ impl Web3Client {
     fn constructor(endpoint: String, version: String) -> Self {
         Self { endpoint, version }
     }
-    async fn connect(&self) -> anyhow::Result<web3::Web3<web3::transports::Http>> {
+    pub async fn connect(&self) -> anyhow::Result<web3::Web3<web3::transports::Http>> {
         connect_to_web3(self.endpoint.clone().as_str()).await
     }
     pub fn new(endpoint: String, version: String) -> Self {
