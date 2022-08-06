@@ -4,7 +4,7 @@
     Description:
         ... Summary ...
 */
-use acme::prelude::{Database, HostPiece, Logger, PortPiece, SocketAddrPieces};
+use acme::prelude::{Database, HostPiece, Logger, SocketAddrPieces};
 
 #[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Settings {
@@ -18,7 +18,7 @@ impl Settings {
     pub fn constructor() -> Result<scsys::DefaultConfigBuilder, config::ConfigError> {
         let mut builder = config::Config::builder()
             .set_default("application.mode", "development")?
-            .set_default("application.name", "rs-sandbox")?
+            .set_default("application.name", "flow")?
             .set_default("database.name", "postgres")?
             .set_default(
                 "database.uri",
@@ -52,17 +52,17 @@ impl std::fmt::Display for AppSettings {
 #[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct ServerParams {
     pub host: String,
-    pub port: PortPiece,
+    pub port: u16,
 }
 
 impl ServerParams {
-    fn constructor(host: String, port: PortPiece) -> Self {
+    fn constructor(host: String, port: u16) -> Self {
         Self { host, port }
     }
     pub fn address(self) -> std::net::SocketAddr {
         std::net::SocketAddr::from(self.pieces())
     }
-    pub fn new(host: String, port: PortPiece) -> Self {
+    pub fn new(host: String, port: u16) -> Self {
         Self::constructor(host, port)
     }
     pub fn pieces(self) -> SocketAddrPieces {

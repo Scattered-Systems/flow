@@ -14,25 +14,13 @@ ENV MODE="development" \
     SERVER_PORT=8080 \
     RUST_LOG="info"
 
-COPY --from=builder /workspace/target/release/flow /flow
-
-EXPOSE ${SERVER_PORT}/tcp
-EXPOSE ${SERVER_PORT}/udp
-
-CMD ["./flow"]
-
-FROM photon as api
-
-ENV MODE="development" \
-    SERVER_PORT=8080 \
-    RUST_LOG="info"
-
 COPY --from=builder /workspace/target/release/flow-api /flow-api
 
 EXPOSE ${SERVER_PORT}/tcp
 EXPOSE ${SERVER_PORT}/udp
 
 CMD ["./flow-api"]
+
 
 FROM photon as cli
 
