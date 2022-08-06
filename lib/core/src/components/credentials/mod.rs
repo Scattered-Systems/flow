@@ -5,5 +5,7 @@
         ... Summary ...
 */
 pub use credential::*;
+pub use mnemonic::*;
 
 mod credential;
+mod mnemonic;

@@ -55,27 +55,6 @@ impl Default for AccessGrant {
     }
 }
 
-#[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
-pub struct Mnemonic {
-    pub passphrase: String,
-}
-
-impl Mnemonic {
-    fn constructor(passphrase: String) -> Self {
-        Self { passphrase }
-    }
-    pub fn new(passphrase: String) -> Self {
-        Self::constructor(passphrase)
-    }
-    pub fn passphrase(&self) -> String {
-        self.passphrase.clone()
-    }
-    pub fn salt(&self) -> String {
-        let salt = String::new();
-        self.passphrase() + salt.as_str()
-    }
-}
-
 /// Quickly create randomly generated access grants for users
 fn generate_access_grant(size: usize) -> Vec<String> {
     let source: BIP0039 = BIP0039::default();

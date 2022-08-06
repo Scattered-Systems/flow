@@ -5,7 +5,8 @@
         ... Summary ...
 */
 
-pub trait ContextInterface<Cnf> {
+///
+pub trait ContextInterface<Cnf>: Clone + PartialEq + std::fmt::Debug + std::hash::Hash {
     fn builder(&self, settings: Cnf) -> Result<Self, scsys::BoxError>
         where
             Self: Sized;
