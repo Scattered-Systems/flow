@@ -4,7 +4,6 @@
     Description:
         ... Summary ...
 */
-use crate::Web3Client;
 use scsys::{Deserialize, Serialize};
 
 /// Defines a Web3 Account
