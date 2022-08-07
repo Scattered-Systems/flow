@@ -1,9 +1,9 @@
 /*
-    Appellation: mod <module>
+    Appellation: inputs <module>
     Creator: FL03 <jo3mccain@icloud.com>
     Description:
         ... Summary ...
 */
-pub use self::credential::*;
+pub use self::cli::*;
 
-mod credential;
+pub(crate) mod cli;

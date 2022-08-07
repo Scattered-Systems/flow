@@ -5,11 +5,13 @@
         ... Summary ...
 */
 pub use clients::*;
+pub use crypto::*;
 pub use primitives::*;
 pub use states::*;
 pub use utils::*;
 
 mod clients;
+mod crypto;
 mod primitives;
 mod states;
 

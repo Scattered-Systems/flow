@@ -4,10 +4,12 @@
     Description:
         ... Summary ...
 */
-#[derive(Clone, Debug, PartialEq, serde::Deserialize, serde::Serialize)]
+use scsys::{bson::oid::ObjectId, Deserialize, Serialize, Temporal};
+
+#[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
 pub struct Item {
     pub address: String,
-    pub id: scsys::ObjectId,
+    pub id: ObjectId,
     pub key: String,
     pub appellation: String,
     pub description: String,
@@ -17,7 +19,7 @@ pub struct Item {
 impl Item {
     fn constructor(
         address: String,
-        id: scsys::ObjectId,
+        id: ObjectId,
         key: String,
         appellation: String,
         description: String,
@@ -34,7 +36,7 @@ impl Item {
     }
     fn new(
         address: String,
-        id: scsys::ObjectId,
+        id: ObjectId,
         key: String,
         appellation: String,
         description: String,
@@ -45,7 +47,7 @@ impl Item {
             key,
             appellation,
             description,
-            scsys::Temporal::now().timestamp(),
+            Temporal::now().timestamp(),
         )
     }
 }
@@ -54,7 +56,7 @@ impl Default for Item {
     fn default() -> Self {
         Self::new(
             String::new(),
-            scsys::ObjectId::new(),
+            ObjectId::new(),
             String::new(),
             String::new(),
             String::new(),

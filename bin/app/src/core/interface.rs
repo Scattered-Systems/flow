@@ -4,10 +4,11 @@
     Description:
         ... Summary ...
 */
-use crate::api::FlowAPI;
-use acme::network::{async_trait, APISpec};
+use crate::{api, cli, handlers::handle_cli_inputs};
+use acme::prelude::{async_trait, APISpec, CLISpec};
+use scsys::{BoxResult, Temporal};
 
-#[derive(Clone, Copy, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Copy, Debug, Hash, PartialEq, scsys::Deserialize, scsys::Serialize)]
 pub enum AppState {
     Off,
     On,
@@ -19,7 +20,7 @@ impl Default for AppState {
     }
 }
 
-#[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Hash, PartialEq, scsys::Deserialize, scsys::Serialize)]
 pub struct Flow {
     pub state: AppState,
     pub timestamp: i64,
@@ -30,17 +31,17 @@ impl Flow {
         Self { state, timestamp }
     }
     pub fn new(state: AppState) -> Self {
-        Self::constructor(state, scsys::Utc::now().timestamp())
+        Self::constructor(state, Temporal::now().timestamp())
     }
 }
 
 #[async_trait]
-impl APISpec<FlowAPI> for Flow {
-    async fn run(&self) -> Result<(), scsys::BoxError>
+impl APISpec<api::FlowAPI> for Flow {
+    async fn run(&self) -> BoxResult<()>
         where
             Self: Sized + Sync,
     {
-        let api = FlowAPI::default();
+        let api = api::FlowAPI::default();
         println!("{}", &api);
         api.server()
             .await
@@ -49,6 +50,18 @@ impl APISpec<FlowAPI> for Flow {
             .await
             .expect("Server Error");
         Ok(())
+    }
+}
+
+impl CLISpec<cli::FlowCLI> for Flow {
+    fn run(&self) -> BoxResult<()>
+        where
+            Self: Sized,
+    {
+        let data = cli::FlowCLI::default();
+        println!("{:#?}", data.action.clone());
+        println!("{:#?}", data.command.clone());
+        Ok(handle_cli_inputs(data))
     }
 }
 

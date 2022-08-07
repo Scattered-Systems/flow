@@ -4,9 +4,10 @@
     Description:
         ... Summary ...
 */
-use acme::prelude::{Database, HostPiece, Logger, PortPiece, SocketAddrPieces};
+use acme::prelude::{Database, HostPiece, Logger, SocketAddrPieces};
+use scsys::{collect_config_files, ConfigEnvironment, ConfigError, DefaultConfigBuilder};
 
-#[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Hash, PartialEq, scsys::Deserialize, scsys::Serialize)]
 pub struct Settings {
     pub application: AppSettings,
     pub database: Database,
@@ -15,10 +16,10 @@ pub struct Settings {
 }
 
 impl Settings {
-    pub fn constructor() -> Result<scsys::DefaultConfigBuilder, config::ConfigError> {
-        let mut builder = config::Config::builder()
+    pub fn constructor() -> Result<DefaultConfigBuilder, ConfigError> {
+        let mut builder = scsys::config::Config::builder()
             .set_default("application.mode", "development")?
-            .set_default("application.name", "rs-sandbox")?
+            .set_default("application.name", "flow")?
             .set_default("database.name", "postgres")?
             .set_default(
                 "database.uri",
@@ -28,16 +29,16 @@ impl Settings {
             .set_default("server.host", "0.0.0.0")?
             .set_default("server.port", 8080)?;
 
-        builder = builder.add_source(scsys::collect_config_files("**/*.config.*", false));
-        builder = builder.add_source(config::Environment::default().separator("__"));
+        builder = builder.add_source(collect_config_files("**/*.config.*", false));
+        builder = builder.add_source(ConfigEnvironment::default().separator("__"));
         Ok(builder)
     }
-    pub fn new() -> Result<Self, config::ConfigError> {
+    pub fn new() -> Result<Self, ConfigError> {
         Self::constructor().ok().unwrap().build()?.try_deserialize()
     }
 }
 
-#[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Hash, PartialEq, scsys::Deserialize, scsys::Serialize)]
 pub struct AppSettings {
     pub mode: String,
     pub name: String,
@@ -49,20 +50,20 @@ impl std::fmt::Display for AppSettings {
     }
 }
 
-#[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Hash, PartialEq, scsys::Deserialize, scsys::Serialize)]
 pub struct ServerParams {
     pub host: String,
-    pub port: PortPiece,
+    pub port: u16,
 }
 
 impl ServerParams {
-    fn constructor(host: String, port: PortPiece) -> Self {
+    fn constructor(host: String, port: u16) -> Self {
         Self { host, port }
     }
     pub fn address(self) -> std::net::SocketAddr {
         std::net::SocketAddr::from(self.pieces())
     }
-    pub fn new(host: String, port: PortPiece) -> Self {
+    pub fn new(host: String, port: u16) -> Self {
         Self::constructor(host, port)
     }
     pub fn pieces(self) -> SocketAddrPieces {

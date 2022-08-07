@@ -6,7 +6,7 @@
 */
 #[doc(inline)]
 #[cfg(feature = "core")]
-pub use fluidity_core::*;
+pub use fluidity_core as core;
 #[cfg(feature = "derive")]
 pub use fluidity_derive::*;
 #[cfg(feature = "macros")]
@@ -14,5 +14,5 @@ pub use fluidity_macros::*;
 
 pub mod prelude {
     #[cfg(feature = "core")]
-    pub use super::{access::*, assets::*, auth::*, credentials::*, models::*, wallets::*};
+    pub use super::core::{assets::*, auth::*, credentials::*, models::*, wallets::*};
 }

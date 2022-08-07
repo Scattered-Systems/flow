@@ -4,15 +4,17 @@
     Description:
         ... Summary ...
 */
-#[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+use scsys::{Id, Temporal};
+
+#[derive(Clone, Debug, Hash, PartialEq, scsys::Deserialize, scsys::Serialize)]
 pub struct State {
-    pub id: scsys::Id,
+    pub id: Id,
     pub message: String,
     pub timestamp: i64,
 }
 
 impl State {
-    fn constructor(id: scsys::Id, message: String, timestamp: i64) -> Self {
+    fn constructor(id: Id, message: String, timestamp: i64) -> Self {
         Self {
             id,
             message,
@@ -20,11 +22,7 @@ impl State {
         }
     }
     pub fn new(message: String) -> Self {
-        Self::constructor(
-            scsys::Id::generate_object_id(),
-            message,
-            scsys::Temporal::now().timestamp(),
-        )
+        Self::constructor(Id::new_oid(), message, Temporal::now().timestamp())
     }
 }
 

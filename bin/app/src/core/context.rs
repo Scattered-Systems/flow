@@ -6,7 +6,7 @@
 */
 use crate::Settings;
 
-#[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Hash, PartialEq, scsys::Deserialize, scsys::Serialize)]
 pub struct Context {
     pub settings: Settings,
 }

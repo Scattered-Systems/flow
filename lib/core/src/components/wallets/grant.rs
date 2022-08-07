@@ -7,11 +7,10 @@
 use crate::PATH_TO_BIP0039_DATA;
 
 use rand::Rng;
-use scsys::{Deserialize, Serialize};
 use std::io::Read;
 
 /// Implement the BIP0039 standard, defaulting searching for the file at the project root
-#[derive(Clone, Debug, Hash, PartialEq, Deserialize, Serialize)]
+#[derive(Clone, Debug, Hash, PartialEq, scsys::Deserialize, scsys::Serialize)]
 pub struct BIP0039 {
     pub data: Vec<String>,
 }
@@ -20,62 +19,45 @@ impl BIP0039 {
     fn constructor(data: Vec<String>) -> Self {
         Self { data }
     }
-    pub fn from_file(filepath: &str) -> Self {
-        let mut file = match std::fs::File::open(std::path::Path::new(filepath)) {
-            Ok(f) => f,
-            Err(e) => panic!("File Error: {}", e),
-        };
-        let mut file_contents = String::new();
-        file.read_to_string(&mut file_contents)
-            .ok()
-            .expect("failed to read!");
-        let data: Vec<String> = file_contents
-            .split("\n")
-            .map(|s: &str| s.to_string())
-            .collect();
-        Self::constructor(data)
+    pub fn from_file(path: &str) -> Self {
+        Self::constructor(extract_file_from_path(path))
     }
 }
 
 impl Default for BIP0039 {
     fn default() -> Self {
-        Self::from_file(PATH_TO_BIP0039_DATA)
+        Self::constructor(extract_file_from_path(PATH_TO_BIP0039_DATA))
     }
 }
 
-#[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
+#[derive(Clone, Debug, PartialEq, scsys::Deserialize, scsys::Serialize)]
 pub struct AccessGrant {
-    pub access: scsys::Dictionary,
-    pub grant: Vec<String>,
-    pub timestamp: i64,
+    pub grant: String,
+    pub timestamp: scsys::Timestamp,
 }
 
 impl AccessGrant {
-    pub fn generate_grant(size: usize) -> Vec<String> {
-        generate_access_grant(size)
+    fn constructor(grant: String, timestamp: scsys::Timestamp) -> Self {
+        Self { grant, timestamp }
     }
-    pub fn new(access: scsys::Dictionary, grant: Vec<String>, timestamp: i64) -> Self {
-        Self {
-            access,
-            grant,
-            timestamp,
-        }
+    pub fn generator(size: usize) -> String {
+        generate_access_grant(size).join(" ")
+    }
+    pub fn new(grant: String) -> Self {
+        Self::constructor(grant, scsys::Timestamp::new())
     }
 }
 
 impl Default for AccessGrant {
     fn default() -> Self {
-        Self::new(
-            scsys::Dictionary::new(),
-            Self::generate_grant(12),
-            scsys::Temporal::now().timestamp(),
-        )
+        Self::new(Self::generator(12))
     }
 }
 
 /// Quickly create randomly generated access grants for users
-pub fn generate_access_grant(size: usize) -> Vec<String> {
-    let options = BIP0039::default().data;
+fn generate_access_grant(size: usize) -> Vec<String> {
+    let source: BIP0039 = BIP0039::default();
+    let options = source.data;
     let mut cache = Vec::<String>::with_capacity(size);
     let mut rng = rand::thread_rng();
     for _ in 0..size {
@@ -85,22 +67,32 @@ pub fn generate_access_grant(size: usize) -> Vec<String> {
     cache
 }
 
+fn extract_file_from_path(path: &str) -> Vec<String> {
+    let mut file = match std::fs::File::open(std::path::Path::new(path.clone())) {
+        Ok(f) => f,
+        Err(e) => panic!("File Error: {}", e),
+    };
+    let mut buffer = String::new();
+    file.read_to_string(&mut buffer).expect("File Error");
+    buffer.split("\n").map(|s: &str| s.to_string()).collect()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
     fn test_bip0039() {
-        let actual = BIP0039::default();
-        let expected = actual.clone();
-        assert_eq!(actual, expected)
+        assert_eq!(
+            BIP0039::default().data,
+            extract_file_from_path(PATH_TO_BIP0039_DATA)
+        )
     }
 
     #[test]
     fn test_access_grant() {
         let actual = AccessGrant::default();
         let expected = actual.clone();
-        println!("{:#?}", actual.clone());
-        assert_eq!("", "")
+        assert_eq!(actual, expected)
     }
 }

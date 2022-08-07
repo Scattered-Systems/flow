@@ -4,21 +4,23 @@
     Description:
         ... Summary ...
 */
+use scsys::{Deserialize, Dictionary, Serialize};
+
 /// Implement a secure authenticator
-#[derive(Clone, Debug, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
 pub struct Authenticator {
-    pub authorizations: scsys::Dictionary,
+    pub authorizations: Dictionary,
     pub endpoint: String,
 }
 
 impl Authenticator {
-    fn constructor(authorizations: scsys::Dictionary, endpoint: String) -> Self {
+    fn constructor(authorizations: Dictionary, endpoint: String) -> Self {
         Self {
             authorizations,
             endpoint,
         }
     }
-    pub fn new(authorizations: scsys::Dictionary, endpoint: String) -> Self {
+    pub fn new(authorizations: Dictionary, endpoint: String) -> Self {
         Self::constructor(authorizations, endpoint)
     }
 }

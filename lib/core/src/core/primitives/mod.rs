@@ -4,6 +4,7 @@
     Description:
         ... Summary ...
 */
-pub use self::credential::*;
+pub use self::{constants::*, types::*};
 
-mod credential;
+mod constants;
+mod types;

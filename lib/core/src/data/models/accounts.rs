@@ -36,6 +36,20 @@ impl Default for Web3Account {
     }
 }
 
+pub async fn get_account_balance(
+    address: crate::Web3Address,
+    client: crate::Web3Http,
+) -> web3::Result<web3::types::U256> {
+    let block_num = client.eth().block_number().await?;
+    client
+        .eth()
+        .balance(
+            address,
+            Option::from(web3::types::BlockNumber::from(block_num)),
+        )
+        .await
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

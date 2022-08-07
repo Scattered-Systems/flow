@@ -4,7 +4,7 @@
     Description:
         ... Summary ...
 */
-use crate::wallets::WalletKey;
+use crate::{public_key_address, wallets::keys::WalletKey, Web3Address};
 use secp256k1::{PublicKey, SecretKey};
 use std::str::FromStr;
 
@@ -25,13 +25,17 @@ impl Wallet {
         }
     }
     pub fn new(label: String) -> Self {
-        let keypair = WalletKey::generate_keypair();
-        let address: web3::types::Address = crate::public_key_address(&keypair.1);
-        Self::constructor(address.to_string(), WalletKey::from_keypair(keypair), label)
+        let key = WalletKey::default();
+        let address: Web3Address = public_key_address(
+            &PublicKey::from_str(key.public.clone().as_str())
+                .ok()
+                .unwrap(),
+        );
+        Self::constructor(format!("{}", address), key, label)
     }
     pub fn from(public: &PublicKey, secret: &SecretKey, label: String) -> Self {
         Self::constructor(
-            crate::public_key_address(&public).to_string(),
+            public_key_address(&public).to_string(),
             WalletKey::new(public.to_string(), format!("{:?}", secret)),
             label,
         )
