@@ -4,16 +4,10 @@
     Description:
         ... Summary ...
 */
-pub use crate::{context::Context, interface::Flow, settings::Settings};
-
-mod api;
-mod context;
-mod interface;
-mod settings;
-
 use acme::prelude::APISpec;
+use fluidity_sdk::Flow;
 
 #[tokio::main]
-async fn main() -> Result<(), scsys::BoxError> {
+async fn main() -> scsys::BoxResult<()> {
     Flow::default().run().await
 }

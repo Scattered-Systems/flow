@@ -4,15 +4,10 @@
     Description:
         ... Summary ...
 */
-pub use crate::interface::Flow;
-
-mod cli;
-mod interface;
-
 use acme::prelude::CLISpec;
+use fluidity_sdk::Flow;
 
-/// Run the sandbox application
 #[tokio::main]
-async fn main() -> Result<(), scsys::BoxError> {
+async fn main() -> scsys::BoxResult<()> {
     Flow::default().run()
 }

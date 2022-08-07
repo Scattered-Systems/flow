@@ -7,11 +7,10 @@
 use crate::PATH_TO_BIP0039_DATA;
 
 use rand::Rng;
-use scsys::{Deserialize, Serialize};
 use std::io::Read;
 
 /// Implement the BIP0039 standard, defaulting searching for the file at the project root
-#[derive(Clone, Debug, Hash, PartialEq, Deserialize, Serialize)]
+#[derive(Clone, Debug, Hash, PartialEq, scsys::Deserialize, scsys::Serialize)]
 pub struct BIP0039 {
     pub data: Vec<String>,
 }
@@ -31,21 +30,21 @@ impl Default for BIP0039 {
     }
 }
 
-#[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
+#[derive(Clone, Debug, PartialEq, scsys::Deserialize, scsys::Serialize)]
 pub struct AccessGrant {
     pub grant: String,
-    pub timestamp: i64,
+    pub timestamp: scsys::Timestamp,
 }
 
 impl AccessGrant {
-    fn constructor(grant: String, timestamp: i64) -> Self {
+    fn constructor(grant: String, timestamp: scsys::Timestamp) -> Self {
         Self { grant, timestamp }
     }
     pub fn generator(size: usize) -> String {
         generate_access_grant(size).join(" ")
     }
     pub fn new(grant: String) -> Self {
-        Self::constructor(grant, scsys::Temporal::now().timestamp())
+        Self::constructor(grant, scsys::Timestamp::new())
     }
 }
 

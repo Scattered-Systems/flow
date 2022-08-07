@@ -11,13 +11,13 @@ pub trait ICredential {
             Self: Sized;
 }
 
-#[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Hash, PartialEq, scsys::Deserialize, scsys::Serialize)]
 pub enum CredentialState {
     Authenticated(Credential),
     Unauthenticated(Credential),
 }
 
-#[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Hash, PartialEq, scsys::Deserialize, scsys::Serialize)]
 pub struct Credential {
     pub account: String,
     pub created: i64,

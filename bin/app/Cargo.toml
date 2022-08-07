@@ -9,33 +9,48 @@ edition = "2021"
 homepage = "https://scattered-systems.github.io/flow/"
 keywords = []
 license = "MIT"
-name = "flow-api"
+name = "fluidity-sdk"
 repository = "https://github.com/scattered-systems/flow"
 version = "0.1.0"
+
+[features]
+default = []
+full = []
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+test = true
 
 [[bin]]
 bench = false
 name = "flow-api"
 test = false
 
+[[bin]]
+bench = false
+name = "flow-cli"
+test = false
+
 [build-dependencies]
 
 [dependencies]
 axum = { features = ["headers"], version = "0.5.13" }
-bson = { features = ["chrono-0_4", "serde_with"], version = "2.3.0" }
-chrono = "0.4.19"
+clap = { features = ["cargo", "derive"], version = "3.2.12" }
 config = "0.13.1"
 futures = "0.3.21"
 glob = "0.3.0"
 http = "0.2.8"
 hyper = { features = ["full"], version = "0.14.20" }
-serde = { features = ["derive"], version = "1.0.140" }
+reqwest = "0.11.11"
+serde = { features = ["derive"], version = "1.0.142" }
 serde_json = "1.0.82"
 tokio = { features = ["full"], version = "1.20.1" }
 tower = "0.4.13"
 tower-http = { features = ["compression-br", "propagate-header", "sensitive-headers", "trace"], version = "0.3.4" }
 tracing = "0.1.35"
 tracing-subscriber = "0.3.14"
+siwe = "0.4.1"
+web3 = "0.18.0"
 
 [dependencies.acme]
 features = ["full"]
@@ -44,9 +59,10 @@ version = "0.2.0"
 [dependencies.fluidity]
 features = ["full"]
 path = "../../lib/fluidity"
+version = "0.1.10"
 
 [dependencies.scsys]
 features = ["full"]
-version = "0.1.11"
+version = "0.1.12"
 
 [dev-dependencies]

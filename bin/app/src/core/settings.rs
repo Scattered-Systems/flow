@@ -5,8 +5,9 @@
         ... Summary ...
 */
 use acme::prelude::{Database, HostPiece, Logger, SocketAddrPieces};
+use scsys::{collect_config_files, ConfigEnvironment, ConfigError, DefaultConfigBuilder};
 
-#[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Hash, PartialEq, scsys::Deserialize, scsys::Serialize)]
 pub struct Settings {
     pub application: AppSettings,
     pub database: Database,
@@ -15,8 +16,8 @@ pub struct Settings {
 }
 
 impl Settings {
-    pub fn constructor() -> Result<scsys::DefaultConfigBuilder, config::ConfigError> {
-        let mut builder = config::Config::builder()
+    pub fn constructor() -> Result<DefaultConfigBuilder, ConfigError> {
+        let mut builder = scsys::config::Config::builder()
             .set_default("application.mode", "development")?
             .set_default("application.name", "flow")?
             .set_default("database.name", "postgres")?
@@ -28,16 +29,16 @@ impl Settings {
             .set_default("server.host", "0.0.0.0")?
             .set_default("server.port", 8080)?;
 
-        builder = builder.add_source(scsys::collect_config_files("**/*.config.*", false));
-        builder = builder.add_source(config::Environment::default().separator("__"));
+        builder = builder.add_source(collect_config_files("**/*.config.*", false));
+        builder = builder.add_source(ConfigEnvironment::default().separator("__"));
         Ok(builder)
     }
-    pub fn new() -> Result<Self, config::ConfigError> {
+    pub fn new() -> Result<Self, ConfigError> {
         Self::constructor().ok().unwrap().build()?.try_deserialize()
     }
 }
 
-#[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Hash, PartialEq, scsys::Deserialize, scsys::Serialize)]
 pub struct AppSettings {
     pub mode: String,
     pub name: String,
@@ -49,7 +50,7 @@ impl std::fmt::Display for AppSettings {
     }
 }
 
-#[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Hash, PartialEq, scsys::Deserialize, scsys::Serialize)]
 pub struct ServerParams {
     pub host: String,
     pub port: u16,

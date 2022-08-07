@@ -6,4 +6,3 @@
         fidelity of the information being processed.
 */
 pub mod auth;
-pub mod crypto;

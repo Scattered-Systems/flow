@@ -4,9 +4,9 @@
     Description:
         ... Summary ...
 */
-use scsys::{Deserialize, Id, Serialize, Temporal};
+use scsys::{Id, Temporal};
 
-#[derive(Clone, Debug, Hash, PartialEq, Deserialize, Serialize)]
+#[derive(Clone, Debug, Hash, PartialEq, scsys::Deserialize, scsys::Serialize)]
 pub struct State {
     pub id: Id,
     pub message: String,

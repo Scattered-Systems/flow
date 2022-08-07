@@ -4,6 +4,9 @@
     Description:
         ... Summary ...
 */
-pub use self::credential::*;
+#[doc(inline)]
+pub use self::{context::*, interface::*, settings::*};
 
-mod credential;
+mod context;
+mod interface;
+mod settings;

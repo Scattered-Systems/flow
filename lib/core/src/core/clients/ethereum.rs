@@ -4,6 +4,7 @@
     Description:
         ... Summary ...
 */
+use crate::Web3HttpResult;
 
 #[derive(Clone, Debug, Hash, PartialEq, scsys::Deserialize, scsys::Serialize)]
 pub struct Web3Client {
@@ -15,7 +16,7 @@ impl Web3Client {
     fn constructor(endpoint: String, version: String) -> Self {
         Self { endpoint, version }
     }
-    pub async fn connect(&self) -> crate::Web3HttpResult {
+    pub async fn connect(&self) -> Web3HttpResult {
         connect_to_web3(self.endpoint.clone().as_str()).await
     }
     pub fn new(endpoint: String, version: String) -> Self {
@@ -30,7 +31,7 @@ impl Default for Web3Client {
 }
 
 /// Quickly connect to Web3 Providers
-pub async fn connect_to_web3(endpoint: &str) -> crate::Web3HttpResult {
+pub async fn connect_to_web3(endpoint: &str) -> Web3HttpResult {
     Ok(web3::Web3::new(
         web3::transports::Http::new(endpoint).ok().unwrap(),
     ))

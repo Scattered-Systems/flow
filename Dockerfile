@@ -1,11 +1,12 @@
 FROM jo3mccain/rusty as builder
 
+
 ADD . /workspace
 WORKDIR /workspace
 
 COPY . .
-RUN cargo build --color always --release --verbose --workspace && \
-    cargo test --all-features --color always --release --verbose --workspace
+RUN cargo build --quiet --release --workspace && \
+    cargo test --all-features --quiet --release --workspace
 
 
 FROM photon as latest
@@ -20,7 +21,6 @@ EXPOSE ${SERVER_PORT}/tcp
 EXPOSE ${SERVER_PORT}/udp
 
 CMD ["./flow-api"]
-
 
 FROM photon as cli
 

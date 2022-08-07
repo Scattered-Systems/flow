@@ -36,7 +36,7 @@ impl Default for IndexRouter {
 ///
 pub async fn base() -> axum::Json<serde_json::Value> {
     let mut cache: HashMap<String, String> = HashMap::new();
-    let timestamp: bson::DateTime = chrono::Local::now().into();
+    let timestamp: scsys::bson::DateTime = scsys::Temporal::now().into();
     cache.insert(String::from("timestamp"), timestamp.to_string());
     axum::Json(serde_json::json!(cache))
 }
