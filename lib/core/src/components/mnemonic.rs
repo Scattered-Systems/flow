@@ -4,8 +4,6 @@
     Description:
         ... Summary ...
 */
-use rand::{distributions::Alphanumeric, Rng};
-
 #[derive(Clone, Debug, Hash, PartialEq, scsys::Deserialize, scsys::Serialize)]
 pub struct Mnemonic {
     pub passphrase: String,
@@ -41,7 +39,7 @@ impl Passphrase {
         Self::new(data.to_string())
     }
     pub fn generate(len: usize) -> Self {
-        Self::new(generate_random_string(len))
+        Self::new(crate::generate_random_string(len))
     }
 }
 
@@ -49,14 +47,6 @@ impl Default for Passphrase {
     fn default() -> Self {
         Self::generate(12)
     }
-}
-
-fn generate_random_string(len: usize) -> String {
-    rand::thread_rng()
-        .sample_iter(&Alphanumeric)
-        .take(len)
-        .map(char::from)
-        .collect()
 }
 
 #[cfg(test)]

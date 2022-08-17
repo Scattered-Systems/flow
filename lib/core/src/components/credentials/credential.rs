@@ -28,7 +28,6 @@ impl Credential {
     pub fn save_to_file(&self, path: &str) -> scsys::BoxResult<Self> {
         crate::save_to_file(self.clone(), path)
     }
-
 }
 
 impl Default for Credential {

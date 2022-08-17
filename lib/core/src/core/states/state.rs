@@ -4,17 +4,19 @@
     Description:
         ... Summary ...
 */
-use scsys::{Id, Temporal};
+use scsys::bson::{oid::ObjectId, DateTime};
 
-#[derive(Clone, Debug, Hash, PartialEq, scsys::Deserialize, scsys::Serialize)]
+pub struct SessionId {}
+
+#[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct State {
-    pub id: Id,
+    pub id: ObjectId,
     pub message: String,
-    pub timestamp: i64,
+    pub timestamp: DateTime,
 }
 
 impl State {
-    fn constructor(id: Id, message: String, timestamp: i64) -> Self {
+    fn constructor(id: ObjectId, message: String, timestamp: DateTime) -> Self {
         Self {
             id,
             message,
@@ -22,7 +24,13 @@ impl State {
         }
     }
     pub fn new(message: String) -> Self {
-        Self::constructor(Id::new_oid(), message, Temporal::now().timestamp())
+        Self::constructor(ObjectId::new(), message, scsys::Temporal::now().into())
+    }
+}
+
+impl Default for State {
+    fn default() -> Self {
+        Self::new(String::new())
     }
 }
 

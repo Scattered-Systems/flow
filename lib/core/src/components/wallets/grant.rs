@@ -4,47 +4,32 @@
     Description:
         ... Summary ...
 */
-use crate::PATH_TO_BIP0039_DATA;
 
 use rand::Rng;
-use std::io::Read;
 
-/// Implement the BIP0039 standard, defaulting searching for the file at the project root
 #[derive(Clone, Debug, Hash, PartialEq, scsys::Deserialize, scsys::Serialize)]
-pub struct BIP0039 {
-    pub data: Vec<String>,
-}
-
-impl BIP0039 {
-    fn constructor(data: Vec<String>) -> Self {
-        Self { data }
-    }
-    pub fn from_file(path: &str) -> Self {
-        Self::constructor(extract_file_from_path(path))
-    }
-}
-
-impl Default for BIP0039 {
-    fn default() -> Self {
-        Self::constructor(extract_file_from_path(PATH_TO_BIP0039_DATA))
-    }
-}
-
-#[derive(Clone, Debug, PartialEq, scsys::Deserialize, scsys::Serialize)]
 pub struct AccessGrant {
     pub grant: String,
-    pub timestamp: scsys::Timestamp,
+    pub timestamp: scsys::bson::DateTime,
 }
 
 impl AccessGrant {
-    fn constructor(grant: String, timestamp: scsys::Timestamp) -> Self {
+    fn constructor(grant: String, timestamp: scsys::bson::DateTime) -> Self {
         Self { grant, timestamp }
     }
     pub fn generator(size: usize) -> String {
-        generate_access_grant(size).join(" ")
+        let source = crate::BIP0039::default();
+        let mut cache = Vec::<String>::with_capacity(size);
+        let mut rng = rand::thread_rng();
+        for _ in 0..size {
+            let random_index = rng.gen_range(0..source.data.clone().len());
+            cache.push(source.data[random_index].clone())
+        }
+
+        cache.join(" ")
     }
     pub fn new(grant: String) -> Self {
-        Self::constructor(grant, scsys::Timestamp::new())
+        Self::constructor(grant, scsys::Temporal::now().into())
     }
 }
 
@@ -54,40 +39,9 @@ impl Default for AccessGrant {
     }
 }
 
-/// Quickly create randomly generated access grants for users
-fn generate_access_grant(size: usize) -> Vec<String> {
-    let source: BIP0039 = BIP0039::default();
-    let options = source.data;
-    let mut cache = Vec::<String>::with_capacity(size);
-    let mut rng = rand::thread_rng();
-    for _ in 0..size {
-        let random_index = rng.gen_range(0..options.clone().len());
-        cache.push(options[random_index].clone())
-    }
-    cache
-}
-
-fn extract_file_from_path(path: &str) -> Vec<String> {
-    let mut file = match std::fs::File::open(std::path::Path::new(path.clone())) {
-        Ok(f) => f,
-        Err(e) => panic!("File Error: {}", e),
-    };
-    let mut buffer = String::new();
-    file.read_to_string(&mut buffer).expect("File Error");
-    buffer.split("\n").map(|s: &str| s.to_string()).collect()
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    #[test]
-    fn test_bip0039() {
-        assert_eq!(
-            BIP0039::default().data,
-            extract_file_from_path(PATH_TO_BIP0039_DATA)
-        )
-    }
 
     #[test]
     fn test_access_grant() {

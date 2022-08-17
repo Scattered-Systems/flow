@@ -1,5 +1,5 @@
 /*
-    Appellation: mod <module>
+    Appellation: credentials <module>
     Creator: FL03 <jo3mccain@icloud.com>
     Description:
         ... Summary ...
@@ -26,6 +26,5 @@ pub enum CredentialState<T = Credential> {
     Authenticated(T),
     Unauthenticated(T),
 }
-
 
 mod utils {}
