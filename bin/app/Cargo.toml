@@ -23,6 +23,11 @@ test = true
 
 [[bin]]
 bench = false
+name = "flow"
+test = false
+
+[[bin]]
+bench = false
 name = "flow-api"
 test = false
 
@@ -50,6 +55,7 @@ tower-http = { features = ["compression-br", "propagate-header", "sensitive-head
 tracing = "0.1.35"
 tracing-subscriber = "0.3.14"
 siwe = "0.4.1"
+u2f = "0.2.0"
 web3 = "0.18.0"
 
 [dependencies.acme]
