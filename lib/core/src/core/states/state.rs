@@ -6,8 +6,6 @@
 */
 use scsys::bson::{oid::ObjectId, DateTime};
 
-pub struct SessionId {}
-
 #[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct State {
     pub id: ObjectId,
@@ -36,9 +34,12 @@ impl Default for State {
 
 #[cfg(test)]
 mod tests {
+    use super::State;
+
     #[test]
-    fn test() {
-        let f = |x: usize, y: usize| x + y;
-        assert_eq!(f(4, 2), 6)
+    fn test_state() {
+        let actual = State::default();
+        let expected = actual.clone();
+        assert_eq!(actual, expected)
     }
 }

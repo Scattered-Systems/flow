@@ -1,9 +1,9 @@
 /*
-    Appellation: mod <module>
+    Appellation: clients <module>
     Creator: FL03 <jo3mccain@icloud.com>
     Description:
         ... Summary ...
 */
-pub use ethereum::*;
+pub use self::ethereum::*;
 
 mod ethereum;

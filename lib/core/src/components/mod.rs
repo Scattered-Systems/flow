@@ -6,5 +6,5 @@
 */
 pub mod assets;
 pub mod credentials;
-pub mod mnemonic;
+pub mod mnemonics;
 pub mod wallets;

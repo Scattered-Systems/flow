@@ -40,25 +40,19 @@ impl Wallet {
             label,
         )
     }
-    pub fn from_file(file_path: &str) -> anyhow::Result<Self> {
+    pub fn from_file(file_path: &str) -> scsys::BoxResult<Self> {
         let file = std::fs::OpenOptions::new().read(true).open(file_path)?;
         let buf_reader = std::io::BufReader::new(file);
         let wallet: Wallet = serde_json::from_reader(buf_reader)?;
         Ok(wallet)
     }
-    pub fn public_key(&self) -> anyhow::Result<PublicKey> {
+    pub fn public_key(&self) -> scsys::BoxResult<PublicKey> {
         Ok(PublicKey::from_str(&self.key.public)?)
     }
-    pub fn save_to_file(&self, file_path: &str) -> anyhow::Result<()> {
-        let file = std::fs::OpenOptions::new()
-            .write(true)
-            .create(true)
-            .open(file_path)?;
-        let buf_writer = std::io::BufWriter::new(file);
-        serde_json::to_writer_pretty(buf_writer, self)?;
-        Ok(())
+    pub fn save_to_file(&self, path: &str) -> scsys::BoxResult<Self> {
+       crate::save_to_file(self.clone(), path)
     }
-    pub fn secret_key(&self) -> anyhow::Result<SecretKey> {
+    pub fn secret_key(&self) -> scsys::BoxResult<SecretKey> {
         Ok(SecretKey::from_str(&self.key.secret)?)
     }
 }

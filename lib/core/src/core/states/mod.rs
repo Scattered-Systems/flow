@@ -4,28 +4,18 @@
     Description:
         ... Summary ...
 */
-pub use crypto::*;
-pub use state::*;
+pub use self::state::*;
 
 mod state;
 
 pub trait Stateful<S> {
+    fn message(&self, data: String) -> String {
+        format!("Message:\n{}\n\nTimestamp: {}", data, self.timestamp())
+    }
     fn state(&self) -> S
         where
             Self: Sized;
-}
-
-mod crypto {
-    #[derive(Clone, Copy, Debug, Hash, PartialEq, scsys::Deserialize, scsys::Serialize)]
-    pub enum CryptoStates {
-        Insecure,
-        Secure,
-        Securing,
-    }
-
-    impl Default for CryptoStates {
-        fn default() -> Self {
-            Self::Secure
-        }
+    fn timestamp(&self) -> scsys::bson::DateTime {
+        scsys::Temporal::now().into()
     }
 }

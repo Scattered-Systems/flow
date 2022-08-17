@@ -4,10 +4,9 @@
     Description:
         ... Summary ...
 */
-pub use self::{clients::*, crypto::*, primitives::*, states::*, utils::*};
+pub use self::{clients::*, primitives::*, states::*, utils::*};
 
 mod clients;
-mod crypto;
 mod primitives;
 mod states;
 mod utils;

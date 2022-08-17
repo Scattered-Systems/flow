@@ -1,29 +1,6 @@
-/*
-    Appellation: mnemonic <module>
-    Creator: FL03 <jo3mccain@icloud.com>
-    Description:
-        ... Summary ...
-*/
-#[derive(Clone, Debug, Hash, PartialEq, scsys::Deserialize, scsys::Serialize)]
-pub struct Mnemonic {
-    pub passphrase: String,
-}
+pub use self::mnemonic::*;
 
-impl Mnemonic {
-    fn constructor(passphrase: String) -> Self {
-        Self { passphrase }
-    }
-    pub fn new(passphrase: String) -> Self {
-        Self::constructor(passphrase)
-    }
-    pub fn passphrase(&self) -> String {
-        self.passphrase.clone()
-    }
-    pub fn salt(&self) -> String {
-        let salt = String::new();
-        self.passphrase() + salt.as_str()
-    }
-}
+mod mnemonic;
 
 #[derive(Clone, Debug, Hash, PartialEq, scsys::Deserialize, scsys::Serialize)]
 pub struct Passphrase(String);
