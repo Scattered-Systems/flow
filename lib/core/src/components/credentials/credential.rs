@@ -8,30 +8,27 @@
 #[derive(Clone, Debug, Hash, PartialEq, scsys::Deserialize, scsys::Serialize)]
 pub struct Credential {
     pub account: String,
-    pub created: i64,
+    pub created: scsys::bson::DateTime,
     pub data: Vec<String>,
 }
 
 impl Credential {
-    fn constructor(account: String, created: i64, data: Vec<String>) -> Self {
+    fn constructor(account: String, created: scsys::bson::DateTime, data: Vec<String>) -> Self {
         Self {
             account,
             created,
             data,
         }
     }
+
     pub fn new(account: String, data: Vec<String>) -> Self {
-        Self::constructor(account, chrono::Utc::now().timestamp(), data)
+        Self::constructor(account, scsys::DefaultTimezone::now().into(), data)
     }
-    pub fn save_to_file(&self, file_path: &str) -> scsys::BoxResult<Self> {
-        let file = std::fs::OpenOptions::new()
-            .write(true)
-            .create(true)
-            .open(file_path)?;
-        let buf_writer = std::io::BufWriter::new(file);
-        serde_json::to_writer_pretty(buf_writer, self)?;
-        Ok(self.clone())
+
+    pub fn save_to_file(&self, path: &str) -> scsys::BoxResult<Self> {
+        crate::save_to_file(self.clone(), path)
     }
+
 }
 
 impl Default for Credential {

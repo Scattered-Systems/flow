@@ -4,11 +4,7 @@
     Description:
         ... Summary ...
 */
-pub use clients::*;
-pub use crypto::*;
-pub use primitives::*;
-pub use states::*;
-pub use utils::*;
+pub use self::{clients::*, crypto::*, primitives::*, states::*, utils::*};
 
 mod clients;
 mod crypto;
@@ -30,7 +26,7 @@ mod utils {
         Address::from_slice(&hash[12..])
     }
 
-    /// Save a serde enabled da
+    /// Save a serde enabled data-structure to a file
     pub fn save_to_file<'a, T: Clone + scsys::Deserialize<'a> + scsys::Serialize>(
         data: T,
         path: &str,
