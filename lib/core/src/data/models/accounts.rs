@@ -4,10 +4,22 @@
     Description:
         ... Summary ...
 */
-use scsys::{Deserialize, Serialize};
+
+pub trait AccountSpec {
+    fn new(username: String, password: String) -> Self
+        where
+            Self: Sized;
+    fn id(&self) -> scsys::bson::oid::ObjectId;
+    fn name(&self) -> String;
+    fn password(&self) -> String;
+    fn slug(&self) -> String {
+        self.name().clone().to_lowercase()
+    }
+    fn username(&self) -> String;
+}
 
 /// Defines a Web3 Account
-#[derive(Clone, Debug, Hash, PartialEq, Deserialize, Serialize)]
+#[derive(Clone, Debug, Hash, PartialEq, scsys::Deserialize, scsys::Serialize)]
 pub struct Web3Account {
     pub address: String,
     pub balance: usize,

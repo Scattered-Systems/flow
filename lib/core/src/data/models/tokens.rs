@@ -4,11 +4,10 @@
     Description:
         ... Summary ...
 */
-use scsys::{Deserialize, Serialize};
-pub use utils::*;
+pub use self::utils::*;
 
 /// Defines the standard model for creating authentication tokens
-#[derive(Clone, Debug, Hash, PartialEq, Deserialize, Serialize)]
+#[derive(Clone, Debug, Hash, PartialEq, scsys::Deserialize, scsys::Serialize)]
 pub struct OAuthToken {
     pub access_type: Vec<String>,
     pub token: String,
@@ -33,7 +32,7 @@ impl Default for OAuthToken {
     }
 }
 
-#[derive(Clone, Debug, Hash, PartialEq, Deserialize, Serialize)]
+#[derive(Clone, Debug, Hash, PartialEq, scsys::Deserialize, scsys::Serialize)]
 struct Claims {
     sub: String,
     role: String,
@@ -49,7 +48,7 @@ impl Claims {
     }
 }
 
-#[derive(Clone, Copy, Debug, Hash, PartialEq, Deserialize, Serialize)]
+#[derive(Clone, Copy, Debug, Hash, PartialEq, scsys::Deserialize, scsys::Serialize)]
 pub enum Role {
     User,
     Admin,

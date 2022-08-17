@@ -30,6 +30,20 @@ mod utils {
         Address::from_slice(&hash[12..])
     }
 
+    /// Save a serde enabled da
+    pub fn save_to_file<'a, T: Clone + scsys::Deserialize<'a> + scsys::Serialize>(
+        data: T,
+        path: &str,
+    ) -> scsys::BoxResult<T> {
+        let file = std::fs::OpenOptions::new()
+            .write(true)
+            .create(true)
+            .open(path)?;
+        let buf_writer = std::io::BufWriter::new(file);
+        serde_json::to_writer_pretty(buf_writer, &data)?;
+        Ok(data.clone())
+    }
+
     /// Convert wei to eth
     pub fn wei_to_eth(wei_val: U256) -> f64 {
         let res = wei_val.as_u128() as f64;

@@ -6,6 +6,8 @@
 */
 use crate::Web3HttpResult;
 
+const DEFAULT_WEB3_ENDPOINT: &str = "https://rpc.ankr.com/eth";
+
 #[derive(Clone, Debug, Hash, PartialEq, scsys::Deserialize, scsys::Serialize)]
 pub struct Web3Client {
     pub endpoint: String,
@@ -26,12 +28,12 @@ impl Web3Client {
 
 impl Default for Web3Client {
     fn default() -> Self {
-        Self::new("https://rpc.ankr.com/eth".to_string(), String::new())
+        Self::new(DEFAULT_WEB3_ENDPOINT.to_string(), String::new())
     }
 }
 
 /// Quickly connect to Web3 Providers
-pub async fn connect_to_web3(endpoint: &str) -> Web3HttpResult {
+async fn connect_to_web3(endpoint: &str) -> Web3HttpResult {
     Ok(web3::Web3::new(
         web3::transports::Http::new(endpoint).ok().unwrap(),
     ))

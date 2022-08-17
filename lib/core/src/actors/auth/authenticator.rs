@@ -2,32 +2,38 @@
     Appellation: authenticator <module>
     Creator: FL03 <jo3mccain@icloud.com>
     Description:
-        ... Summary ...
+        With the recent advent of a multi-device authentication protocol (FIDO's PassKey) developers
+        are enabled to string together devices, uniting them under a single credential which is
+        typically stored under the user's primary service provider; i.e. Apple, Google, etc.
+
 */
-use scsys::{Deserialize, Dictionary, Serialize};
+use super::IAuthenticator;
+use scsys::{BoxResult, Dictionary};
 
 /// Implement a secure authenticator
-#[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
+#[derive(Clone, Debug, PartialEq, scsys::Deserialize, scsys::Serialize)]
 pub struct Authenticator {
     pub authorizations: Dictionary,
     pub endpoint: String,
 }
 
 impl Authenticator {
-    fn constructor(authorizations: Dictionary, endpoint: String) -> Self {
-        Self {
+    fn constructor(authorizations: Dictionary, endpoint: String) -> BoxResult<Self> {
+        Ok(Self {
             authorizations,
             endpoint,
-        }
+        })
     }
     pub fn new(authorizations: Dictionary, endpoint: String) -> Self {
-        Self::constructor(authorizations, endpoint)
+        Self::constructor(authorizations, endpoint).ok().unwrap()
     }
 }
 
+impl IAuthenticator<String, Vec<String>> for Authenticator {}
+
 impl Default for Authenticator {
     fn default() -> Self {
-        Self::new(scsys::Dictionary::new(), String::new())
+        Self::new(Dictionary::new(), String::new())
     }
 }
 

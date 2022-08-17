@@ -4,9 +4,9 @@
     Description:
         ... Summary ...
 */
-use scsys::{bson::oid::ObjectId, Deserialize, Serialize, Temporal};
+use scsys::{bson::oid::ObjectId, Temporal};
 
-#[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
+#[derive(Clone, Debug, PartialEq, scsys::Deserialize, scsys::Serialize)]
 pub struct Item {
     pub address: String,
     pub id: ObjectId,
