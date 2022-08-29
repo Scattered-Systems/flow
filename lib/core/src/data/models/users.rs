@@ -7,8 +7,8 @@
 
 pub trait AccountSpec {
     fn new(username: String, password: String) -> Self
-        where
-            Self: Sized;
+    where
+        Self: Sized;
     fn id(&self) -> scsys::bson::oid::ObjectId;
     fn name(&self) -> String;
     fn password(&self) -> String;

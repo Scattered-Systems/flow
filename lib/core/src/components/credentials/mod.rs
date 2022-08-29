@@ -11,14 +11,14 @@ mod credential;
 /// Implements the credential specification for the systems to properly authenticate actors
 pub trait CredentialSpec: Clone + PartialEq + std::fmt::Debug {
     fn get(&self) -> scsys::BoxResult<Self>
-        where
-            Self: Sized,
+    where
+        Self: Sized,
     {
         Ok(self.clone())
     }
     fn authorize(&self, signature: String) -> bool
-        where
-            Self: Sized;
+    where
+        Self: Sized;
 }
 
 #[derive(Clone, Debug, Hash, PartialEq, scsys::Deserialize, scsys::Serialize)]

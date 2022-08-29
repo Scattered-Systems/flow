@@ -17,7 +17,7 @@ impl Default for FlowArgs {
 }
 
 #[derive(
-clap::ArgEnum, Clone, Copy, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize,
+    clap::ArgEnum, Clone, Copy, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub enum WalletAction {
     Create,

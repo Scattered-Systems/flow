@@ -9,31 +9,13 @@ edition = "2021"
 homepage = "https://scattered-systems.github.io/flow/"
 keywords = []
 license = "MIT"
-name = "fluidity-sdk"
+name = "flow"
 repository = "https://github.com/scattered-systems/flow"
 version = "0.1.0"
-
-[features]
-default = []
-full = []
-
-[lib]
-crate-type = ["cdylib", "rlib"]
-test = true
 
 [[bin]]
 bench = false
 name = "flow"
-test = false
-
-[[bin]]
-bench = false
-name = "flow-api"
-test = false
-
-[[bin]]
-bench = false
-name = "flow-cli"
 test = false
 
 [build-dependencies]
@@ -63,9 +45,7 @@ features = ["full"]
 version = "0.2.0"
 
 [dependencies.fluidity]
-features = ["full"]
-path = "../../lib/fluidity"
-version = "0.1.10"
+path = "../lib/fluidity"
 
 [dependencies.scsys]
 features = ["full"]

@@ -50,7 +50,7 @@ impl Wallet {
         Ok(PublicKey::from_str(&self.key.public)?)
     }
     pub fn save_to_file(&self, path: &str) -> scsys::BoxResult<Self> {
-       crate::save_to_file(self.clone(), path)
+        crate::save_to_file(self.clone(), path)
     }
     pub fn secret_key(&self) -> scsys::BoxResult<SecretKey> {
         Ok(SecretKey::from_str(&self.key.secret)?)

@@ -25,13 +25,13 @@ pub fn extract_file_from_path(path: &str) -> Vec<String> {
 
 /// Create a random set of elements from a source via index
 pub fn generate_collection_from_reference(reference: Vec<String>, size: usize) -> Vec<String> {
-        let mut cache = Vec::<String>::with_capacity(size);
-        let mut rng = rand::thread_rng();
-        for _ in 0..size {
-            let random_index = rng.gen_range(0..reference.clone().len());
-            cache.push(reference[random_index].clone())
-        }
-        cache
+    let mut cache = Vec::<String>::with_capacity(size);
+    let mut rng = rand::thread_rng();
+    for _ in 0..size {
+        let random_index = rng.gen_range(0..reference.clone().len());
+        cache.push(reference[random_index].clone())
+    }
+    cache
 }
 
 /// Quickly generate a random, secure string

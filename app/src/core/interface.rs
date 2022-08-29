@@ -38,8 +38,8 @@ impl Flow {
 #[async_trait]
 impl APISpec<api::FlowAPI> for Flow {
     async fn run(&self) -> BoxResult<()>
-        where
-            Self: Sized + Sync,
+    where
+        Self: Sized + Sync,
     {
         let api = api::FlowAPI::default();
         println!("{}", &api);
@@ -55,8 +55,8 @@ impl APISpec<api::FlowAPI> for Flow {
 
 impl CLISpec<cli::FlowCLI> for Flow {
     fn run(&self) -> BoxResult<()>
-        where
-            Self: Sized,
+    where
+        Self: Sized,
     {
         let data = cli::FlowCLI::default();
         println!("{:#?}", data.action.clone());

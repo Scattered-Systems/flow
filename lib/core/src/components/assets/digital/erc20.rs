@@ -7,8 +7,8 @@
 /// Describes an interface for the ERC20 fungible token standard
 pub trait IERC20 {
     fn constructor() -> Self
-        where
-            Self: Sized;
+    where
+        Self: Sized;
     fn decimals(&self) -> usize;
     fn name(&self) -> String;
     fn supply(&self) -> usize;
@@ -26,8 +26,8 @@ pub struct ERC20 {
 
 impl IERC20 for ERC20 {
     fn constructor() -> Self
-        where
-            Self: Sized,
+    where
+        Self: Sized,
     {
         todo!()
     }

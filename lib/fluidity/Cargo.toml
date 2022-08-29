@@ -16,11 +16,9 @@ version = "0.1.11"
 
 [features]
 default = ["core"]
-full = ["core", "derive", "macros"]
+full = ["core"]
 
 core = ["fluidity-core"]
-derive = ["fluidity-derive"]
-macros = ["fluidity-macros"]
 
 [lib]
 crate-type = ["cdylib", "rlib"]
@@ -29,14 +27,6 @@ test = true
 [dependencies.fluidity-core]
 optional = true
 path = "../core"
-
-[dependencies.fluidity-derive]
-optional = true
-path = "../derive"
-
-[dependencies.fluidity-macros]
-optional = true
-path = "../macros"
 
 [package.metadata.docs.rs]
 all-features = true

@@ -8,14 +8,14 @@ use scsys::BoxResult;
 
 /// Implements an interface for standard, multi-device authenticators
 pub trait IAuthenticator<Addr: std::string::ToString, Data>:
-Clone + PartialEq + std::fmt::Debug
+    Clone + PartialEq + std::fmt::Debug
 {
     fn get(&self) -> BoxResult<Self> {
         Ok(self.clone())
     }
     fn authenticate(&self, address: Addr, signature: String) -> BoxResult<bool>
-        where
-            Self: Sized,
+    where
+        Self: Sized,
     {
         let mut authenticated: bool = false;
         if address.to_string() == "".to_string() {

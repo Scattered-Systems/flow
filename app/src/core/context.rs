@@ -12,10 +12,7 @@ pub struct Context {
 }
 
 impl Context {
-    fn constructor(settings: Settings) -> Self {
-        Self { settings }
-    }
     pub fn new(settings: Settings) -> Self {
-        Self::constructor(settings)
+        Self { settings }
     }
 }

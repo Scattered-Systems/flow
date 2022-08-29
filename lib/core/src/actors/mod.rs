@@ -2,7 +2,8 @@
     Appellation: actors <module>
     Creator: FL03 <jo3mccain@icloud.com>
     Description:
-        Flow actors encompasses abstract models of computation generally associated with the
-        fidelity of the information being processed.
+        This module is dedicated to defining complex computational models for automations,
+        machine learning and more...
 */
-pub mod auth;
+
+pub mod authorize;

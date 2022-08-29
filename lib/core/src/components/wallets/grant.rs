@@ -22,8 +22,8 @@ impl AccessGrant {
         let mut cache = Vec::<String>::with_capacity(size);
         let mut rng = rand::thread_rng();
         for _ in 0..size {
-            let random_index = rng.gen_range(0..source.data.clone().len());
-            cache.push(source.data[random_index].clone())
+            let random_index = rng.gen_range(0..source.0.clone().len());
+            cache.push(source.0[random_index].clone())
         }
 
         cache.join(" ")

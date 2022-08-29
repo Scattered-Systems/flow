@@ -4,19 +4,14 @@
     Description:
         ... Summary ...
 */
-pub use self::{accounts::*, items::*, tokens::*};
+pub use self::{items::*, profiles::*, tokens::*, users::*};
 
-mod accounts;
 mod items;
+mod profiles;
 mod tokens;
+mod users;
 
-pub trait FlowModelSpec {
-    fn create(&self) -> Result<Self, scsys::BoxError>
-        where
-            Self: Sized;
-}
-
-#[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct ModelId {
-    temporal: i64,
+pub trait StandardModel {
+    fn created(&self) -> scsys::BsonDateTime;
+    fn modified(&self) -> scsys::BsonDateTime;
 }

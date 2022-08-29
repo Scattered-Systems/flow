@@ -13,8 +13,8 @@ pub trait Stateful<S> {
         format!("Message:\n{}\n\nTimestamp: {}", data, self.timestamp())
     }
     fn state(&self) -> S
-        where
-            Self: Sized;
+    where
+        Self: Sized;
     fn timestamp(&self) -> scsys::bson::DateTime {
         scsys::Temporal::now().into()
     }

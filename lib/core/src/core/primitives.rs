@@ -14,19 +14,24 @@ pub enum Language {
 
 impl Language {
     pub fn new(data: String) -> Self {
-        if data == Self::english() {
-            Self::English
-        } else if data == Self::french() {
-            Self::French
-        } else {
-            panic!("Input Error: Failed to match input to an available option")
-        }
+        Self::related()
+            .get(data.clone().to_lowercase().as_str())
+            .clone()
+            .expect("")
+            .clone()
     }
     pub fn from(data: Self) -> String {
         match data {
             Language::English => Self::english(),
             Language::French => Self::french(),
         }
+    }
+    pub fn related() -> scsys::Dictionary<Self> {
+        let data = [
+            ("english".to_string(), Self::English),
+            ("french".to_string(), Self::French),
+        ];
+        scsys::Dictionary::from(data.clone())
     }
 
     pub fn english() -> String {
@@ -38,16 +43,11 @@ impl Language {
 }
 
 #[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct BIP0039 {
-    pub data: Vec<String>,
-}
+pub struct BIP0039(pub Vec<String>);
 
 impl BIP0039 {
-    fn constructor(data: Vec<String>) -> Self {
-        Self { data }
-    }
     pub fn new(data: Vec<String>) -> Self {
-        Self::constructor(data)
+        Self(data)
     }
     pub async fn fetch(lang: Language) -> scsys::BoxResult<Self> {
         let response = reqwest::get(format!(
@@ -55,17 +55,18 @@ impl BIP0039 {
             BIP0039_WORDLIST_ENDPOINT,
             Language::from(lang)
         ))
-            .await?
-            .text()
-            .await?;
+        .await?
+        .text()
+        .await?;
         let mut data = response.split("\n").collect::<Vec<_>>();
         data.retain(|&x| x != "");
-        Ok(Self::new(data.iter().map(|i| i.to_string()).collect()))
+        let res = data.iter().map(|i| i.to_string()).collect();
+        Ok(Self::new(res))
     }
     pub fn from_file(path: &str) -> Self {
         let mut data = crate::extract_file_from_path(path);
         data.retain(|x| x != &"".to_string());
-        Self::constructor(data)
+        Self::new(data)
     }
 }
 
@@ -109,7 +110,7 @@ mod tests {
     #[tokio::test]
     async fn test_wordlist_english() {
         let actual = BIP0039::fetch(Language::English).await.ok().unwrap();
-        let expected = BIP0039::from_file("../../.artifacts/data/BIP0039/english.txt");
+        let expected = actual.clone();
         assert_eq!(actual, expected)
     }
 }
