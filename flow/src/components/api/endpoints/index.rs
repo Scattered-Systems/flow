@@ -5,6 +5,7 @@
         ... Summary ...
 */
 use axum::routing::get;
+use fluidity::prelude::Tokens;
 use std::collections::HashMap;
 
 #[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
@@ -47,5 +48,11 @@ pub async fn base() -> axum::Json<serde_json::Value> {
     let mut cache = scsys::Dictionary::new();
     let timestamp: scsys::bson::DateTime = scsys::Temporal::now().into();
     cache.insert(String::from("timestamp"), timestamp.to_string());
+    axum::Json(serde_json::json!(cache))
+}
+
+pub async fn post_token() -> axum::Json<serde_json::Value> {
+    let mut cache: scsys::Dictionary = scsys::Dictionary::new();
+
     axum::Json(serde_json::json!(cache))
 }

@@ -16,7 +16,6 @@ version = "0.1.0"
 [[bin]]
 bench = false
 name = "flow"
-test = false
 
 [build-dependencies]
 
@@ -24,6 +23,7 @@ test = false
 axum = { features = ["headers"], version = "0.5.13" }
 clap = { features = ["cargo", "derive"], version = "3.2.12" }
 config = "0.13.1"
+ethers = "0.17.0"
 futures = "0.3.21"
 glob = "0.3.0"
 http = "0.2.8"
@@ -38,14 +38,13 @@ tracing = "0.1.35"
 tracing-subscriber = "0.3.14"
 siwe = "0.4.1"
 u2f = "0.2.0"
-web3 = "0.18.0"
 
 [dependencies.acme]
 features = ["full"]
 version = "0.2.0"
 
 [dependencies.fluidity]
-path = "../lib/fluidity"
+version = "0.1.10"
 
 [dependencies.scsys]
 features = ["full"]

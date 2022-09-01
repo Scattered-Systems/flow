@@ -5,18 +5,6 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: cargo
-    directory: /
-    schedule:
-      interval: daily
-  - package-ecosystem: cargo
-    directory: /app
-    schedule:
-      interval: daily
-  - package-ecosystem: cargo
-    directory: /lib/fluidity
-    schedule:
-      interval: daily
-  - package-ecosystem: cargo
-    directory: /lib/core
+    directory: /flow
     schedule:
       interval: daily

@@ -1,13 +1,10 @@
 [workspace]
 default-members = [
-    "app",
-    "lib/fluidity"
+    "flow",
 ]
 
 members = [
-    "app",
-    "lib/fluidity",
-    "lib/core"
+    "flow",
 ]
 
 [profile.dev]
