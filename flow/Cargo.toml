@@ -1,0 +1,49 @@
+[package]
+authors = ["FL03 <jo3mccain@icloud.com> (https://github.com/FL03)"]
+categories = []
+description = "Flow is a complete digital identity management toolkit"
+edition = "2021"
+homepage = "https://scattered-systems.github.io/flow"
+keywords = ["blockchain", "digital identity", "management"]
+license = "MIT"
+name = "flow"
+readme = "https://gitlab.com/scsys/flow/flow/#README"
+repository = "https://gitlab.com/scsys/flow/flow"
+version = "0.1.0"
+
+[[bin]]
+bench = false
+name = "flow"
+
+[build-dependencies]
+
+[dependencies]
+axum = { features = ["headers"], version = "0.5.11" }
+bcrypt = "0.13.0"
+clap = { features = ["derive"], version = "3.2.19" }
+ethers = "0.17.0"
+futures = "0.3.23"
+glob = "0.3.0"
+http = "0.2.8"
+hyper = { features = ["full"], version = "0.14.20" }
+jsonwebkey = "0.3.5"
+mongodb = { features = ["tokio-runtime"], version = "2.3.0" }
+openidconnect = "2.3.2"
+rand = "0.8.5"
+redis = "0.21.6"
+reqwest = "0.11.11"
+scsys = "0.1.12"
+serde = { features = ["derive"], version = "1.0.144" }
+serde_json = "1.0.83"
+siwe = "0.4.1"
+tokio = { features = ["full"], version = "1.20.1" }
+tower = "0.4.13"
+tower-http = { features = ["compression-br", "propagate-header", "sensitive-headers", "trace"], version = "0.3.4" }
+tracing = "0.1.35"
+tracing-subscriber = "0.3.14"
+
+[dependencies.fluidity]
+version = "0.1.10"
+
+[dev-dependencies]
+
