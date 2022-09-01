@@ -1,0 +1,11 @@
+**/.artifacts/
+**/.idea/
+**/.github/
+**/.vscode/
+
+
+**/target/
+
+
+*.bk
+*.bk.*

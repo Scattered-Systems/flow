@@ -4,69 +4,62 @@
     Description:
         ... Summary ...
 */
-use crate::{api, cli, handlers::handle_cli_inputs};
-use acme::prelude::{async_trait, APISpec, CLISpec};
-use scsys::{BoxResult, Temporal};
+use crate::{api::Interface, Context, Settings};
+use scsys::BoxResult;
 
-#[derive(Clone, Copy, Debug, Hash, PartialEq, scsys::Deserialize, scsys::Serialize)]
-pub enum AppState {
+#[derive(Clone, Copy, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+pub enum State {
     Off,
     On,
 }
 
-impl Default for AppState {
-    fn default() -> Self {
-        Self::Off
+impl State {
+    pub fn new(data: String) -> Self {
+        Self::mappings()
+            .get(data.as_str())
+            .expect("Failed to find a match...")
+            .clone()
+    }
+    pub fn from<T: std::string::ToString>(data: T) -> Self {
+        Self::new(data.to_string().clone().to_lowercase())
+    }
+    pub fn mappings() -> scsys::Dictionary<Self> {
+        let info = [("off".to_string(), Self::Off), ("on".to_string(), Self::On)];
+        scsys::Dictionary::<Self>::from(info)
     }
 }
 
-#[derive(Clone, Debug, Hash, PartialEq, scsys::Deserialize, scsys::Serialize)]
-pub struct Flow {
-    pub state: AppState,
-    pub timestamp: i64,
+#[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct Application {
+    pub context: Context,
 }
 
-impl Flow {
-    fn constructor(state: AppState, timestamp: i64) -> Self {
-        Self { state, timestamp }
-    }
-    pub fn new(state: AppState) -> Self {
-        Self::constructor(state, Temporal::now().timestamp())
-    }
-}
+impl Application {
+    pub fn new() -> Self {
+        println!("Initializing the application...");
+        let settings = Settings::default();
+        println!("{}", settings.clone());
 
-#[async_trait]
-impl APISpec<api::FlowAPI> for Flow {
-    async fn run(&self) -> BoxResult<()>
-    where
-        Self: Sized + Sync,
-    {
-        let api = api::FlowAPI::default();
-        println!("{}", &api);
-        api.server()
-            .await
-            .ok()
-            .unwrap()
-            .await
-            .expect("Server Error");
+        let context = Context::new(settings.clone());
+        Self { context }
+    }
+    pub fn from(settings: Settings) -> Self {
+        Self {
+            context: Context::new(settings),
+        }
+    }
+    pub async fn run(&self) -> BoxResult {
+        let api = Interface::new(self.context.clone());
+
+        println!("{}", api.context.settings.server.clone());
+        api.logger();
+        api.run().await?;
         Ok(())
     }
 }
 
-impl CLISpec<cli::FlowCLI> for Flow {
-    fn run(&self) -> BoxResult<()>
-    where
-        Self: Sized,
-    {
-        let data = cli::FlowCLI::default();
-        println!("{:#?}", data.action.clone());
-        println!("{:#?}", data.command.clone());
-        Ok(handle_cli_inputs(data))
-    }
-}
-
-impl Default for Flow {
+impl Default for Application {
     fn default() -> Self {
-        Self::new(AppState::default())
+        todo!()
     }
 }

@@ -1,8 +1,9 @@
 /*
-    Appellation: actors <module>
+    Appellation: stores <module>
     Creator: FL03 <jo3mccain@icloud.com>
     Description:
         ... Summary ...
 */
+pub use self::database::*;
 
-pub mod stores;
+mod database;

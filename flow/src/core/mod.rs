@@ -1,11 +1,13 @@
 /*
-    Appellation: mod <module>
-    Creator: FL03 <jo3mccain@icloud.com>
-    Description:
-        ... Summary ...
+   Appellation: core <module>
+   Creator: FL03 <jo3mccain@icloud.com>
+   Description:
+       ... Summary ...
 */
-#[doc(inline)]
-pub use self::{context::*, interface::*, settings::*};
+pub use self::{context::Context, interface::Application, settings::*};
+
+pub mod api;
+pub mod cli;
 
 mod context;
 mod interface;
