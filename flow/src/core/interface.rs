@@ -35,7 +35,7 @@ impl Application {
 
 impl Default for Application {
     fn default() -> Self {
-        todo!()
+        Self::new(None)
     }
 }
 
