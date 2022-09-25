@@ -4,11 +4,8 @@
    Description:
        ... Summary ...
 */
-pub use self::{context::Context, interface::Application, settings::*};
+pub use self::{interface::Application, settings::*};
 
-pub mod api;
-pub mod cli;
-
-mod context;
+pub mod context;
 mod interface;
 mod settings;

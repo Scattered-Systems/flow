@@ -6,7 +6,7 @@
 */
 use scsys::{BsonDateTime, BsonOid};
 
-#[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Eq, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct UserModel {
     pub id: BsonOid,
 
@@ -30,11 +30,11 @@ impl UserModel {
         }
     }
     pub fn object_id(&self) -> BsonOid {
-        self.id.clone()
+        self.id
     }
 }
 
-#[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Eq, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Profile {
     pub email: String,
     pub ensname: String,
@@ -57,7 +57,7 @@ impl Default for Profile {
     }
 }
 
-#[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Eq, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum StreetAddress {
     Default(String),
     Alternate {
@@ -72,7 +72,7 @@ impl Default for StreetAddress {
     }
 }
 
-#[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Eq, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct PostalAddress {
     pub street: StreetAddress,
     pub city: String,
@@ -95,7 +95,7 @@ impl Default for PostalAddress {
     }
 }
 
-#[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Eq, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct HumanName {
     pub prefix: String,
     pub first: String,

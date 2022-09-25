@@ -4,56 +4,31 @@
     Description:
         ... Summary ...
 */
-use crate::{api::Interface, Context, Settings};
-use scsys::BoxResult;
+use crate::{context::Context, Settings};
+use self::states::State;
 
-#[derive(Clone, Copy, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
-pub enum State {
-    Off,
-    On,
-}
-
-impl State {
-    pub fn new(data: String) -> Self {
-        Self::mappings()
-            .get(data.as_str())
-            .expect("Failed to find a match...")
-            .clone()
-    }
-    pub fn from<T: std::string::ToString>(data: T) -> Self {
-        Self::new(data.to_string().clone().to_lowercase())
-    }
-    pub fn mappings() -> scsys::Dictionary<Self> {
-        let info = [("off".to_string(), Self::Off), ("on".to_string(), Self::On)];
-        scsys::Dictionary::<Self>::from(info)
-    }
-}
-
-#[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Eq, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Application {
     pub context: Context,
+    pub state: State
 }
 
 impl Application {
-    pub fn new() -> Self {
-        println!("Initializing the application...");
-        let settings = Settings::default();
-        println!("{}", settings.clone());
+    pub fn new(settings: Option<Settings>) -> Self {
+        let settings = match settings {
+            Some(v) => v,
+            None => Settings::default() 
+        };
 
-        let context = Context::new(settings.clone());
-        Self { context }
+        let context = Context::new(Some(settings));
+        let state = State::new("initializing");
+        Self { context, state }
     }
-    pub fn from(settings: Settings) -> Self {
-        Self {
-            context: Context::new(settings),
-        }
+    pub fn set_state(&mut self, state: State) -> &Self {
+        self.state = state;
+        self
     }
-    pub async fn run(&self) -> BoxResult {
-        let api = Interface::new(self.context.clone());
-
-        println!("{}", api.context.settings.server.clone());
-        api.logger();
-        api.run().await?;
+    pub async fn run(&self) -> scsys::BoxResult {
         Ok(())
     }
 }
@@ -61,5 +36,43 @@ impl Application {
 impl Default for Application {
     fn default() -> Self {
         todo!()
+    }
+}
+
+pub mod states {
+    use serde::{Deserialize, Serialize};
+    use strum::{EnumString, EnumVariantNames};
+
+    #[derive(
+        Clone,
+        Copy,
+        Debug,
+        Deserialize,
+        EnumString,
+        EnumVariantNames,
+        Eq,
+        Hash,
+        PartialEq,
+        Serialize,
+    )]
+    #[strum(serialize_all = "snake_case")]
+    pub enum State {
+        Initializing,
+        Off,
+        On,
+    }
+
+    impl State {
+        pub fn new(data: &str) -> Self {
+            match Self::try_from(data) {
+                Ok(v) => v,
+                Err(_) => panic!("{:?}", scsys::Error::Default),
+            }
+        }
+    }
+    impl Default for State {
+        fn default() -> Self {
+            Self::new("off")
+        }
     }
 }

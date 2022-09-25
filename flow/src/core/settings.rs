@@ -5,33 +5,33 @@
    Description:
        ... Summary ...
 */
-use crate::{
-    caches::Cache, databases::Database, loggers::Logger, providers::Provider, servers::Server,
-};
 use scsys::{
     collect_config_files,
-    config::{Config, ConfigError, Environment},
+    prelude::{
+        config::{Config, ConfigError, Environment},
+        Cache, Database, Logger, Server, Web3Provider,
+    },
 };
 
-#[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Eq, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Application {
-    pub mode: String,
-    pub name: String,
+    pub mode: Option<String>,
+    pub name: Option<String>,
 }
 
 impl std::fmt::Display for Application {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "Application(mode={}, name={})", self.mode, self.name)
+        write!(f, "Application",)
     }
 }
 
-#[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Eq, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Settings {
     pub application: Application,
     pub cache: Cache,
     pub database: Database,
     pub logger: Logger,
-    pub provider: Provider,
+    pub provider: Web3Provider,
     pub server: Server,
 }
 
@@ -61,6 +61,6 @@ impl Default for Settings {
 
 impl std::fmt::Display for Settings {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "Welcome to {}", self.application.name)
+        write!(f, "Configured {}", self.application)
     }
 }

@@ -5,4 +5,6 @@
         ... Summary ...
 */
 
+pub mod handlers;
 pub mod stores;
+

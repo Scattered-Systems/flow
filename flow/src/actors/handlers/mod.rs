@@ -4,6 +4,5 @@
     Description:
         ... Summary ...
 */
-pub use self::inputs::*;
 
-pub(crate) mod inputs;
+pub mod wallets;

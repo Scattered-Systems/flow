@@ -6,7 +6,7 @@
 */
 use scsys::BsonOid;
 
-#[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Eq, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Items {
     #[serde(rename = "item_id")]
     pub id: BsonOid,
@@ -19,7 +19,7 @@ pub struct Items {
 impl Items {
     pub fn new(label: String, description: Option<String>) -> Self {
         let id = BsonOid::new();
-        let key = format!("{}-{}", id.clone(), label.clone());
+        let key = format!("{}-{}", id.clone(), label);
 
         Self {
             id,
