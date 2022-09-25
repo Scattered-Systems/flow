@@ -19,4 +19,3 @@ COPY --from=builder /app/target/release/flow bin/flow
 EXPOSE ${SERVER_PORT}/tcp
 EXPOSE ${SERVER_PORT}/udp
 
-CMD ["flow"]
