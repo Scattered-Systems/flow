@@ -2,9 +2,13 @@ name: Code Analysis
 
 on:
   push:
-    branches: [ "*" ]
+    branches:
+      - latest
+    tags:
+      - v*.*.*
   pull_request:
-    branches: [ "*" ]
+    tags:
+      - v*.*.*
 
 jobs:
   code-analysis:
