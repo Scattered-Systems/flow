@@ -6,6 +6,10 @@
     "name": "Flow",
     "slug": "flow"
   },
+  "cache": {
+    "name": "redis",
+    "uri": "redis://localhost:5432"
+  },
   "database": {
     "name": "postgres",
     "uri": "postgres://postgres:example@localhost:5432/postgres"
@@ -14,12 +18,8 @@
     "level": "info"
   },
   "provider": {
-    "key": {
-      "public": "",
-      "secret": ""
-    },
-    "http": "https://rpc.ankr.com/eth",
-    "websocket": "wss://"
+    "name": "eth-provider",
+    "url": "https://rpc.ankr.com/eth"
   },
   "server": {
     "host": "0.0.0.0",

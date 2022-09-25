@@ -5,13 +5,18 @@
         ... Summary ...
 */
 
-use fluidity::prelude::{Wallet, WalletKey};
+use ethers::{signers::{LocalWallet, MnemonicBuilder, Wallet, coins_bip39::English}, prelude::k256::ecdsa::SigningKey};
+use scsys::prelude::rand::thread_rng;
 
-pub fn create_wallet() {
-    let keypair = WalletKey::generate_keypair();
-    let wallet = Wallet::new(&keypair.1, &keypair.0, label);
-    wallet
-        .save_to_file(filepath.as_str())
-        .expect("Interface error");
-    println!("Created a new wallet at: {}", filepath.clone());
+pub fn create_wallet() -> LocalWallet {
+    LocalWallet::new(&mut thread_rng())
+}
+
+pub fn from_passphrase(mnemonic: &str) -> Wallet<SigningKey> {
+    match MnemonicBuilder::<English>::default()
+        .phrase(mnemonic)
+        .build() {
+            Ok(v) => v,
+            Err(_) => panic!("Failed to setup the wallet...")
+        }
 }

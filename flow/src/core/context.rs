@@ -18,7 +18,7 @@ impl Context {
         Self { settings }
     }
     pub fn settings(&self) -> Settings {
-        self.settings.expect(format!("{:?}", scsys::Error::default()).as_str())
+        self.settings.clone().expect(format!("{:?}", scsys::Error::default()).as_str())
     }
     pub fn set_settings(&mut self, settings: Settings) -> &Self {
         self.settings = Some(settings);
@@ -37,7 +37,7 @@ impl Context {
 
 impl std::fmt::Display for Context {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self.settings {
+        match &self.settings {
             Some(v) => write!(f, "Context({})", v),
             None => write!(f, "Context(None)")
         }
