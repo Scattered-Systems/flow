@@ -15,8 +15,14 @@ use scsys::{
 
 #[derive(Clone, Debug, Eq, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Application {
-    pub mode: Option<String>,
-    pub name: Option<String>,
+    pub mode: String,
+    pub name: String,
+}
+
+impl Application {
+    pub fn slug(&self) -> String {
+        self.name.clone().to_lowercase()
+    }
 }
 
 impl std::fmt::Display for Application {
@@ -26,12 +32,18 @@ impl std::fmt::Display for Application {
 }
 
 #[derive(Clone, Debug, Eq, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct Settings {
-    pub application: Application,
+
+pub struct Providers {
     pub cache: Cache,
     pub database: Database,
-    pub logger: Logger,
-    pub provider: Web3Provider,
+    pub ethereum: Web3Provider
+}
+
+#[derive(Clone, Debug, Eq, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct Settings {
+    pub application: Application,
+    pub logger: Option<Logger>,
+    pub providers: Providers,
     pub server: Server,
 }
 
@@ -39,7 +51,7 @@ impl Settings {
     pub fn new() -> Result<Self, ConfigError> {
         let mut builder = Config::builder();
 
-        builder = builder.add_source(collect_config_files("**/default.config.*", true));
+        builder = builder.add_source(collect_config_files("**/flow.config.*", true));
         builder = builder.add_source(collect_config_files("**/*.config.*", false));
         builder = builder.add_source(Environment::default().separator("__"));
 

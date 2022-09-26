@@ -14,7 +14,8 @@ mod data;
 
 #[tokio::main]
 async fn main() -> scsys::BoxResult {
-    let app = Application::default();
-    app.run().await.expect("Application startup failed...");
+    let mut app = Application::default();
+    app.logging(None).run().await.expect("Application startup failed...");
+
     Ok(())
 }

@@ -1,10 +1,10 @@
 /*
     Appellation: interface <module>
-    Creator: FL03 <jo3mccain@icloud.com>
+    Contributors: FL03 <jo3mccain@icloud.com>
     Description:
         ... Summary ...
 */
-use crate::{context::Context, Settings};
+use crate::{cli::CommandLineInterface, context::Context, Settings};
 use self::states::State;
 
 #[derive(Clone, Debug, Eq, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
@@ -24,12 +24,32 @@ impl Application {
         let state = State::new("initializing");
         Self { context, state }
     }
+    pub fn logging(&mut self, opt: Option<String>) -> &Self {
+        let logger = match self.context.settings().logger {
+            Some(v) => v,
+            None => {
+                match opt {
+                    Some(v) => scsys::prelude::Logger::new(v),
+                    None => scsys::prelude::Logger::new("debug".to_string())
+                }
+            }
+        };
+        self.context.settings().logger = Some(logger);
+        self
+    }
     pub fn set_state(&mut self, state: State) -> &Self {
         self.state = state;
         self
     }
-    pub async fn run(&self) -> scsys::BoxResult {
-        Ok(())
+    pub fn cli(&self) -> scsys::BoxResult<CommandLineInterface> {
+        Ok(CommandLineInterface::default())
+    }
+    pub async fn run(&self) -> scsys::BoxResult<&Self> {
+        let _data = match self.cli() {
+            Ok(v) => v,
+            Err(_) => panic!("{:?}", scsys::Error::default())
+        };
+        Ok(self)
     }
 }
 

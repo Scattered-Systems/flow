@@ -6,6 +6,7 @@
 */
 pub use self::{interface::Application, settings::*};
 
+pub mod cli;
 pub mod context;
 mod interface;
 mod settings;
