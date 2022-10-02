@@ -5,10 +5,10 @@
        ... Summary ...
 
 */
-pub use self::{actors::*, components::*, core::*, data::*};
+pub use self::{actors::*, contexts::*, core::*, data::*};
 
 mod actors;
-mod components;
+mod contexts;
 mod core;
 mod data;
 
