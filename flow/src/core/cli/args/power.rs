@@ -4,10 +4,10 @@
     Description:
         ... Summary ...
 */
-use clap::ArgEnum;
+use clap::ValueEnum;
 use serde::{Deserialize, Serialize};
 
-#[derive(ArgEnum, Clone, Debug, Deserialize, Hash, PartialEq,  Serialize)]
+#[derive(ValueEnum, Clone, Debug, Deserialize, Hash, PartialEq,  Serialize)]
 pub enum Power {
     On,
     Off

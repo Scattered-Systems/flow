@@ -34,9 +34,9 @@ impl std::fmt::Display for Application {
 #[derive(Clone, Debug, Eq, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
 
 pub struct Providers {
-    pub cache: Cache,
-    pub database: Database,
-    pub ethereum: Web3Provider
+    pub cache: Option<Cache>,
+    pub database: Option<Database>,
+    pub ethereum: Option<Web3Provider>
 }
 
 #[derive(Clone, Debug, Eq, Hash, PartialEq, serde::Deserialize, serde::Serialize)]

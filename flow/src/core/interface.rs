@@ -4,10 +4,12 @@
     Description:
         ... Summary ...
 */
-use crate::{cli::CommandLineInterface, context::Context, Settings};
-use self::states::State;
+use crate::{cli::CommandLineInterface, Context, Settings};
+use scsys::{logging::Logger, BoxResult, Error};
+use serde::{Deserialize, Serialize};
+pub use self::states::State;
 
-#[derive(Clone, Debug, Eq, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
 pub struct Application {
     pub context: Context,
     pub state: State
@@ -15,12 +17,7 @@ pub struct Application {
 
 impl Application {
     pub fn new(settings: Option<Settings>) -> Self {
-        let settings = match settings {
-            Some(v) => v,
-            None => Settings::default() 
-        };
-
-        let context = Context::new(Some(settings));
+        let context = Context::new(settings);
         let state = State::new("initializing");
         Self { context, state }
     }
@@ -29,8 +26,8 @@ impl Application {
             Some(v) => v,
             None => {
                 match opt {
-                    Some(v) => scsys::prelude::Logger::new(v),
-                    None => scsys::prelude::Logger::new("debug".to_string())
+                    Some(v) => Logger::new(v),
+                    None => Logger::new("debug".to_string())
                 }
             }
         };
@@ -41,13 +38,13 @@ impl Application {
         self.state = state;
         self
     }
-    pub fn cli(&self) -> scsys::BoxResult<CommandLineInterface> {
+    pub fn cli(&self) -> BoxResult<CommandLineInterface> {
         Ok(CommandLineInterface::default())
     }
-    pub async fn run(&self) -> scsys::BoxResult<&Self> {
+    pub async fn run(&self) -> BoxResult<&Self> {
         let _data = match self.cli() {
             Ok(v) => v,
-            Err(_) => panic!("{:?}", scsys::Error::default())
+            Err(_) => panic!("{:?}", Error::Default)
         };
         Ok(self)
     }
@@ -55,13 +52,18 @@ impl Application {
 
 impl Default for Application {
     fn default() -> Self {
-        Self::new(None)
+        Self::new(Some(Settings::default()))
     }
 }
 
-pub mod states {
+pub(crate) mod states {
     use serde::{Deserialize, Serialize};
     use strum::{EnumString, EnumVariantNames};
+
+    pub enum Agency {
+        Busy,
+        Idle,
+    }
 
     #[derive(
         Clone,
@@ -77,9 +79,7 @@ pub mod states {
     )]
     #[strum(serialize_all = "snake_case")]
     pub enum State {
-        Initializing,
-        Off,
-        On,
+        
     }
 
     impl State {

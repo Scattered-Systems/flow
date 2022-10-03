@@ -1,5 +1,6 @@
-pub use self::{commands::Commands, interface::CommandLineInterface};
 
-pub mod args;
+pub use self::{args::Power, commands::Commands, interface::CommandLineInterface};
+
+mod args;
 mod commands;
 mod interface;

@@ -6,16 +6,19 @@
 */
 use clap::Parser;
 use serde::{Deserialize, Serialize};
+use super::{Commands, Power};
 
 #[derive(Clone, Debug, Deserialize, Hash, Parser, PartialEq, Serialize)]
 #[clap(about, author, version)]
 #[clap(long_about = "")]
 pub struct CommandLineInterface {
+    #[arg(value_enum)]
+    pub control: Option<Power>,
     #[clap(subcommand)]
-    pub command: Option<super::Commands>,
+    pub command: Option<Commands>,
+    #[arg(long, short)]
+    pub update: isize
 
-    #[clap(long, short, parse(from_occurrences))]
-    pub update: i64
 }
 
 impl CommandLineInterface {

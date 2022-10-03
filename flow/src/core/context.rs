@@ -24,13 +24,13 @@ impl Context {
         self.settings = Some(settings);
         self
     }
-    pub fn cache(&self) -> Cache {
+    pub fn cache(&self) -> Option<Cache> {
         self.settings().providers.cache.clone()
     }
-    pub fn database(&self) -> Database {
+    pub fn database(&self) -> Option<Database> {
         self.settings().providers.database.clone()
     }
-    pub fn ethereum(&self) -> Web3Provider {
+    pub fn ethereum(&self) -> Option<Web3Provider> {
         self.settings().providers.ethereum.clone()
     }
 }
