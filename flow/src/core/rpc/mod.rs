@@ -4,7 +4,62 @@
    Description:
        Remote Procedure Call (RPC) Implementation for Flow Nodes
 */
+use scsys::core::BoxResult;
+use std::net::SocketAddr;
 
+#[derive(Clone, Debug, Hash, PartialEq)]
+pub struct RPCBackend {
+    pub address: SocketAddr,
+    pub name: String
+}
+
+impl RPCBackend {
+    pub fn new(address: Option<SocketAddr>, name: String) -> Self {
+        let address = match address {
+            Some(v) => v,
+            None => SocketAddr::from(([0, 0, 0, 0], 9999))
+        };
+        Self { address, name }
+    }
+    pub fn setup_tracing(&self) -> BoxResult<&Self> {
+        env::set_var("OTEL_BSP_MAX_EXPORT_BATCH_SIZE", "12");
+
+        let tracer = opentelemetry_jaeger::new_pipeline()
+            .with_service_name(service_name)
+            .with_max_packet_size(2usize.pow(13))
+            .install_batch(opentelemetry::runtime::Tokio)?;
+
+        tracing_subscriber::registry()
+            .with(tracing_subscriber::EnvFilter::from_default_env())
+            .with(tracing_subscriber::fmt::layer().with_span_events(FmtSpan::NEW | FmtSpan::CLOSE))
+            .with(tracing_opentelemetry::layer().with_tracer(tracer))
+            .try_init()?;
+
+        Ok(self)
+    }
+    pub async fn client(&self) -> BoxResult {
+        self.init_tracing()?;
+        let transport = tarpc::serde_transport::tcp::connect(flags.server_addr, Json::default);
+        let client = WorldClient::new(client::Config::default(), transport.await?).spawn();
+
+        let hello = async move {
+            // Send the request twice, just to be safe! ;)
+            tokio::select! {
+                hello1 = client.hello(context::current(), format!("{}1", flags.name)) => { hello1 }
+                hello2 = client.hello(context::current(), format!("{}2", flags.name)) => { hello2 }
+            }
+        }
+        .instrument(tracing::info_span!("Two Hellos"))
+        .await;
+
+        tracing::info!("{:?}", hello);
+
+        // Let the background span processor finish.
+        sleep(Duration::from_micros(1)).await;
+        opentelemetry::global::shutdown_tracer_provider();
+        Ok(())
+    }
+}
 
 pub(crate) mod samples {
     use clap::Parser;

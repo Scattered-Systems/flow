@@ -5,7 +5,7 @@
         ... Summary ...
 */
 use crate::{cli::CommandLineInterface, Context, Settings};
-use scsys::{logging::Logger, BoxResult, Error};
+use scsys::core::{logging::Logger, BoxResult, Error};
 use serde::{Deserialize, Serialize};
 pub use self::states::State;
 
@@ -44,7 +44,7 @@ impl Application {
     pub async fn run(&self) -> BoxResult<&Self> {
         let _data = match self.cli() {
             Ok(v) => v,
-            Err(_) => panic!("{:?}", Error::Default)
+            Err(_) => panic!("{:?}", Error::default())
         };
         Ok(self)
     }
@@ -79,14 +79,14 @@ pub(crate) mod states {
     )]
     #[strum(serialize_all = "snake_case")]
     pub enum State {
-        
+        Initializing
     }
 
     impl State {
         pub fn new(data: &str) -> Self {
             match Self::try_from(data) {
                 Ok(v) => v,
-                Err(_) => panic!("{:?}", scsys::Error::Default),
+                Err(_) => panic!("{:?}", scsys::core::Error::default()),
             }
         }
     }

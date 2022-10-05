@@ -5,6 +5,7 @@
        ... Summary ...
 
 */
+use scsys::core::BoxResult;
 use tokio::net::{TcpListener, TcpStream};
 pub use self::{actors::*, controllers::*, core::*, data::*};
 
@@ -14,7 +15,7 @@ mod core;
 mod data;
 
 #[tokio::main]
-async fn main() -> scsys::BoxResult {
+async fn main() -> BoxResult {
 
     let mut app = Application::default();
 
@@ -26,14 +27,14 @@ async fn main() -> scsys::BoxResult {
     Ok(())
 }
 
-pub async fn sample_process(data: TcpStream) -> scsys::BoxResult {
+pub async fn sample_process(data: TcpStream) -> BoxResult {
     println!("{:?}", data);
     Ok(())
 }
 
-pub async fn spawn_listener() -> scsys::BoxResult {
+pub async fn spawn_listener() -> BoxResult {
 
-    let listener = tokio::net::TcpListener::bind("127.0.0.1:8080").await?;
+    let listener = TcpListener::bind("127.0.0.1:8080").await?;
 
     loop {
         let (socket, _) = listener.accept().await?;

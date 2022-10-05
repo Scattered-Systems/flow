@@ -5,15 +5,10 @@
    Description:
        ... Summary ...
 */
-use scsys::{
-    collect_config_files,
-    prelude::{
-        config::{Config, ConfigError, Environment},
-        Cache, Database, Logger, Server, Web3Provider,
-    },
-};
+use scsys::{core::collect_config_files, prelude::{Cache, Database, Logger, Server, Web3Provider, config::{Config, ConfigError, Environment}}};
+use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, Eq, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
 pub struct Application {
     pub mode: String,
     pub name: String,
@@ -31,7 +26,7 @@ impl std::fmt::Display for Application {
     }
 }
 
-#[derive(Clone, Debug, Eq, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
 
 pub struct Providers {
     pub cache: Option<Cache>,
@@ -39,7 +34,7 @@ pub struct Providers {
     pub ethereum: Option<Web3Provider>
 }
 
-#[derive(Clone, Debug, Eq, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
 pub struct Settings {
     pub application: Application,
     pub logger: Option<Logger>,
@@ -51,7 +46,7 @@ impl Settings {
     pub fn new() -> Result<Self, ConfigError> {
         let mut builder = Config::builder();
 
-        builder = builder.add_source(collect_config_files("**/flow.config.*", true));
+        builder = builder.add_source(collect_config_files("**/default.config.*", true));
         builder = builder.add_source(collect_config_files("**/*.config.*", false));
         builder = builder.add_source(Environment::default().separator("__"));
 
