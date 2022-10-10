@@ -1,0 +1,34 @@
+[package]
+authors = [
+    "FL03 <jo3mccain@icloud.com> (https://github.com/FL03)",
+    "Scattered-Systems (https://github.com/scattered-systems)"
+]
+categories = []
+description = "Flow is a complete digital identity platform designed to be your last profile, built around ENS "
+edition = "2021"
+homepage = "https://scattered-systems.github.io/flow/"
+keywords = ["did", "scsys"]
+license = "MIT"
+name = "fluidity"
+readme = "README.md"
+repository = "https://github.com/scattered-systems/flow"
+version = "0.1.12" # TODO: Check package versioning
+
+[features]
+default = ["core"]
+full = ["core"]
+
+core = ["fluidity-core"]
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+test = true
+
+[dependencies.fluidity-core]
+optional = true
+path = "../core"
+version = "0.1.6" # TODO: Check feature versioning
+
+[package.metadata.docs.rs]
+all-features = true
+rustc-args = ["--cfg", "docsrs"]
