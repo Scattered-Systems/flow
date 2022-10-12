@@ -11,7 +11,4 @@ mod profiles;
 mod tokens;
 mod users;
 
-pub trait StandardModel {
-    fn created(&self) -> scsys::BsonDateTime;
-    fn modified(&self) -> scsys::BsonDateTime;
-}
+

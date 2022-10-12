@@ -12,6 +12,5 @@ pub enum Commands {
     Account {
         #[clap(long, short, value_parser)]
         address: String,
-        
-    }
+    },
 }

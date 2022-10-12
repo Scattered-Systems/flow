@@ -8,9 +8,10 @@
 
 */
 use super::IAuthenticator;
-use scsys::Dictionary;
+use scsys::core::Dictionary;
+use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Copy, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
 pub enum AuthState {
     Authorized,
     Owner,

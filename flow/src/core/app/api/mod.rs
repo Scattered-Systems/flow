@@ -4,6 +4,7 @@
    Description:
        ... Summary ...
 */
+pub use self::interface::Api;
 
+pub(crate) mod interface;
 pub mod routes;
-

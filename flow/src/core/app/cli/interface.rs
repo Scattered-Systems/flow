@@ -4,9 +4,9 @@
     Description:
         ... Summary ...
 */
+use super::{Commands, Power};
 use clap::Parser;
 use serde::{Deserialize, Serialize};
-use super::{Commands, Power};
 
 #[derive(Clone, Debug, Deserialize, Hash, Parser, PartialEq, Serialize)]
 #[clap(about, author, version)]
@@ -17,13 +17,11 @@ pub struct CommandLineInterface {
     #[clap(subcommand)]
     pub command: Option<Commands>,
     #[arg(long, short)]
-    pub update: isize
-
+    pub update: Option<isize>,
 }
 
 impl CommandLineInterface {
     pub fn handler(&self) -> &Self {
-        
         self
     }
 }

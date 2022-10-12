@@ -7,13 +7,3 @@
 pub use self::state::*;
 
 mod state;
-
-pub trait Stateful<S> {
-    fn message(&self, data: String) -> String {
-        format!("Message:\n{}\n\nTimestamp: {:?}", data, self.timestamp())
-    }
-    fn state(&self) -> S
-    where
-        Self: Sized;
-    fn timestamp(&self) -> scsys::Timestamp;
-}

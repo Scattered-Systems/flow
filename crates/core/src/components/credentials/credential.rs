@@ -4,9 +4,10 @@
     Description:
         ... Summary ...
 */
-use scsys::{BoxResult, Timestamp};
+use scsys::core::{BoxResult, Timestamp};
+use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, Eq, Hash, PartialEq, Serialize)]
 pub struct Credential {
     pub account: String,
     pub created: Timestamp,
@@ -24,12 +25,6 @@ impl Credential {
 
     pub fn save_to_file(&self, path: &str) -> BoxResult<Self> {
         crate::save_to_file(self.clone(), path)
-    }
-}
-
-impl Default for Credential {
-    fn default() -> Self {
-        Self::new(String::new(), Vec::<String>::new())
     }
 }
 

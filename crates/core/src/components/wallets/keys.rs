@@ -5,11 +5,11 @@
         ... Summary ...
 */
 use crate::SecpKeypair;
-use scsys::Timestamp;
-use secp256k1::Secp256k1;
+use scsys::prelude::{core::Timestamp, rand::rngs::OsRng};
+use secp256k1::{Secp256k1, PublicKey, SecretKey};
+use serde::{Deserialize, Serialize};
 
-/// Defines a key for use in Crypto Wallets
-#[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, Eq, Hash, PartialEq, Serialize)]
 pub struct WalletKey {
     pub public: String,
     pub secret: String,
@@ -24,8 +24,11 @@ impl WalletKey {
             timestamp: Timestamp::default(),
         }
     }
-    pub fn generate_keypair() -> SecpKeypair {
-        Secp256k1::new().generate_keypair(&mut rand::rngs::OsRng)
+    pub fn generate_keypair(&mut self) -> &Self {
+        let (sk, pk) = Secp256k1::new().generate_keypair(&mut OsRng);
+        self.public = pk.to_string();
+        self.secret = sk.display_secret().to_string();
+        self
     }
     // TODO: Find a better method of converting a SecretKey into a String
     pub fn from_keypair(keypair: SecpKeypair) -> Self {
@@ -33,11 +36,7 @@ impl WalletKey {
     }
 }
 
-impl Default for WalletKey {
-    fn default() -> Self {
-        Self::from_keypair(Self::generate_keypair())
-    }
-}
+
 
 #[cfg(test)]
 mod tests {

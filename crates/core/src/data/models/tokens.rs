@@ -86,7 +86,7 @@ impl Default for Claims {
         Self::new(
             String::new(),
             String::new(),
-            scsys::Timestamp::now()
+            scsys::core::Timestamp::now()
                 .checked_add_signed(chrono::Duration::seconds(60))
                 .expect("Timestamp Error")
                 .timestamp() as usize,

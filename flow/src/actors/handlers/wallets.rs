@@ -5,7 +5,10 @@
         ... Summary ...
 */
 
-use ethers::{signers::{LocalWallet, MnemonicBuilder, Wallet, coins_bip39::English}, prelude::k256::ecdsa::SigningKey};
+use ethers::{
+    prelude::k256::ecdsa::SigningKey,
+    signers::{coins_bip39::English, LocalWallet, MnemonicBuilder, Wallet},
+};
 use scsys::prelude::rand::thread_rng;
 
 pub fn create_wallet() -> LocalWallet {
@@ -15,8 +18,9 @@ pub fn create_wallet() -> LocalWallet {
 pub fn from_passphrase(mnemonic: &str) -> Wallet<SigningKey> {
     match MnemonicBuilder::<English>::default()
         .phrase(mnemonic)
-        .build() {
-            Ok(v) => v,
-            Err(_) => panic!("Failed to setup the wallet...")
-        }
+        .build()
+    {
+        Ok(v) => v,
+        Err(_) => panic!("Failed to setup the wallet..."),
+    }
 }

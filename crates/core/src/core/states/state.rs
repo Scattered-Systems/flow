@@ -4,9 +4,10 @@
     Description:
         ... Summary ...
 */
-use scsys::{BsonOid, Timestamp};
+use scsys::core::{BsonOid, Timestamp};
+use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, Eq, Hash, PartialEq, Serialize)]
 pub struct State {
     pub id: BsonOid,
     pub message: String,
@@ -26,20 +27,3 @@ impl State {
     }
 }
 
-impl Default for State {
-    fn default() -> Self {
-        Self::new(String::new())
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::State;
-
-    #[test]
-    fn test_state() {
-        let actual = State::default();
-        let expected = actual.clone();
-        assert_eq!(actual, expected)
-    }
-}

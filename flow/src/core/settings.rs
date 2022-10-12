@@ -5,22 +5,28 @@
    Description:
        ... Summary ...
 */
-use scsys::{core::collect_config_files, prelude::{Cache, Database, Logger, Server, Web3Provider, config::{Config, ConfigError, Environment}}};
+use scsys::{
+    core::collect_config_files,
+    prelude::{
+        config::{Config, ConfigError, Environment},
+        Cache, Database, Logger, Server, Web3Provider,
+    },
+};
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
-pub struct Application {
+#[derive(Clone, Debug, Default, Deserialize, Eq, Hash, PartialEq, Serialize)]
+pub struct AppSettings {
     pub mode: String,
     pub name: String,
 }
 
-impl Application {
+impl AppSettings {
     pub fn slug(&self) -> String {
         self.name.clone().to_lowercase()
     }
 }
 
-impl std::fmt::Display for Application {
+impl std::fmt::Display for AppSettings {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "Application",)
     }
@@ -31,19 +37,19 @@ impl std::fmt::Display for Application {
 pub struct Providers {
     pub cache: Option<Cache>,
     pub database: Option<Database>,
-    pub ethereum: Option<Web3Provider>
+    pub ethereum: Option<Web3Provider>,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
 pub struct Settings {
-    pub application: Application,
+    pub application: AppSettings,
     pub logger: Option<Logger>,
-    pub providers: Providers,
+    pub providers: Option<Providers>,
     pub server: Server,
 }
 
 impl Settings {
-    pub fn new() -> Result<Self, ConfigError> {
+    pub fn build() -> Result<Self, ConfigError> {
         let mut builder = Config::builder();
 
         builder = builder.add_source(collect_config_files("**/default.config.*", true));
@@ -59,7 +65,7 @@ impl Settings {
 
 impl Default for Settings {
     fn default() -> Self {
-        match Self::new() {
+        match Self::build() {
             Ok(v) => v,
             Err(e) => panic!("Configuration Error: {}", e),
         }

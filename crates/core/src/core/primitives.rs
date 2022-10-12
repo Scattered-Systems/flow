@@ -5,55 +5,35 @@
         ... Summary ...
 */
 pub use self::{constants::*, types::*};
+use scsys::core::{BoxResult, Dictionary};
+use serde::{Deserialize, Serialize};
+use strum::{EnumString, EnumVariantNames};
 
-#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Copy, Debug, Default, Deserialize, EnumString, EnumVariantNames, Eq, Hash, PartialEq, Serialize)]
 pub enum Language {
+    #[default]
     English,
     French,
 }
 
-impl Language {
-    pub fn new(data: String) -> Self {
-        Self::related()
-            .get(data.clone().to_lowercase().as_str())
-            .clone()
-            .expect("")
-            .clone()
-    }
-    pub fn from(data: Self) -> String {
-        match data {
-            Language::English => Self::english(),
-            Language::French => Self::french(),
-        }
-    }
-    pub fn related() -> scsys::Dictionary<Self> {
-        let data = [
-            ("english".to_string(), Self::English),
-            ("french".to_string(), Self::French),
-        ];
-        scsys::Dictionary::from(data.clone())
-    }
-
-    pub fn english() -> String {
-        "english".to_string()
-    }
-    pub fn french() -> String {
-        "french".to_string()
+impl std::convert::From<&Self> for Language {
+    fn from(data: &Self) -> Self {
+        data.clone()
     }
 }
 
-#[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, Eq, Hash, PartialEq, Serialize)]
 pub struct BIP0039(pub Vec<String>);
 
 impl BIP0039 {
     pub fn new(data: Vec<String>) -> Self {
         Self(data)
     }
-    pub async fn fetch(lang: Language) -> scsys::BoxResult<Self> {
+    pub async fn fetch(lang: Language) -> BoxResult<Self> {
         let response = reqwest::get(format!(
             "{}/{}.txt",
             BIP0039_WORDLIST_ENDPOINT,
-            Language::from(lang)
+            "english"
         ))
         .await?
         .text()
@@ -67,12 +47,6 @@ impl BIP0039 {
         let mut data = crate::extract_file_from_path(path);
         data.retain(|x| x != &"".to_string());
         Self::new(data)
-    }
-}
-
-impl Default for BIP0039 {
-    fn default() -> Self {
-        Self::from_file(PATH_TO_BIP0039_DATA)
     }
 }
 

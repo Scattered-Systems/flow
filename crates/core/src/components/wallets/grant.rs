@@ -4,11 +4,10 @@
     Description:
         ... Summary ...
 */
+use scsys::prelude::{core::Timestamp, rand::Rng};
+use serde::{Deserialize, Serialize};
 
-use rand::Rng;
-use scsys::Timestamp;
-
-#[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, Eq, Hash, PartialEq, Serialize)]
 pub struct AccessGrant {
     pub grant: String,
     pub timestamp: Timestamp,
@@ -31,12 +30,6 @@ impl AccessGrant {
     }
     pub fn new(grant: String) -> Self {
         Self::constructor(grant, Timestamp::default())
-    }
-}
-
-impl Default for AccessGrant {
-    fn default() -> Self {
-        Self::new(Self::generator(12))
     }
 }
 
