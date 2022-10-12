@@ -1,4 +1,4 @@
-FROM scsys/photon:loaded as builder
+FROM scsys/rust:photon-loaded-stable as builder
 
 ADD . /app
 WORKDIR /app
