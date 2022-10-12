@@ -16,10 +16,8 @@ mod data;
 #[tokio::main]
 async fn main() -> BoxResult {
     let mut app = Application::default();
-    app.logging();
-    // proxy::spawn_listener().await.expect("Failed to run the spawner");
-    app.api().await?;
-    app.rpc().await?;
+    app.logging().api().await?;
+    // app.rpc().await?;
 
     Ok(())
 }
