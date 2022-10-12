@@ -6,7 +6,7 @@ WORKDIR /app
 COPY . .
 RUN cargo build --color always --release --verbose --workspace
 
-FROM photon as latest
+FROM scsys/photon
 
 ENV MODE="production" \
     SERVER_PORT=9000 \
