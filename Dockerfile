@@ -1,10 +1,10 @@
-FROM rust:latest as builder
+FROM scsys/photon:loaded as builder
 
 ADD . /app
 WORKDIR /app
 
 COPY . .
-RUN cargo build --color always --release --verbose --workspace
+RUN cargo build --color always -p flow --release -v
 
 FROM scsys/photon
 
