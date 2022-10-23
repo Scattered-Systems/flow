@@ -6,7 +6,7 @@
        ... Summary ...
 */
 use scsys::{
-    core::collect_config_files,
+    collect_config_files,
     prelude::{
         config::{Config, ConfigError, Environment},
         Cache, Database, Logger, Server, Web3Provider,
@@ -34,17 +34,19 @@ impl std::fmt::Display for AppSettings {
 
 #[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
 
-pub struct Providers {
-    pub cache: Option<Cache>,
-    pub database: Option<Database>,
-    pub ethereum: Option<Web3Provider>,
+pub enum Provider {
+    Cache(Cache),
+    Database(Database),
+    Ethereum(Web3Provider)
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
 pub struct Settings {
     pub application: AppSettings,
+    pub cache: Option<Cache>,
+    pub database: Option<Database>,
+    pub ethereum: Option<Web3Provider>,
     pub logger: Option<Logger>,
-    pub providers: Option<Providers>,
     pub server: Server,
 }
 
@@ -56,10 +58,7 @@ impl Settings {
         builder = builder.add_source(collect_config_files("**/*.config.*", false));
         builder = builder.add_source(Environment::default().separator("__"));
 
-        builder
-            .build()
-            .expect("Failed to build the configuration...")
-            .try_deserialize()
+        builder.build()?.try_deserialize()
     }
 }
 

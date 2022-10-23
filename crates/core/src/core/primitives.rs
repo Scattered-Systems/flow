@@ -5,11 +5,23 @@
         ... Summary ...
 */
 pub use self::{constants::*, types::*};
-use scsys::core::{BoxResult, Dictionary};
+use scsys::{BoxResult, Dictionary};
 use serde::{Deserialize, Serialize};
 use strum::{EnumString, EnumVariantNames};
 
-#[derive(Clone, Copy, Debug, Default, Deserialize, EnumString, EnumVariantNames, Eq, Hash, PartialEq, Serialize)]
+#[derive(
+    Clone,
+    Copy,
+    Debug,
+    Default,
+    Deserialize,
+    EnumString,
+    EnumVariantNames,
+    Eq,
+    Hash,
+    PartialEq,
+    Serialize,
+)]
 pub enum Language {
     #[default]
     English,
@@ -30,14 +42,10 @@ impl BIP0039 {
         Self(data)
     }
     pub async fn fetch(lang: Language) -> BoxResult<Self> {
-        let response = reqwest::get(format!(
-            "{}/{}.txt",
-            BIP0039_WORDLIST_ENDPOINT,
-            "english"
-        ))
-        .await?
-        .text()
-        .await?;
+        let response = reqwest::get(format!("{}/{}.txt", BIP0039_WORDLIST_ENDPOINT, "english"))
+            .await?
+            .text()
+            .await?;
         let mut data = response.split("\n").collect::<Vec<_>>();
         data.retain(|&x| x != "");
         let res = data.iter().map(|i| i.to_string()).collect();

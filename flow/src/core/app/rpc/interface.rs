@@ -5,13 +5,13 @@
         ... Summary ...
 */
 use crate::Context;
-use scsys::core::BoxResult;
+use scsys::BoxResult;
 use std::net::SocketAddr;
 use tracing_subscriber::{fmt::format::FmtSpan, prelude::*};
 
 #[derive(Clone, Debug, Hash, PartialEq)]
 pub struct RPCBackend {
-    pub ctx: Context
+    pub ctx: Context,
 }
 
 impl RPCBackend {
@@ -39,12 +39,12 @@ impl RPCBackend {
 
 pub(crate) mod samples {
     use clap::Parser;
-    use scsys::core::BoxResult;
+    use scsys::BoxResult;
+    use std::env;
     use std::{net::SocketAddr, time::Duration};
     use tarpc::{client, context, tokio_serde::formats::Json};
     use tokio::time::sleep;
     use tracing::Instrument;
-    use std::env;
     use tracing_subscriber::{fmt::format::FmtSpan, prelude::*};
 
     /// This is the service definition. It looks a lot like a trait definition.

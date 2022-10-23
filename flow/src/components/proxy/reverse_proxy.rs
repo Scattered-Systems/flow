@@ -4,7 +4,7 @@
    Description:
        ... Summary ...
 */
-use scsys::core::BoxResult;
+use scsys::BoxResult;
 use serde::{Deserialize, Serialize};
 use tokio::net::{TcpListener, TcpStream};
 

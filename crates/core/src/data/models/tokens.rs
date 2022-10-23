@@ -5,6 +5,7 @@
         ... Summary ...
 */
 pub use self::utils::*;
+use scsys::prelude::chrono;
 
 pub enum Token {
     Token(String),
@@ -86,7 +87,7 @@ impl Default for Claims {
         Self::new(
             String::new(),
             String::new(),
-            scsys::core::Timestamp::now()
+            scsys::Timestamp::now()
                 .checked_add_signed(chrono::Duration::seconds(60))
                 .expect("Timestamp Error")
                 .timestamp() as usize,
@@ -94,8 +95,9 @@ impl Default for Claims {
     }
 }
 
-mod utils {
+pub(crate) mod utils {
     use super::{Claims, Role};
+    use scsys::prelude::chrono;
 
     pub fn create_jwt(
         uid: &str,

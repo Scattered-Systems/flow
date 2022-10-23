@@ -4,7 +4,7 @@
     Description:
         ... Summary ...
 */
-use scsys::core::{BsonOid, Timestamp};
+use scsys::{BsonOid, Timestamp};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Default, Deserialize, Eq, Hash, PartialEq, Serialize)]
@@ -26,4 +26,3 @@ impl State {
         }
     }
 }
-

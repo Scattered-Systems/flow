@@ -19,7 +19,7 @@ impl Context {
     }
 }
 
-impl scsys::core::Context<Settings> for Context {
+impl scsys::Context<Settings> for Context {
     fn context(&self) -> Self {
         self.clone()
     }

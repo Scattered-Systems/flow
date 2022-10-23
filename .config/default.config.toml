@@ -5,15 +5,15 @@ name = "Flow"
 [logger]
 level = "debug"
 
-[providers.cache]
+[cache]
 name = "redis"
 uri = "redis://localhost:6379"
 
-[providers.database]
+[database]
 name = "sqlite"
 uri = "sqlite://:memory:"
 
-[providers.ethereum]
+[ethereum]
 name = "ethereum"
 url = "https://rpc.ankr.com/eth"
 

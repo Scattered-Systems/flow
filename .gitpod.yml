@@ -1,5 +1,11 @@
 tasks:
-  - init: cargo build
+  - init: |
+      sudo apt update -y && sudo apt upgrade -y
+      rustup update
+      rustup install nightly
+      rustup component add clippy rustfmt --toolchain nightly
+      rustup target add wasm32-unknown-unknown
+      cargo build --workspace && cargo build --release --workspace
     command: cargo watch -x run
 
 

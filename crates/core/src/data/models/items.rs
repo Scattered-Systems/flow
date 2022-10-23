@@ -4,7 +4,7 @@
     Description:
         ... Summary ...
 */
-use scsys::core::{BsonOid, Timestamp};
+use scsys::{BsonOid, Timestamp};
 
 #[derive(Clone, Debug, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Item {

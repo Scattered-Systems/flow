@@ -6,7 +6,7 @@
 */
 pub use super::states::State;
 use crate::{api::Api, cli::CommandLineInterface, Context, Settings};
-use scsys::core::{BoxResult, Error};
+use scsys::{prelude::Logger, BoxResult};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Default, Deserialize, Eq, Hash, PartialEq, Serialize)]
@@ -21,10 +21,10 @@ impl Application {
         let state = State::new("initializing");
         Self { context, state }
     }
-    pub fn logging(&mut self) -> &Self {
+    pub fn setup_logger(&self) -> &Self {
         match &self.context.settings.logger {
             Some(v) => v.setup(),
-            None => scsys::prelude::Logger::from("debug").setup(),
+            None => Logger::from("info").setup(),
         }
         self
     }
@@ -32,7 +32,7 @@ impl Application {
         self.state = state;
         self
     }
-    pub async fn api(&self) -> BoxResult<&Self> {
+    pub async fn spawn_api(&self) -> BoxResult<&Self> {
         let api = Api::new(self.context.clone());
         api.run().await?;
         Ok(self)
@@ -40,12 +40,18 @@ impl Application {
     pub fn cli(&self) -> BoxResult<CommandLineInterface> {
         Ok(CommandLineInterface::default())
     }
-    pub async fn rpc(&self) -> BoxResult<&Self> {
-        super::rpc::RPCBackend::new(self.context.clone()).run().await?;
+    pub async fn spawn_rpc(&self) -> BoxResult<&Self> {
+        super::rpc::RPCBackend::new(self.context.clone())
+            .run()
+            .await?;
         Ok(self)
     }
     pub async fn run(&self) -> BoxResult<&Self> {
-        let _data = self.cli()?;
+        self.setup_logger();
+
+        self.cli()?;
+        self.spawn_rpc().await?;
+
         Ok(self)
     }
 }

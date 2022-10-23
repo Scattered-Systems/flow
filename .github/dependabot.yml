@@ -5,6 +5,14 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: cargo
+    directory: /crates/core
+    schedule:
+      interval: daily
+  - package-ecosystem: cargo
+    directory: /crates/sdk
+    schedule:
+      interval: daily
+  - package-ecosystem: cargo
     directory: /flow
     schedule:
       interval: daily

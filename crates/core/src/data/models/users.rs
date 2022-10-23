@@ -4,12 +4,13 @@
     Description:
         ... Summary ...
 */
+use scsys::prelude::Id;
 
 pub trait AccountSpec {
     fn new(username: String, password: String) -> Self
     where
         Self: Sized;
-    fn id(&self) -> scsys::core::BsonOid;
+    fn id(&self) -> Id;
     fn name(&self) -> String;
     fn password(&self) -> String;
     fn slug(&self) -> String {

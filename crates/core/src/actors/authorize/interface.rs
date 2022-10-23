@@ -4,7 +4,7 @@
     Description:
         ... Summary ...
 */
-use scsys::core::BoxResult;
+use scsys::BoxResult;
 
 /// Implements an interface for standard, multi-device authenticators
 pub trait IAuthenticator<Addr: std::string::ToString, Data>:

@@ -2,8 +2,7 @@ name: Code Analysis
 
 on:
   push:
-    branches:
-      - latest
+    branches: [ "main", "master"]
     tags:
       - v*.*.*
   pull_request:

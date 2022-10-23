@@ -11,6 +11,10 @@ readme = "https://gitlab.com/scsys/flow/flow/#README"
 repository = "https://gitlab.com/scsys/flow/flow"
 version = "0.1.0"
 
+[lib]
+crate-type = ["cdylib", "rlib"]
+name = "fluidity"
+
 [[bin]]
 bench = false
 name = "flow"
@@ -26,9 +30,9 @@ hyper = { features = ["full"], version = "0.14.20" }
 opentelemetry = { features = ["rt-tokio"], version = "0.18.0" }
 opentelemetry-jaeger = { features = ["full"], version = "0.17.0" }
 reqwest = { features = ["stream"], version = "0.11.12" }
-scsys = { features = ["full"], version = "0.1.18" }
-serde = { default-features = false, features = ["derive"], version = "1.0.145" }
-serde_json = "1.0.85"
+scsys = { features = ["full"], version = "0.1.21" }
+serde = { default-features = false, features = ["derive"], version = "1.0.147" }
+serde_json = "1.0.87"
 strum = { features = ["derive"], version = "0.24.1" }
 tarpc = { features = ["full"], version = "0.30.0" }
 tokio = { features = ["full"], version = "1.21.2" }

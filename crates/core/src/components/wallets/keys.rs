@@ -5,8 +5,8 @@
         ... Summary ...
 */
 use crate::SecpKeypair;
-use scsys::prelude::{core::Timestamp, rand::rngs::OsRng};
-use secp256k1::{Secp256k1, PublicKey, SecretKey};
+use scsys::{prelude::rand::rngs::OsRng, Timestamp};
+use secp256k1::{PublicKey, Secp256k1, SecretKey};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Default, Deserialize, Eq, Hash, PartialEq, Serialize)]
@@ -35,8 +35,6 @@ impl WalletKey {
         Self::new(keypair.1.to_string(), format!("{:?}", keypair.0))
     }
 }
-
-
 
 #[cfg(test)]
 mod tests {
