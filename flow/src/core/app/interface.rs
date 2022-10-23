@@ -50,7 +50,8 @@ impl Application {
         self.setup_logger();
 
         self.cli()?;
-        self.spawn_rpc().await?;
+        self.spawn_api().await?;
+        // self.spawn_rpc().await?;
 
         Ok(self)
     }

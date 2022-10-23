@@ -10,13 +10,21 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Default, Deserialize, Eq, Hash, PartialEq, Serialize)]
 pub struct AppSettings {
-    pub mode: Option<String>,
-    pub name: Option<String>,
+    pub mode: String,
+    pub name: String,
 }
 
 impl AppSettings {
+    pub fn name(&mut self, name: Option<&str>) -> &Self {
+        self.name = match name {
+            Some(v) => v.to_string(),
+            None => self.name.clone()
+        };
+        
+        self
+    }
     pub fn slug(&self) -> String {
-        self.name.clone().unwrap_or_default().to_lowercase()
+        self.name.clone().to_lowercase()
     }
 }
 
@@ -36,7 +44,7 @@ pub enum Provider {
 
 #[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
 pub struct Settings {
-    pub application: AppSettings,
+    pub application: Option<AppSettings>,
     pub logger: Option<Logger>,
     pub server: Server,
 }
@@ -62,6 +70,6 @@ impl Default for Settings {
 
 impl std::fmt::Display for Settings {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "Configured {}", self.application)
+        write!(f, "Timestamp: {:?}", scsys::Timestamp::default())
     }
 }

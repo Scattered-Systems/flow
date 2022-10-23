@@ -4,13 +4,11 @@
     Description:
         ... Summary ...
 */
-use super::routes;
-use crate::Context;
-
+use crate::{Context, api::routes};
+use axum::{Router, Server};
 use http::header::{HeaderName, AUTHORIZATION};
 use scsys::BoxResult;
 use serde::{Deserialize, Serialize};
-use std::net::SocketAddr;
 use tower_http::{
     compression::CompressionLayer,
     propagate_header::PropagateHeaderLayer,
@@ -20,19 +18,15 @@ use tower_http::{
 
 #[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
 pub struct Api {
-    pub address: SocketAddr,
-    pub context: Context,
+    pub ctx: Context,
 }
 
 impl Api {
-    pub fn new(context: Context) -> Self {
-        Self {
-            address: context.clone().settings.server.address(),
-            context,
-        }
+    pub fn new(ctx: Context) -> Self {
+        Self { ctx }
     }
-    pub async fn client(&self) -> BoxResult<axum::Router> {
-        let client = axum::Router::new()
+    pub async fn client(&self) -> Router {
+        Router::new()
             .merge(routes::Homepage::default().router())
             .layer(
                 TraceLayer::new_for_http()
@@ -47,24 +41,23 @@ impl Api {
             .layer(PropagateHeaderLayer::new(HeaderName::from_static(
                 "x-request-id",
             )))
-            .layer(axum::Extension(self.context.clone()));
-        Ok(client)
+            .layer(axum::Extension(self.ctx.clone()))
     }
     /// Implements a graceful shutdown when users press CTRL + C
     pub async fn shutdown(&self) {
         tokio::signal::ctrl_c()
             .await
             .expect("Expect shutdown signal handler");
-        println!("signal shutdown");
+        tracing::info!("Terminating the application...");
     }
     /// Quickly run the api
     pub async fn run(&self) -> BoxResult {
-        let client = self.client().await.expect("Client error...").clone();
-        let server = axum::Server::bind(&self.address.clone())
+        let address = self.ctx.clone().settings.server.address();
+        let client = self.client().await;
+        let server = Server::bind(&address)
             .serve(client.into_make_service())
             .with_graceful_shutdown(self.shutdown())
-            .await
-            .expect("Server error");
+            .await?;
         Ok(server)
     }
 }
@@ -74,7 +67,7 @@ impl std::fmt::Display for Api {
         write!(
             f,
             "View the application locally at http://localhost:{}",
-            self.context.settings.server.port
+            self.ctx.settings.server.port
         )
     }
 }
