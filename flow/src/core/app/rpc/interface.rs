@@ -6,7 +6,6 @@
 */
 use crate::Context;
 use scsys::BoxResult;
-use std::net::SocketAddr;
 use tracing_subscriber::{fmt::format::FmtSpan, prelude::*};
 
 #[derive(Clone, Debug, Hash, PartialEq)]
@@ -19,7 +18,7 @@ impl RPCBackend {
         Self { ctx }
     }
     pub fn setup_tracing(&self) -> BoxResult<&Self> {
-        let name = self.ctx.settings.application.name.clone();
+        let name = self.ctx.settings.application.name.clone().unwrap_or_default();
         let tracer = opentelemetry_jaeger::new_agent_pipeline()
             .with_service_name(name.as_str())
             .with_max_packet_size(2usize.pow(13))
@@ -85,7 +84,7 @@ pub(crate) mod samples {
 
     pub async fn sample_client(ctx: crate::Context) -> BoxResult {
         let address = ctx.settings.server.address();
-        let name = ctx.settings.application.name;
+        let name = ctx.settings.application.name.unwrap_or_default();
         init_tracing("Tarpc Example Client")?;
 
         let transport = tarpc::serde_transport::tcp::connect(address, Json::default);

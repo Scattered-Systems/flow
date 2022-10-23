@@ -5,24 +5,18 @@
    Description:
        ... Summary ...
 */
-use scsys::{
-    collect_config_files,
-    prelude::{
-        config::{Config, ConfigError, Environment},
-        Cache, Database, Logger, Server, Web3Provider,
-    },
-};
+use scsys::{prelude::{config::{Config, Environment}, Cache, Database, Logger, Server, Web3Provider}, collect_config_files};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Default, Deserialize, Eq, Hash, PartialEq, Serialize)]
 pub struct AppSettings {
-    pub mode: String,
-    pub name: String,
+    pub mode: Option<String>,
+    pub name: Option<String>,
 }
 
 impl AppSettings {
     pub fn slug(&self) -> String {
-        self.name.clone().to_lowercase()
+        self.name.clone().unwrap_or_default().to_lowercase()
     }
 }
 
@@ -43,20 +37,15 @@ pub enum Provider {
 #[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
 pub struct Settings {
     pub application: AppSettings,
-    pub cache: Option<Cache>,
-    pub database: Option<Database>,
-    pub ethereum: Option<Web3Provider>,
     pub logger: Option<Logger>,
     pub server: Server,
 }
 
 impl Settings {
-    pub fn build() -> Result<Self, ConfigError> {
-        let mut builder = Config::builder();
-
-        builder = builder.add_source(collect_config_files("**/default.config.*", true));
-        builder = builder.add_source(collect_config_files("**/*.config.*", false));
-        builder = builder.add_source(Environment::default().separator("__"));
+    pub fn build() -> scsys::ConfigResult<Self> {
+        let builder = Config::builder()
+            .add_source(collect_config_files("**/Flow.toml", true))
+            .add_source(Environment::default().separator("__"));
 
         builder.build()?.try_deserialize()
     }

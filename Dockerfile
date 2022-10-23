@@ -1,12 +1,12 @@
-FROM scsys/rust:photon-loaded-stable as builder
+FROM scsys/rust:debian-lts as builder
 
 ADD . /app
 WORKDIR /app
 
 COPY . .
-RUN cargo build --color always -p flow --release -v
+RUN cargo build --color always --release --verbose --workspace
 
-FROM scsys/photon
+FROM photon
 
 ENV MODE="production" \
     SERVER_PORT=9000 \
