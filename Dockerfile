@@ -8,6 +8,8 @@ RUN cargo build --color always --release --verbose --workspace
 
 FROM debian:buster-slim
 
+RUN apt-get update -y && apt-get upgrade -y && apt-get install -y apt-utils build-essential pkg-config libssl-dev
+
 ENV MODE="production" \
     SERVER__PORT=9000 \
     RUST_LOG="info"
