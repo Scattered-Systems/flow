@@ -12,8 +12,6 @@ use serde::{Deserialize, Serialize};
 #[clap(about, author, version)]
 #[clap(long_about = "")]
 pub struct CommandLineInterface {
-    #[arg(value_enum)]
-    pub control: Option<Power>,
     #[clap(subcommand)]
     pub command: Option<Commands>,
     #[arg(long, short)]

@@ -26,7 +26,7 @@ impl Homepage {
         Router::new()
             .route("/", get(landing))
             .route("/settings", get(settings))
-            .route("/notifications/:id", get(notifications))
+            .route("/notifications/:id", post(notifications))
             .route("/auth/token/:id", post(token))
     }
 }
@@ -61,6 +61,7 @@ pub async fn notifications(Path(id): Path<usize>) -> Json<Value> {
     Json(data)
 }
 
+/// Broadcasts the current settings specified by the user for the interface and other technical systems to leverage
 pub async fn settings(Extension(ctx): Extension<Context>) -> Json<Value> {
     Json(json!(ctx.settings))
 }

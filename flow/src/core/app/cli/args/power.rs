@@ -5,10 +5,20 @@
         ... Summary ...
 */
 use clap::ValueEnum;
+use scsys::BoxResult;
 use serde::{Deserialize, Serialize};
 
 #[derive(ValueEnum, Clone, Debug, Deserialize, Hash, PartialEq, Serialize)]
 pub enum Power {
     On,
     Off,
+}
+
+impl Power {
+    pub fn handler(&self, catalyst: fn(Self) -> BoxResult) -> BoxResult {
+        match self {
+            Self::On => catalyst(self.clone()),
+            Self::Off => catalyst(self.clone())
+        }
+    }
 }

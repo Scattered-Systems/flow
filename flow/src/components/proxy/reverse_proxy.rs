@@ -1,3 +1,5 @@
+use std::future::IntoFuture;
+
 /*
    Appellation: reverse_proxy <module>
    Contributors: FL03 <jo3mccain@icloud.com>
@@ -24,17 +26,16 @@ pub async fn sample_process(data: TcpStream) -> BoxResult {
     Ok(())
 }
 
-pub async fn spawn_listener() -> BoxResult {
-    let listener = TcpListener::bind("127.0.0.1:8080").await?;
+pub async fn spawn_listener(addr: &str) -> BoxResult {
+    let listener = TcpListener::bind(addr).await?;
 
     loop {
         let (socket, _) = listener.accept().await?;
 
         tokio::spawn(async move {
             // Process each socket concurrently.
-            sample_process(socket)
-                .await
-                .expect("Failed to spawn the process");
+            sample_process(socket).await.expect("Failed to spawn the provided process...");
         });
     }
 }
+
