@@ -1,15 +1,15 @@
 [package]
 authors = ["FL03 <jo3mccain@icloud.com> (https://github.com/FL03)"]
 categories = []
-description = "Flow is a complete digital identity management toolkit"
+description = "Fluidity implements the application instances for Flow in support of the Scattered-Systems ecosystem"
 edition = "2021"
 homepage = "https://scattered-systems.github.io/flow"
 keywords = ["blockchain", "digital identity", "management"]
 license = "MIT"
-name = "flow"
+name = "fluidity"
 readme = "https://gitlab.com/scsys/flow/flow/#README"
 repository = "https://gitlab.com/scsys/flow/flow"
-version = "0.1.0"
+version = "0.1.12"
 
 [lib]
 crate-type = ["cdylib", "rlib"]

@@ -23,8 +23,10 @@ jobs:
       with:
         path: "/target/release"
         key: "build"
-    - name: Run tests
+    - name: Test
       run: cargo test --all --verbose
     - name: Publish
       run: |
-        cargo publish --all-features -p fluidity -v
+        cargo publish --all-features -p fluidity-core -v --jobs 1
+        cargo publish --all-features -p fluidity-sdk -v --jobs 1
+        cargo publish --all-features -p fluidity-core -v --jobs 1
