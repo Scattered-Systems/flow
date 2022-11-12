@@ -32,8 +32,9 @@ pub async fn spawn_listener(addr: &str) -> BoxResult {
 
         tokio::spawn(async move {
             // Process each socket concurrently.
-            sample_process(socket).await.expect("Failed to spawn the provided process...");
+            sample_process(socket)
+                .await
+                .expect("Failed to spawn the provided process...");
         });
     }
 }
-

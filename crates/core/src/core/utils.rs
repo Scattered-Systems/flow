@@ -10,7 +10,10 @@ use std::io::Read;
 
 /// From the given path, collect the file lines into a [Vec<String>]
 pub fn extract_file_from_path(pattern: &str, expected: Option<usize>) -> BoxResult<Vec<String>> {
-    let res = glob::glob(pattern).expect("Failed to match the pattern").map(|i| i.expect("").clone()).collect::<Vec<std::path::PathBuf>>();
+    let res = glob::glob(pattern)
+        .expect("Failed to match the pattern")
+        .map(|i| i.expect("").clone())
+        .collect::<Vec<std::path::PathBuf>>();
     let n = expected.unwrap_or(1);
     if res.len() > n {
         panic!("Found too many files...")
@@ -24,7 +27,6 @@ pub fn extract_file_from_path(pattern: &str, expected: Option<usize>) -> BoxResu
         }
         Ok(data)
     }
-    
 }
 
 /// Create a random set of elements from a source via index

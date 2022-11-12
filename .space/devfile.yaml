@@ -8,6 +8,6 @@ attributes:
       version: '1.10'
       updateChannel: EAP
 components:
-- name: devspace
+- name: rust
   container:
     image: rust
