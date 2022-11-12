@@ -6,6 +6,7 @@
 */
 use super::Power;
 use clap::Subcommand;
+use scsys::prelude::BoxResult;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Hash, PartialEq, Serialize, Subcommand)]
@@ -21,14 +22,16 @@ pub enum Commands {
 }
 
 impl Commands {
-    pub fn handler(&self) -> &Self {
+    pub async fn handler(&self) -> &Self {
         match self {
-            Self::Account { address } => {},
+            Self::Account { address: _ } => {},
             Self::Services { power } => {
                 match power.clone() {
                     Some(v) => {
                         match v.clone() {
-                            Power::On => {},
+                            Power::On => {
+                                crate::spawn_application_instance().await.expect("");
+                            },
                             Power::Off => {}
                         }
                     },

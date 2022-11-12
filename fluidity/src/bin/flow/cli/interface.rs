@@ -6,6 +6,7 @@
 */
 use super::{Commands, Power};
 use clap::Parser;
+use scsys::prelude::BoxResult;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Hash, Parser, PartialEq, Serialize)]
@@ -19,7 +20,14 @@ pub struct CommandLineInterface {
 }
 
 impl CommandLineInterface {
-    pub fn handler(&self) -> &Self {
+    pub async fn handler(&self) -> &Self {
+        match self.command.clone() {
+            None => {},
+            Some(v) => {
+                v.handler().await;
+            }
+        }
+
         self
     }
 }

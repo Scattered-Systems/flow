@@ -19,12 +19,12 @@ job("(Flow) Docker: Build and publish") {
         }
 
         dockerBuildPush {
-            context = "."
+            context = "./flow"
             file = "Dockerfile"
             labels["vendor"] = "Scattered-Systems, LLC"
             tags {
-                +"scsys/proton:backend"
-                +"scsys/proton:backend_v0.1.${"$"}JB_SPACE_EXECUTION_NUMBER"
+                +"scsys/flow:latest"
+                +"scsys/flow:v0.1.${"$"}JB_SPACE_EXECUTION_NUMBER"
             }
         }
     }
@@ -67,6 +67,7 @@ job("(Flow) Rust: Publish crates") {
             interpreter = "/bin/bash"
             content = """
                 cargo publish --all-features --color always --jobs 1 --token ${'$'}TOKEN --verbose -p fluidity-core
+                cargo publish --all-features --color always --jobs 1 --token ${'$'}TOKEN --verbose -p fluidity-sdk
                 cargo publish --all-features --color always --jobs 1 --token ${'$'}TOKEN --verbose -p fluidity
             """
         }

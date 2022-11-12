@@ -7,7 +7,7 @@
 pub use super::states::State;
 use crate::{api::Api, cli::CommandLineInterface};
 use fluidity::{Context, Settings};
-use scsys::{components::logging::Logger, prelude::{BoxResult, Stateful, messages::Message}};
+use scsys::{components::logging::Logger, prelude::BoxResult};
 use serde::{Deserialize, Serialize};
 use std::fmt::Display;
 
@@ -34,19 +34,18 @@ impl<T: Default + Display> Application<T> {
         self.state = state;
         self
     }
-    pub async fn spawn_api(&self) -> BoxResult<&Self> {
+    pub async fn spawn_api(&self) -> BoxResult {
         let api = Api::new(self.ctx.clone());
         api.run().await?;
-        Ok(self)
+        Ok(())
     }
     pub fn cli(&self) -> CommandLineInterface {
         CommandLineInterface::default()
     }
     pub async fn run(&self) -> BoxResult<&Self> {
-        self.cli();
+        // self.cli().handler().await;
+        self.setup_logger();
         self.spawn_api().await?;
-        // self.spawn_rpc().await?;
-
         Ok(self)
     }
 }

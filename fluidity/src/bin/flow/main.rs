@@ -21,9 +21,6 @@ async fn main() -> scsys::prelude::BoxResult {
 
 pub async fn spawn_application_instance() -> scsys::prelude::BoxResult {
     let application = Application::<String>::default();
-    application
-        .setup_logger()
-        .run()
-        .await?;
+    application.run().await?;
     Ok(())
 }

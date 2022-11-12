@@ -7,8 +7,8 @@ currently being supported with security updates.
 
 | Package      | Current | Supported |
 |--------------|---------|-----------|
-| flow         | 0.1.0   | <=0.1.0   |
-
+| fluidity-sdk | 0.1.12   | <=0.1.12   |
+| fluidity     | 0.1.12   | <=0.1.12   |
 
 ## Reporting a Vulnerability
 
