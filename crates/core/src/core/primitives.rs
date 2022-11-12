@@ -5,7 +5,7 @@
         ... Summary ...
 */
 pub use self::{constants::*, types::*};
-use scsys::prelude::{BoxResult, Dictionary};
+use scsys::prelude::BoxResult;
 use serde::{Deserialize, Serialize};
 use strum::{EnumString, EnumVariantNames};
 
@@ -52,7 +52,7 @@ impl BIP0039 {
         Ok(Self::new(res))
     }
     pub fn from_file(path: &str) -> Self {
-        let mut data = crate::extract_file_from_path(path);
+        let mut data = crate::extract_file_from_path(path, Some(1)).expect("");
         data.retain(|x| x != &"".to_string());
         Self::new(data)
     }
@@ -62,7 +62,7 @@ mod constants {
     /// Define the valid sizes of generated access grants
     pub const ACCESS_GRANT_VALID_BIT_SIZES: [usize; 5] = [128, 160, 192, 224, 256];
     /// Define the default filepath for locating the BIP0039 english text file
-    pub const PATH_TO_BIP0039_DATA: &str = "../.artifacts/data/BIP0039/english.txt";
+    pub const PATH_TO_BIP0039_DATA: &str = "**/BIP0039/english.txt";
     /// Define the endpoint pointing to BIP0039 Mnemonics
     pub const BIP0039_WORDLIST_ENDPOINT: &str =
         "https://raw.githubusercontent.com/bitcoin/bips/master/bip-0039";
