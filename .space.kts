@@ -23,8 +23,8 @@ job("(Flow) Docker: Build and publish") {
             file = "Dockerfile"
             labels["vendor"] = "Scattered-Systems, LLC"
             tags {
-                +"scsys/proton:backend"
-                +"scsys/proton:backend_v0.1.${"$"}JB_SPACE_EXECUTION_NUMBER"
+                +"scsys/flow:latest"
+                +"scsys/flow:v0.1.${"$"}JB_SPACE_EXECUTION_NUMBER"
             }
         }
     }
