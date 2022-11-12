@@ -5,11 +5,13 @@
         ... Summary ...
 */
 #[cfg(test)]
-use fluidity_core::State;
+
+
 
 #[test]
-fn test_state() {
-    let actual = State::default();
-    let expected = actual.clone();
+fn lib_compiles() {
+    let f = | x: usize, y: usize, z: usize | (x * y) + z;
+    let actual = f(10, 2, 10);
+    let expected = 22;
     assert_eq!(actual, expected)
 }

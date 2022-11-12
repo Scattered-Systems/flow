@@ -8,7 +8,7 @@
 
 */
 use super::IAuthenticator;
-use scsys::Dictionary;
+use scsys::prelude::Dictionary;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]

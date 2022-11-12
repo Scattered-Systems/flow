@@ -5,7 +5,7 @@
         ... Summary ...
 */
 use clap::ValueEnum;
-use scsys::BoxResult;
+use scsys::prelude::BoxResult;
 use serde::{Deserialize, Serialize};
 
 #[derive(ValueEnum, Clone, Debug, Deserialize, Hash, PartialEq, Serialize)]

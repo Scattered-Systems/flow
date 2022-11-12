@@ -4,7 +4,7 @@
     Description:
         ... Summary ...
 */
-use scsys::prelude::Id;
+use scsys::components::identities::Id;
 
 pub trait AccountSpec {
     fn new(username: String, password: String) -> Self

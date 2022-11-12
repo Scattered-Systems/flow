@@ -4,7 +4,7 @@
     Description:
         ... Summary ...
 */
-use rand::Rng;
+use scsys::prelude::{rand::Rng, BoxResult};
 use serde::{Deserialize, Serialize};
 use std::io::Read;
 
@@ -43,7 +43,7 @@ pub fn generate_random_string(len: usize) -> String {
 pub fn save_to_file<'a, T: Clone + Deserialize<'a> + Serialize>(
     data: T,
     path: &str,
-) -> scsys::BoxResult<T> {
+) -> BoxResult<T> {
     let file = std::fs::OpenOptions::new()
         .write(true)
         .create(true)

@@ -5,7 +5,7 @@
    Description:
        ... Summary ...
 */
-use scsys::{prelude::{config::{Config, Environment}, Cache, Database, Logger, Server, Web3Provider}, collect_config_files};
+use scsys::{prelude::{config::{Config, Environment}, ConfigResult, Configurable, collect_config_files}, components::{logging::Logger, networking::Server, providers::{Cache, Database, Web3Provider}}};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Default, Deserialize, Eq, Hash, PartialEq, Serialize)]
@@ -50,12 +50,20 @@ pub struct Settings {
 }
 
 impl Settings {
-    pub fn build() -> scsys::ConfigResult<Self> {
+    pub fn build() -> ConfigResult<Self> {
         let builder = Config::builder()
             .add_source(collect_config_files("**/Flow.toml", true))
             .add_source(Environment::default().separator("__"));
 
         builder.build()?.try_deserialize()
+    }
+}
+
+impl Configurable for Settings {
+    type Settings = Self;
+
+    fn settings(&self) -> &Self::Settings {
+        self
     }
 }
 
@@ -70,6 +78,6 @@ impl Default for Settings {
 
 impl std::fmt::Display for Settings {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "Timestamp: {:?}", scsys::Timestamp::default())
+        write!(f, "{}", serde_json::to_string_pretty(&self).unwrap())
     }
 }

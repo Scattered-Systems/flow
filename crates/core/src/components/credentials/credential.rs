@@ -4,7 +4,7 @@
     Description:
         ... Summary ...
 */
-use scsys::{BoxResult, Timestamp};
+use scsys::prelude::{BoxResult, Timestamp};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Default, Deserialize, Eq, Hash, PartialEq, Serialize)]

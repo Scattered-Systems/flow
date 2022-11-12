@@ -12,4 +12,4 @@ currently being supported with security updates.
 
 ## Reporting a Vulnerability
 
-[Scattered-Systems](https://scattered-systems.com)
+[Scattered-Systems](https://scsys.eth.limo)

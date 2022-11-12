@@ -4,7 +4,7 @@
     Description:
         ... Summary ...
 */
-use scsys::{prelude::rand::Rng, Timestamp};
+use scsys::prelude::{rand::Rng, Timestamp};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Default, Deserialize, Eq, Hash, PartialEq, Serialize)]

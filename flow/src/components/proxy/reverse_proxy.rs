@@ -1,12 +1,10 @@
-use std::future::IntoFuture;
-
 /*
    Appellation: reverse_proxy <module>
    Contributors: FL03 <jo3mccain@icloud.com>
    Description:
        ... Summary ...
 */
-use scsys::BoxResult;
+use scsys::prelude::BoxResult;
 use serde::{Deserialize, Serialize};
 use tokio::net::{TcpListener, TcpStream};
 

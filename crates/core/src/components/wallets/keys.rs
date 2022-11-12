@@ -5,7 +5,7 @@
         ... Summary ...
 */
 use crate::SecpKeypair;
-use scsys::{prelude::rand::rngs::OsRng, Timestamp};
+use scsys::prelude::{rand::rngs::OsRng, Timestamp};
 use secp256k1::{PublicKey, Secp256k1, SecretKey};
 use serde::{Deserialize, Serialize};
 

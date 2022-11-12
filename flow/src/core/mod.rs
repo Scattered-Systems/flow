@@ -4,8 +4,7 @@
    Description:
        ... Summary ...
 */
-pub use self::{app::*, context::Context, settings::Settings};
+pub use self::{context::*, settings::Settings};
 
-mod app;
 mod context;
 mod settings;

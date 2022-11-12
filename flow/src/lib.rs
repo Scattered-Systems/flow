@@ -12,7 +12,3 @@ mod components;
 mod core;
 mod data;
 
-pub async fn spawn_application_instance() -> scsys::BoxResult {
-    Application::default().run().await?;
-    Ok(())
-}

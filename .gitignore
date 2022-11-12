@@ -11,12 +11,14 @@
 
 **/.DS_STORE/
 **/.artifacts/data/
+**/.cache/
 **/.docker/data/
 **/.idea/
 **/.pytest_cache/
 **/.svelte-kit/
 **/.vscode/
 
+**/artifacts/
 **/build/
 **/debug/
 **/dist/
@@ -56,4 +58,3 @@
 !**/*.env.example
 !**/*.config.js
 !**/*.config.cjs
-!**/BIP0039/

@@ -5,7 +5,7 @@
         ... Summary ...
 */
 pub use self::{constants::*, types::*};
-use scsys::{BoxResult, Dictionary};
+use scsys::prelude::{BoxResult, Dictionary};
 use serde::{Deserialize, Serialize};
 use strum::{EnumString, EnumVariantNames};
 

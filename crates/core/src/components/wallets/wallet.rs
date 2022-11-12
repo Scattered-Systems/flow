@@ -5,7 +5,7 @@
         ... Summary ...
 */
 use crate::wallets::keys::WalletKey;
-use scsys::BoxResult;
+use scsys::prelude::BoxResult;
 use secp256k1::{PublicKey, SecretKey};
 use serde::{Deserialize, Serialize};
 use std::str::FromStr;

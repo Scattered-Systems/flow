@@ -5,9 +5,12 @@
         ... Summary ...
 */
 pub use self::utils::*;
-use scsys::prelude::chrono;
+use scsys::prelude::{chrono, Timestamp};
+use serde::{Deserialize, Serialize};
+use strum::{EnumString, EnumVariantNames};
 
-pub enum Token {
+#[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
+pub enum Tokens {
     Token(String),
     OAuth2 {
         access_token: String,
@@ -17,15 +20,15 @@ pub enum Token {
 }
 
 /// Defines the standard model for creating authentication tokens
-#[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct Tokens {
+#[derive(Clone, Debug, Default, Deserialize, Hash, PartialEq, Serialize)]
+pub struct Token {
     pub access_type: Vec<String>,
     pub token: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub username: Option<String>,
 }
 
-impl Tokens {
+impl Token {
     pub fn new(access_type: Vec<String>, token: String, username: Option<String>) -> Self {
         Self {
             access_type,
@@ -35,31 +38,22 @@ impl Tokens {
     }
 }
 
-impl Default for Tokens {
-    // Migrate the generative token to here
-    fn default() -> Self {
-        Self::new(Vec::<String>::new(), String::new(), None)
-    }
-}
-
-#[derive(Clone, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
-struct Claims {
-    sub: String,
-    role: String,
-    exp: usize,
+#[derive(Clone, Debug, Default, Deserialize, Eq, Hash, PartialEq, Serialize)]
+pub struct Claims {
+    pub sub: String,
+    pub role: String,
+    pub exp: usize,
 }
 
 impl Claims {
-    fn constructor(sub: String, role: String, exp: usize) -> Self {
-        Self { sub, role, exp }
-    }
     pub fn new(sub: String, role: String, exp: usize) -> Self {
-        Self::constructor(sub, role, exp)
+        Self { sub, role, exp }
     }
 }
 
-#[derive(Clone, Copy, Debug, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, EnumString, EnumVariantNames, Eq, Hash, PartialEq, Serialize)]
 pub enum Role {
+    #[default]
     User,
     Admin,
 }
@@ -75,23 +69,7 @@ impl Role {
 
 impl std::fmt::Display for Role {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Role::User => write!(f, "User"),
-            Role::Admin => write!(f, "Admin"),
-        }
-    }
-}
-
-impl Default for Claims {
-    fn default() -> Self {
-        Self::new(
-            String::new(),
-            String::new(),
-            scsys::Timestamp::now()
-                .checked_add_signed(chrono::Duration::seconds(60))
-                .expect("Timestamp Error")
-                .timestamp() as usize,
-        )
+        write!(f, "{}", self.to_string())
     }
 }
 
@@ -129,7 +107,7 @@ mod tests {
 
     #[test]
     fn test_tokens() {
-        let actual = Tokens::default();
+        let actual = Token::default();
         let expected = actual.clone();
         assert_eq!(actual, expected)
     }
