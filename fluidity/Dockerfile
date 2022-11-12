@@ -2,6 +2,10 @@ FROM rust:latest as builder-base
 
 RUN apt-get update -y && apt-get upgrade -y
 
+RUN apt-get install -y \
+    apt-utils \
+    protobuf-compiler
+
 RUN rustup update 
 
 FROM builder-base as builder
