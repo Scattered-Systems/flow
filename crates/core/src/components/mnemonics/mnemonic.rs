@@ -38,8 +38,8 @@ mod tests {
 
     #[test]
     fn test_mnemonic() {
-        let actual = Mnemonic::new(Passphrase::default());
-        let expected = Mnemonic::new(Passphrase::default());
-        assert_ne!(actual, expected)
+        let a = Mnemonic::new(Passphrase::default());
+        let b = Mnemonic::new(Passphrase::default());
+        assert_ne!(a, b)
     }
 }

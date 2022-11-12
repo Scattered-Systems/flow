@@ -34,7 +34,7 @@ impl std::convert::From<&Self> for Language {
     }
 }
 
-#[derive(Clone, Debug, Default, Deserialize, Eq, Hash, PartialEq, Serialize)]
+#[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
 pub struct BIP0039(pub Vec<String>);
 
 impl BIP0039 {
@@ -51,10 +51,16 @@ impl BIP0039 {
         let res = data.iter().map(|i| i.to_string()).collect();
         Ok(Self::new(res))
     }
-    pub fn from_file(path: &str) -> Self {
-        let mut data = crate::extract_file_from_path(path, Some(1)).expect("");
+    pub fn from_file() -> Self {
+        let mut data = crate::extract_file_from_path("./BIP0039/english.txt");
         data.retain(|x| x != &"".to_string());
         Self::new(data)
+    }
+}
+
+impl Default for BIP0039 {
+    fn default() -> Self {
+        Self::from_file()
     }
 }
 

@@ -9,24 +9,12 @@ use serde::{Deserialize, Serialize};
 use std::io::Read;
 
 /// From the given path, collect the file lines into a [Vec<String>]
-pub fn extract_file_from_path(pattern: &str, expected: Option<usize>) -> BoxResult<Vec<String>> {
-    let res = glob::glob(pattern)
-        .expect("Failed to match the pattern")
-        .map(|i| i.expect("").clone())
-        .collect::<Vec<std::path::PathBuf>>();
-    let n = expected.unwrap_or(1);
-    if res.len() > n {
-        panic!("Found too many files...")
-    } else {
-        let mut data = Vec::new();
-        for path in res {
-            let mut file = std::fs::File::open(std::path::Path::new(&path))?;
-            let mut buffer = String::new();
-            file.read_to_string(&mut buffer).expect("File Error");
-            data.push(buffer.split("\n").map(|s: &str| s.to_string()).collect())
-        }
-        Ok(data)
-    }
+pub fn extract_file_from_path(path: &str) -> Vec<String> {
+    let mut file = std::fs::File::open(std::path::Path::new(&path)).expect("Failed to read the file");
+    let mut buffer = String::new();
+    file.read_to_string(&mut buffer).expect("File Error");
+    buffer.split("\n").map(|s: &str| s.to_string()).collect()
+
 }
 
 /// Create a random set of elements from a source via index
