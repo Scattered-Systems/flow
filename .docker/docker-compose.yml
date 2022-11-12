@@ -1,16 +1,16 @@
-version: "3.9"
+version: "4.0"
 services:
   application:
     build:
-      context: ..
+      context: ../fluidity
       dockerfile: Dockerfile
       target: latest
     container_name: flow
     ports:
-      - "8080:8080"
+      - "9000:9000"
     restart: always
     volumes:
-      - ../.config:/config
+      - /config:/config
       - /data:/data
 
   cache:
