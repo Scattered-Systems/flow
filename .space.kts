@@ -19,7 +19,7 @@ job("(Flow) Docker: Build and publish") {
         }
 
         dockerBuildPush {
-            context = "./flow"
+            context = "./fluidity"
             file = "Dockerfile"
             labels["vendor"] = "Scattered-Systems, LLC"
             tags {
