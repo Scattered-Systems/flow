@@ -21,7 +21,11 @@ pub struct Application<T: Default + Display> {
 impl<T: Default + Display> Application<T> {
     pub fn new(settings: Settings) -> Self {
         let context = Context::new(settings.clone());
-        Self { ctx: context, settings, state: Default::default() }
+        Self {
+            ctx: context,
+            settings,
+            state: Default::default(),
+        }
     }
     pub fn setup_logger(&self) -> &Self {
         match &self.ctx.settings.logger {

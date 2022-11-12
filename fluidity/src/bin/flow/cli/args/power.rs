@@ -18,7 +18,7 @@ impl Power {
     pub fn handler(&self, catalyst: fn(Self) -> BoxResult) -> BoxResult {
         match self {
             Self::On => catalyst(self.clone()),
-            Self::Off => catalyst(self.clone())
+            Self::Off => catalyst(self.clone()),
         }
     }
 }

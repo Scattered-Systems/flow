@@ -27,12 +27,15 @@ impl<T: Default + std::fmt::Display> Default for States<T> {
 #[derive(Clone, Debug, Default, Deserialize, Eq, Hash, PartialEq, Serialize)]
 pub struct State<T: Default + std::fmt::Display> {
     pub message: Message<T>,
-    pub timestamp: Timestamp
+    pub timestamp: Timestamp,
 }
 
 impl<T: Default + std::fmt::Display> State<T> {
     pub fn new(message: Message<T>) -> Self {
-        Self { message, timestamp: Default::default() }
+        Self {
+            message,
+            timestamp: Default::default(),
+        }
     }
 }
 

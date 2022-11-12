@@ -5,7 +5,18 @@
    Description:
        ... Summary ...
 */
-use scsys::{prelude::{config::{Config, Environment}, ConfigResult, Configurable, collect_config_files}, components::{logging::Logger, networking::Server, providers::{Cache, Database, Web3Provider}}};
+use scsys::{
+    components::{
+        logging::Logger,
+        networking::Server,
+        providers::{Cache, Database, Web3Provider},
+    },
+    prelude::{
+        collect_config_files,
+        config::{Config, Environment},
+        ConfigResult, Configurable,
+    },
+};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Default, Deserialize, Eq, Hash, PartialEq, Serialize)]
@@ -18,9 +29,9 @@ impl AppSettings {
     pub fn name(&mut self, name: Option<&str>) -> &Self {
         self.name = match name {
             Some(v) => v.to_string(),
-            None => self.name.clone()
+            None => self.name.clone(),
         };
-        
+
         self
     }
     pub fn slug(&self) -> String {
@@ -39,7 +50,7 @@ impl std::fmt::Display for AppSettings {
 pub enum Provider {
     Cache(Cache),
     Database(Database),
-    Ethereum(Web3Provider)
+    Ethereum(Web3Provider),
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]

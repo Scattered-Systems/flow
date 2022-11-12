@@ -51,7 +51,9 @@ impl Claims {
     }
 }
 
-#[derive(Clone, Debug, Default, Deserialize, EnumString, EnumVariantNames, Eq, Hash, PartialEq, Serialize)]
+#[derive(
+    Clone, Debug, Default, Deserialize, EnumString, EnumVariantNames, Eq, Hash, PartialEq, Serialize,
+)]
 pub enum Role {
     #[default]
     User,

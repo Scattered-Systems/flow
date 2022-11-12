@@ -13,6 +13,6 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: cargo
-    directory: /flow
+    directory: /fluidity
     schedule:
       interval: daily

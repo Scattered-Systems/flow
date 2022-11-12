@@ -22,7 +22,7 @@ pub struct CommandLineInterface {
 impl CommandLineInterface {
     pub async fn handler(&self) -> &Self {
         match self.command.clone() {
-            None => {},
+            None => {}
             Some(v) => {
                 v.handler().await;
             }

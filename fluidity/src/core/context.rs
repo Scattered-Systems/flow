@@ -31,6 +31,10 @@ impl Contextual for Context {
 
 impl std::fmt::Display for Context {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", serde_json::to_string_pretty(&self.settings).unwrap())
+        write!(
+            f,
+            "{}",
+            serde_json::to_string_pretty(&self.settings).unwrap()
+        )
     }
 }

@@ -17,28 +17,23 @@ pub enum Commands {
     },
     Services {
         #[arg(value_enum)]
-        power: Option<Power>
-    }
+        power: Option<Power>,
+    },
 }
 
 impl Commands {
     pub async fn handler(&self) -> &Self {
         match self {
-            Self::Account { address: _ } => {},
-            Self::Services { power } => {
-                match power.clone() {
-                    Some(v) => {
-                        match v.clone() {
-                            Power::On => {
-                                crate::spawn_application_instance().await.expect("");
-                            },
-                            Power::Off => {}
-                        }
-                    },
-                    None => {}
-                }
-
-            }
+            Self::Account { address: _ } => {}
+            Self::Services { power } => match power.clone() {
+                Some(v) => match v.clone() {
+                    Power::On => {
+                        crate::spawn_application_instance().await.expect("");
+                    }
+                    Power::Off => {}
+                },
+                None => {}
+            },
         };
         self
     }
