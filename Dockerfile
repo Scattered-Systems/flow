@@ -18,8 +18,9 @@ RUN cargo build --color always --release --verbose --workspace
 
 FROM scratch as cache 
 
-COPY fluidity/Flow.toml /space/config/flow/Flow.toml
-COPY --from=builder /app/target/release/flow /space/bin/flow
+COPY Flow.toml /space/app/flow/config/Flow.toml
+COPY --from=builder /app/target/release/flow /space/app/flow
+
 VOLUME /space
 
 FROM debian:buster-slim
@@ -30,10 +31,9 @@ ENV MODE="production" \
     SERVER__PORT=9000 \
     RUST_LOG="info"
 
-COPY --from=cache /space/config/flow /flow/Flow.toml
-COPY --from=cache /space/bin/flow /bin/flow
+COPY --from=cache /space/app/flow/config/flow /flow/Flow.toml
+COPY --from=cache /space/app/flow /bin/flow
 
-EXPOSE 9000:${SERVER__PORT}/tcp
-EXPOSE 9000:${SERVER__PORT}/udp
+EXPOSE ${SERVER__PORT}
 
 CMD [ "flow" ]
