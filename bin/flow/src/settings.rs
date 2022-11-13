@@ -64,10 +64,7 @@ impl Settings {
     pub fn build() -> ConfigResult<Self> {
         let mut builder = Config::builder()
             .add_source(
-                glob::glob("**/Flow.toml")
-                    .expect("")
-                    .map(|path| File::from(path.expect("")))
-                    .collect::<Vec<_>>(),
+                collect_config_files("**/.config/*", false)
             )
             .add_source(Environment::default().separator("__"));
         
