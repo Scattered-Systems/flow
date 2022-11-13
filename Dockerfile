@@ -30,6 +30,6 @@ ENV LOG_LEVEL="info" \
     
 COPY --from=cache /space/app/flow /bin/flow
 
-EXPOSE ${SERVER__PORT}
+EXPOSE ${SERVER_PORT}
 
 CMD [ "flow" ]
