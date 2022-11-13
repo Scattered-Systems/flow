@@ -11,7 +11,7 @@ keywords = ["core", "scsys"]
 license = "MIT"
 name = "fluidity-core"
 repository = "https://gitlab.com/scsys/crates/fluidity"
-version = "0.1.6" # TODO - Update cargo package version
+version = "0.1.12" # TODO - Update cargo package version
 
 [lib]
 crate-type = ["cdylib", "rlib"]

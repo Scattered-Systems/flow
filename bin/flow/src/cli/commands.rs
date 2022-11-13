@@ -1,5 +1,3 @@
-use std::sync::Arc;
-
 /*
     Appellation: commands <module>
     Contributors: FL03 <jo3mccain@icloud.com>
@@ -36,8 +34,7 @@ impl Commands {
             }
             Self::Services { update } => {
                 println!("{:?}", &update);
-
-            },
+            }
             Self::System { power } => match power.clone() {
                 Some(v) => match v.clone() {
                     Power::On => {
@@ -46,9 +43,8 @@ impl Commands {
                         let api = Api::default();
                         match api.run().await {
                             Err(e) => panic!("{}", e),
-                            Ok(v) => v
+                            Ok(v) => v,
                         };
-
                     }
                     Power::Off => {}
                 },
@@ -58,4 +54,3 @@ impl Commands {
         self
     }
 }
-

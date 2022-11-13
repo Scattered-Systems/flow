@@ -27,7 +27,7 @@ test = true
 [dependencies.fluidity-core]
 optional = true
 path = "../core"
-version = "0.1.6" # TODO: Check feature versioning
+version = "0.1.12" # TODO: Check feature versioning
 
 [package.metadata.docs.rs]
 all-features = true

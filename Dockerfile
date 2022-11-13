@@ -14,23 +14,20 @@ ADD . /app
 WORKDIR /app
 
 COPY . .
-RUN cargo build --color always --release --verbose --workspace
+RUN cargo build --color always --release --verbose -p flow
 
 FROM scratch as cache 
 
 COPY --from=builder /app/target/release/flow /space/app/flow
-
 VOLUME /space
 
 FROM debian:buster-slim
 
 RUN apt-get update -y && apt-get upgrade -y 
 
-ENV MODE="production" \
-    SERVER__PORT=9000 \
-    RUST_LOG="info"
-
-COPY Flow.toml ./
+ENV LOG_LEVEL="info" \
+    SERVER_PORT=9000
+    
 COPY --from=cache /space/app/flow /bin/flow
 
 EXPOSE ${SERVER__PORT}

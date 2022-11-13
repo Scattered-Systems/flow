@@ -12,4 +12,3 @@ fn lib_compiles() {
     let b = 30;
     assert_eq!(a, b)
 }
-

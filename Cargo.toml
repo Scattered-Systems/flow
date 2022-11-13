@@ -1,9 +1,10 @@
 [workspace]
 default-members = [
-    "fluidity",
+    "bin/flow",
 ]
 
 members = [
+    "bin/flow",
     "fluidity",
     "crates/core",
     "crates/sdk"

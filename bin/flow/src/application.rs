@@ -5,9 +5,8 @@
         ... Summary ...
 */
 pub use super::states::State;
-use crate::{api::Api, cli::CommandLineInterface};
-use fluidity::{Context, Settings};
-use scsys::{components::logging::Logger, prelude::BoxResult};
+use crate::{api::Api, cli::CommandLineInterface, Context, Settings};
+use scsys::prelude::BoxResult;
 use serde::{Deserialize, Serialize};
 use std::fmt::Display;
 
@@ -46,9 +45,9 @@ impl<T: Clone + Default + Display> Application<T> {
     }
     pub async fn run(&self) -> BoxResult<&Self> {
         self.setup_logger();
-        tracing::info!("Successfully initialized the application...");
+        tracing::info!("Success: Application initialized; awaiting commands...");
         let cli = CommandLineInterface::default();
-        tracing::info!("Processing command line arguments...");
+        tracing::info!("Success: Commands parsed, processing requests...");
         cli.handler().await;
         Ok(self)
     }

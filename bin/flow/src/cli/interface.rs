@@ -4,10 +4,8 @@
     Description:
         ... Summary ...
 */
-use super::{Commands, Power};
-use crate::Application;
+use super::Commands;
 use clap::Parser;
-use scsys::prelude::BoxResult;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Hash, Parser, PartialEq, Serialize)]
