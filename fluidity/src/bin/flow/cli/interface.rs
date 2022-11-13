@@ -5,6 +5,7 @@
         ... Summary ...
 */
 use super::{Commands, Power};
+use crate::Application;
 use clap::Parser;
 use scsys::prelude::BoxResult;
 use serde::{Deserialize, Serialize};
@@ -27,7 +28,6 @@ impl CommandLineInterface {
                 v.handler().await;
             }
         }
-
         self
     }
 }

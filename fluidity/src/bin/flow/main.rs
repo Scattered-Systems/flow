@@ -5,11 +5,11 @@
        ... Summary ...
 
 */
-pub use self::{interface::*, states::*};
+pub use self::{application::*, states::*};
 
 pub mod api;
 pub mod cli;
-pub(crate) mod interface;
+pub(crate) mod application;
 pub(crate) mod states;
 
 #[tokio::main(flavor = "multi_thread")]
