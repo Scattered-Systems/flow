@@ -18,7 +18,6 @@ RUN cargo build --color always --release --verbose --workspace
 
 FROM scratch as cache 
 
-COPY Flow.toml /space/app/flow/config/Flow.toml
 COPY --from=builder /app/target/release/flow /space/app/flow
 
 VOLUME /space
@@ -31,7 +30,7 @@ ENV MODE="production" \
     SERVER__PORT=9000 \
     RUST_LOG="info"
 
-COPY --from=cache /space/app/flow/config/flow /flow/Flow.toml
+COPY Flow.toml ./
 COPY --from=cache /space/app/flow /bin/flow
 
 EXPOSE ${SERVER__PORT}

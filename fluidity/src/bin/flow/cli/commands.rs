@@ -7,9 +7,8 @@ use std::sync::Arc;
         ... Summary ...
 */
 use super::Power;
-use crate::{api::Api, Application};
+use crate::api::Api;
 use clap::Subcommand;
-use scsys::prelude::BoxResult;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Hash, PartialEq, Serialize, Subcommand)]
@@ -30,6 +29,7 @@ pub enum Commands {
 
 impl Commands {
     pub async fn handler(&self) -> &Self {
+        tracing::info!("Processing commands issued to the cli...");
         match self {
             Self::Account { address } => {
                 println!("{:?}", &address);
