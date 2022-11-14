@@ -13,7 +13,7 @@ use scsys::{
     },
     prelude::{
         collect_config_files,
-        config::{Config, Environment, File},
+        config::{Config, Environment},
         ConfigResult, Configurable,
     },
 };
@@ -94,7 +94,11 @@ impl Default for Settings {
     fn default() -> Self {
         match Self::build() {
             Ok(v) => v,
-            Err(e) => panic!("Configuration Error: {}", e),
+            Err(_) => Self {
+                application: Some(AppSettings::default()),
+                logger: Some(Logger::default()),
+                server: Server::default()
+            },
         }
     }
 }
