@@ -54,7 +54,7 @@ impl Settings {
             .add_source(collect_config_files("**/.config/*.toml", false))
             .add_source(Environment::default().separator("__"));
         
-        match std::env::var("LOG_LEVEL") {
+        match std::env::var("RUST_LOG") {
             Err(_) => {},
             Ok(v) => {builder = builder.set_override("logger.level", Some(v))?;}
         };

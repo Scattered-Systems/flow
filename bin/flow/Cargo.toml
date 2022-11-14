@@ -21,6 +21,7 @@ opentelemetry-jaeger = { features = ["full"], version = "0.17.0" }
 async-session = "3.0.0"
 axum = { features = ["headers", "http2", "ws"], version = "0.5.16" }
 clap = { features = ["derive"], version = "4.0.8" }
+dotenv = "0.15.0"
 futures = "0.3.25"
 glob = "0.3.0"
 http = "0.2.8"

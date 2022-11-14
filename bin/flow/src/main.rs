@@ -5,6 +5,7 @@
        ... Summary ...
 
 */
+extern crate dotenv;
 pub use self::{application::*, context::*, settings::*, states::*};
 
 pub mod api;
@@ -16,6 +17,7 @@ pub(crate) mod states;
 
 #[tokio::main]
 async fn main() -> scsys::prelude::BoxResult {
+    dotenv::dotenv()?;
     Application::<String>::default().run().await?;
 
     Ok(())
