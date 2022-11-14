@@ -62,10 +62,10 @@ pub struct Settings {
 
 impl Settings {
     pub fn build() -> ConfigResult<Self> {
-        let mut builder = Config::builder()
-            .add_source(
-                collect_config_files("**/.config/*.toml", false)
-            )
+        let mut builder = Config::builder();
+
+        builder = builder
+            .add_source(collect_config_files("**/Flow.toml", false))
             .add_source(Environment::default().separator("__"));
         
         match std::env::var("LOG_LEVEL") {
