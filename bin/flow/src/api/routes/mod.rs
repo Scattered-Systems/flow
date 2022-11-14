@@ -4,6 +4,7 @@
    Description:
        ... Summary ...
 */
-pub use self::index::Homepage;
+pub use self::{auth::*, index::Homepage};
 
+pub(crate) mod auth;
 pub(crate) mod index;

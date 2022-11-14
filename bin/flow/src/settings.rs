@@ -5,17 +5,11 @@
    Description:
        ... Summary ...
 */
-use scsys::{
-    components::{
-        logging::Logger,
-        networking::Server,
-        providers::{Cache, Database, Web3Provider},
-    },
-    prelude::{
-        collect_config_files,
-        config::{Config, Environment},
-        ConfigResult, Configurable,
-    },
+use scsys::components::{logging::Logger, networking::Server};
+use scsys::prelude::{
+    collect_config_files,
+    config::{Config, Environment},
+    ConfigResult, Configurable,
 };
 use serde::{Deserialize, Serialize};
 
@@ -46,14 +40,6 @@ impl std::fmt::Display for AppSettings {
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
-
-pub enum Provider {
-    Cache(Cache),
-    Database(Database),
-    Ethereum(Web3Provider),
-}
-
-#[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
 pub struct Settings {
     pub application: Option<AppSettings>,
     pub logger: Option<Logger>,
@@ -65,7 +51,7 @@ impl Settings {
         let mut builder = Config::builder();
 
         builder = builder
-            .add_source(collect_config_files("**/Flow.toml", false))
+            .add_source(collect_config_files("**/.config/*.toml", false))
             .add_source(Environment::default().separator("__"));
         
         match std::env::var("LOG_LEVEL") {

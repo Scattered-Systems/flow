@@ -26,8 +26,11 @@ impl Api {
         Self { ctx }
     }
     pub async fn client(&self) -> Router {
-        Router::new()
+        let mut router = Router::new();
+        router = router
             .merge(routes::Homepage::default().router())
+            .merge(routes::AuthRouter::default().router());
+        router = router
             .layer(
                 TraceLayer::new_for_http()
                     .make_span_with(DefaultMakeSpan::new().include_headers(true))
@@ -41,7 +44,8 @@ impl Api {
             .layer(PropagateHeaderLayer::new(HeaderName::from_static(
                 "x-request-id",
             )))
-            .layer(axum::Extension(self.ctx.clone()))
+            .layer(axum::Extension(self.ctx.clone()));
+        router
     }
     /// Implements a graceful shutdown when users press CTRL + C
     pub async fn shutdown(&self) {

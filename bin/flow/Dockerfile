@@ -11,8 +11,6 @@ RUN rustup update
 FROM builder-base as builder
 
 ADD . /app
-RUN chmod -R 777 /app
-
 WORKDIR /app
 
 COPY . .
@@ -23,16 +21,16 @@ FROM scratch as cache
 COPY --from=builder /app/target/release/flow /space/bin/flow
 VOLUME /space
 
-FROM debian:buster-slim
+FROM debian:buster-slim as runner-base
 
 RUN apt-get update -y && apt-get upgrade -y 
+
+FROM runner-base as runner
 
 ENV LOG_LEVEL="info" \
     SERVER_PORT=9000
 
-COPY --from=builder /app/Flow.toml /flow/Flow.toml
-COPY --from=cache /space/bin/flow /bin/flow
-RUN chmod -R 777 /flow
+COPY --from=builder /app/target/release/flow /bin/flow
 
 EXPOSE ${SERVER_PORT}
 

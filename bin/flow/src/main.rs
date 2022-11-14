@@ -14,15 +14,9 @@ pub(crate) mod context;
 pub(crate) mod settings;
 pub(crate) mod states;
 
-#[tokio::main(flavor = "multi_thread")]
+#[tokio::main]
 async fn main() -> scsys::prelude::BoxResult {
-    spawn_application_instance().await?;
+    Application::<String>::default().run().await?;
 
-    Ok(())
-}
-
-pub async fn spawn_application_instance() -> scsys::prelude::BoxResult {
-    let application = Application::<String>::default();
-    application.run().await?;
     Ok(())
 }

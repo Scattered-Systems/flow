@@ -10,7 +10,7 @@ use axum::{
     routing::{get, post},
     Extension, Json, Router,
 };
-use scsys::prelude::Timestamp;
+use scsys::prelude::messages::Message;
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 
@@ -25,8 +25,7 @@ impl Homepage {
         Router::new()
             .route("/", get(landing))
             .route("/settings", get(settings))
-            .route("/notifications/:id", post(notifications))
-            .route("/auth/token/:id", post(token))
+            .route("/notifications/:id", get(notifications).post(notifications))
     }
 }
 
@@ -38,26 +37,14 @@ impl Default for Homepage {
 
 /// Define the landing endpoint
 pub async fn landing() -> Json<Value> {
-    let data = json!({ "timestamp": Timestamp::default() });
-    Json(data)
-}
-
-/// Implements the authorization url following the OAuth2 specification
-pub async fn authorization(Path(id): Path<usize>) -> Json<Value> {
-    let data = json!({ "id": id });
-    Json(data)
-}
-
-/// Implements the OAuth2 token
-pub async fn token(Path(id): Path<usize>) -> Json<Value> {
-    let data = json!({ "id": id });
-    Json(data)
+    let msg = Message::from("welcome to flow");
+    Json(json!(msg))
 }
 
 /// Implements a notification endpoint
 pub async fn notifications(Path(id): Path<usize>) -> Json<Value> {
     let data = json!({ "id": id });
-    Json(data)
+    Json(json!(Message::from(data)))
 }
 
 /// Broadcasts the current settings specified by the user for the interface and other technical systems to leverage
