@@ -1,13 +1,10 @@
 [workspace]
 default-members = [
-    "bin/flow",
+    "flow",
 ]
 
 members = [
-    "bin/flow",
-    "fluidity",
-    "crates/core",
-    "crates/sdk"
+    "flow",
 ]
 
 [profile.dev]

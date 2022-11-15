@@ -51,25 +51,3 @@ job("(Flow) Rust: Build and test the workspace") {
         }
     }
 }
-
-job("(Flow) Rust: Publish crates") {
-    startOn {
-        gitPush { 
-            branchFilter {
-                +"refs/tags/v*.*.*"
-            }
-        }
-    }
-    container(displayName = "Rust", image = "rust") {
-        env["TOKEN"] = Secrets("cargo_registry_token")
-
-        shellScript {
-            interpreter = "/bin/bash"
-            content = """
-                cargo publish --all-features --color always --jobs 1 --token ${'$'}TOKEN --verbose -p fluidity-core
-                cargo publish --all-features --color always --jobs 1 --token ${'$'}TOKEN --verbose -p fluidity-sdk
-                cargo publish --all-features --color always --jobs 1 --token ${'$'}TOKEN --verbose -p fluidity
-            """
-        }
-    }
-}
