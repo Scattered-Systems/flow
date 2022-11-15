@@ -19,8 +19,8 @@ job("(Flow) Docker: Build and publish") {
         }
 
         dockerBuildPush {
-            context = "./fluidity"
-            file = "Dockerfile"
+            context = "."
+            file = "./bin/flow/Dockerfile"
             labels["vendor"] = "Scattered-Systems, LLC"
             tags {
                 +"scsys/flow:latest"
@@ -47,28 +47,6 @@ job("(Flow) Rust: Build and test the workspace") {
             content = """
                 cargo login ${'$'}CARGO_REGISTRY_TOKEN
                 cargo test --all-features
-            """
-        }
-    }
-}
-
-job("(Flow) Rust: Publish crates") {
-    startOn {
-        gitPush { 
-            branchFilter {
-                +"refs/tags/v*.*.*"
-            }
-        }
-    }
-    container(displayName = "Rust", image = "rust") {
-        env["TOKEN"] = Secrets("cargo_registry_token")
-
-        shellScript {
-            interpreter = "/bin/bash"
-            content = """
-                cargo publish --all-features --color always --jobs 1 --token ${'$'}TOKEN --verbose -p fluidity-core
-                cargo publish --all-features --color always --jobs 1 --token ${'$'}TOKEN --verbose -p fluidity-sdk
-                cargo publish --all-features --color always --jobs 1 --token ${'$'}TOKEN --verbose -p fluidity
             """
         }
     }
