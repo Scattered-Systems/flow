@@ -36,4 +36,4 @@ COPY --from=builder /app/target/release/flow /bin/flow
 
 EXPOSE ${SERVER_PORT}
 
-CMD [ "flow" ]
+CMD [ "flow", "system", "on" ]
