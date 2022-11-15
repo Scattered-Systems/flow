@@ -6,12 +6,16 @@
        ... Summary ...
 */
 use scsys::components::{logging::Logger, networking::Server};
-use scsys::prelude::{
-    collect_config_files,
-    config::{Config, Environment},
-    ConfigResult, Configurable,
-};
+use scsys::prelude::config::{Config, Environment, File, FileSourceFile, FileFormat};
+use scsys::prelude::{BoxResult, ConfigResult, Configurable,};
 use serde::{Deserialize, Serialize};
+
+pub fn collect_configs(pat: &str, required: bool) -> BoxResult<Vec<File<FileSourceFile, FileFormat>>> {
+    let res = glob::glob(pat)?
+        .map(|path| File::from(path.ok().unwrap()).required(required))
+        .collect::<Vec<_>>();
+    Ok(res)
+}
 
 #[derive(Clone, Debug, Default, Deserialize, Eq, Hash, PartialEq, Serialize)]
 pub struct AppSettings {
@@ -35,7 +39,7 @@ impl AppSettings {
 
 impl std::fmt::Display for AppSettings {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "Application",)
+        write!(f, "{}", serde_json::to_string_pretty(&self).unwrap())
     }
 }
 
@@ -48,11 +52,14 @@ pub struct Settings {
 
 impl Settings {
     pub fn build() -> ConfigResult<Self> {
-        let mut builder = Config::builder();
-
-        builder = builder
-            .add_source(collect_config_files("**/.config/*.toml", false))
+        let mut builder = Config::builder()
             .add_source(Environment::default().separator("__"));
+
+        match collect_configs("**/.config/*.toml", false) {
+            Err(_) => {},
+            Ok(v) => {builder = builder.add_source(v)}
+        };
+        builder = builder.add_source(Environment::default().separator("__"));
         
         match std::env::var("RUST_LOG") {
             Err(_) => {},

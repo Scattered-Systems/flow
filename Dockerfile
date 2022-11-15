@@ -27,7 +27,9 @@ RUN apt-get update -y && apt-get upgrade -y
 
 FROM runner-base as runner
 
-ENV LOG_LEVEL="info" \
+ENV CLIENT_ID="" \
+    CLIENT_SECRET="" \
+    RUST_LOG="info" \
     SERVER_PORT=9000
 
 COPY --from=builder /app/target/release/flow /bin/flow
