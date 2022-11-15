@@ -2,7 +2,6 @@ job("(Flow) Docker: Build and publish") {
     startOn {
         gitPush { 
             branchFilter {
-                +"refs/heads/main"
                 +"refs/tags/v*.*.*"
             }
         }
@@ -20,7 +19,7 @@ job("(Flow) Docker: Build and publish") {
 
         dockerBuildPush {
             context = "."
-            file = "./Dockerfile"
+            file = "Dockerfile"
             labels["vendor"] = "Scattered-Systems, LLC"
             tags {
                 +"scsys/flow:latest"
