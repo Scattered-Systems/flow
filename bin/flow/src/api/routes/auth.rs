@@ -14,7 +14,7 @@ use axum::{
 use axum::extract::{rejection::TypedHeaderRejectionReason, Extension, FromRequest, Query, Path, RequestParts, TypedHeader};
 use axum::response::{IntoResponse,  Redirect, Response};
 use http::header;
-use oauth2::{basic::BasicClient, reqwest::async_http_client, ClientSecret, ClientId, AuthUrl, TokenUrl, RedirectUrl, AuthorizationCode,  CsrfToken, Scope, TokenResponse, };
+use oauth2::{basic::BasicClient, reqwest::async_http_client, ClientSecret, ClientId, AuthUrl, TokenUrl, RedirectUrl, AuthorizationCode,  CsrfToken, Scope, TokenResponse, AuthType};
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 
@@ -32,10 +32,10 @@ impl AuthRouter {
         let store = MemoryStore::new();
 
         Router::new()
-            .route("/auth/:id", get(authorize))
+            .route("/auth", get(index))
             .route("/token/:id", post(token))
-            .route("/auth/jetbrains", get(google_auth))
-            .route("/auth/authorized", get(login_authorized))
+            .route("/auth/jetbrains", get(auth_jbspace))
+            .route("/auth/login", get(login_authorized))
             .route("/protected", get(protected))
             .route("/logout", get(logout))
             .layer(Extension(store))
@@ -60,7 +60,7 @@ fn oauth_client() -> BasicClient {
     let client_id = std::env::var("CLIENT_ID").expect("Missing CLIENT_ID!");
     let client_secret = std::env::var("CLIENT_SECRET").expect("Missing CLIENT_SECRET!");
     let redirect_url = std::env::var("REDIRECT_URL")
-        .unwrap_or_else(|_| "http://localhost:9000/auth/authorized".to_string());
+        .unwrap_or_else(|_| "https://localhost:9000/auth/redirect".to_string());
 
     let auth_url = std::env::var("AUTH_URL")
         .unwrap_or_else(|_| "https://scsys.jetbrains.space/oauth/auth".to_string());
@@ -111,11 +111,17 @@ async fn index(user: Option<User>) -> impl IntoResponse {
     }
 }
 
-async fn google_auth(Extension(client): Extension<BasicClient>) -> impl IntoResponse {
+async fn auth_jbspace(Extension(client): Extension<BasicClient>) -> impl IntoResponse {
+    // append("response_type", "code")
+    // append("redirect_uri", "https://scattered-systems.com")
+    // append("client_id", "897bd650-093e-44f3-97b5-142e76ddb795")
+    // append("access_type", "offline")
+    // append("request_credentials", "default")
+    // append("scope", "**")
     let (auth_url, _csrf_token) = client
         .authorize_url(CsrfToken::new_random)
-        .add_scope(Scope::new("profile".to_string()))
-        .add_scope(Scope::new("email".to_string()))
+        .add_scope(Scope::new("**".to_string()))
+        .add_extra_param("access_type", "offline")
         .url();
 
     // Redirect to Google's oauth service
@@ -168,7 +174,7 @@ async fn login_authorized(
     // Fetch user data from Google
     let client = reqwest::Client::new();
     let user_data: User = client
-        .get("https://scsys.jetbrains.space/oauth/auth")
+        .get("https://scsys.jetbrains.space/api/http/organization")
         .bearer_auth(token.access_token().secret())
         .send()
         .await
@@ -198,7 +204,7 @@ struct AuthRedirect;
 
 impl IntoResponse for AuthRedirect {
     fn into_response(self) -> Response {
-        Redirect::temporary("/auth/google").into_response()
+        Redirect::temporary("/auth/jetbrains").into_response()
     }
 }
 
