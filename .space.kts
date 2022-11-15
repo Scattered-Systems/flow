@@ -46,7 +46,7 @@ job("(Flow) Rust: Build and test the workspace") {
             interpreter = "/bin/bash"
             content = """
                 cargo login ${'$'}CARGO_REGISTRY_TOKEN
-                cargo test --all-features
+                cargo test --all --all-features
             """
         }
     }
