@@ -1,9 +1,7 @@
 /*
    Appellation: settings
-   Context:
-   Creator: FL03 <jo3mccain@icloud.com>
-   Description:
-       ... Summary ...
+   Contrib: FL03 <jo3mccain@icloud.com>
+   Description: ... Summary ...
 */
 use config::{Config, Environment};
 use scsys::{
@@ -16,6 +14,10 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Eq, Hash, Hashable, PartialEq, Serialize)]
 pub struct Settings {
+    #[serde(skip)]
+    pub(crate) client_id: String,
+    #[serde(skip)]
+    pub(crate) client_secret: String,
     pub mode: Option<String>,
     pub name: Option<String>,
     pub logger: Option<Logger>,
@@ -28,7 +30,18 @@ impl Settings {
 
         builder = builder.add_source(collect_config_files("**/.config/*.toml", false));
         builder = builder.add_source(Environment::default().separator("__"));
-
+        match std::env::var("CLIENT_ID") {
+            Err(_) => {}
+            Ok(v) => {
+                builder = builder.set_override("client_id", Some(v))?;
+            }
+        };
+        match std::env::var("CLIENT_SECRET") {
+            Err(_) => {}
+            Ok(v) => {
+                builder = builder.set_override("client_secret", Some(v))?;
+            }
+        };
         match std::env::var("RUST_LOG") {
             Err(_) => {}
             Ok(v) => {
@@ -60,6 +73,8 @@ impl Default for Settings {
         match Self::build() {
             Ok(v) => v,
             Err(_) => Self {
+                client_id: Default::default(),
+                client_secret: Default::default(),
                 mode: Some("production".to_string()),
                 name: Some("Flow".to_string()),
                 logger: Some(Logger::default()),

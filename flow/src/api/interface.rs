@@ -29,7 +29,7 @@ impl Api {
         let mut router = Router::new();
         router = router
             .merge(routes::Homepage::default().router())
-            .merge(routes::AuthRouter::default().router());
+            .merge(routes::AuthRouter::default().router(self.ctx.clone()));
         router = router
             .layer(
                 TraceLayer::new_for_http()

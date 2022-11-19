@@ -34,8 +34,8 @@ impl AuthRouter {
     pub fn new(data: String) -> Self {
         Self(data)
     }
-    pub fn router(&mut self) -> Router {
-        let oauth_client = oauth_client();
+    pub fn router(&mut self, ctx: crate::Context) -> Router {
+        let oauth_client = oauth_client(Extension(ctx));
         let store = MemoryStore::new();
 
         Router::new()
@@ -55,9 +55,9 @@ impl Default for AuthRouter {
     }
 }
 
-fn oauth_client() -> BasicClient {
-    let client_id = std::env::var("CLIENT_ID").expect("Missing CLIENT_ID!");
-    let client_secret = std::env::var("CLIENT_SECRET").expect("Missing CLIENT_SECRET!");
+fn oauth_client(Extension(ctx): Extension<crate::Context>) -> BasicClient {
+    let client_id = ctx.settings.client_id.clone();
+    let client_secret = ctx.settings.client_secret.clone();
     let redirect_url = std::env::var("REDIRECT_URL")
         .unwrap_or_else(|_| "http://localhost:9000/auth/".to_string());
 
