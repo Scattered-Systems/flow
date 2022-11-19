@@ -7,7 +7,7 @@
 use crate::{api::routes, Context};
 use axum::{Router, Server};
 use http::header::{HeaderName, AUTHORIZATION};
-use scsys::prelude::BoxResult;
+use scsys::BoxResult;
 use serde::{Deserialize, Serialize};
 use tower_http::{
     compression::CompressionLayer,

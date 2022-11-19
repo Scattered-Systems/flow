@@ -5,16 +5,23 @@
        ... Summary ...
 */
 use async_session::{MemoryStore, Session, SessionStore};
+use axum::extract::{
+    rejection::TypedHeaderRejectionReason, Extension, FromRequest, Path, Query, RequestParts,
+    TypedHeader,
+};
+use axum::response::{IntoResponse, Redirect, Response};
 use axum::{
     async_trait,
+    headers::Cookie,
     http::{header::SET_COOKIE, HeaderMap},
     routing::{get, post},
-    Json, Router, headers::Cookie
+    Json, Router,
 };
-use axum::extract::{rejection::TypedHeaderRejectionReason, Extension, FromRequest, Query, Path, RequestParts, TypedHeader};
-use axum::response::{IntoResponse,  Redirect, Response};
 use http::header;
-use oauth2::{basic::BasicClient, reqwest::async_http_client, ClientSecret, ClientId, AuthUrl, TokenUrl, RedirectUrl, AuthorizationCode,  CsrfToken, Scope, TokenResponse, AuthType};
+use oauth2::{
+    basic::BasicClient, reqwest::async_http_client, AuthType, AuthUrl, AuthorizationCode, ClientId,
+    ClientSecret, CsrfToken, RedirectUrl, Scope, TokenResponse, TokenUrl,
+};
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 
@@ -77,7 +84,6 @@ fn oauth_client() -> BasicClient {
     .set_redirect_uri(RedirectUrl::new(redirect_url).unwrap())
 }
 
-
 /// Implements the authorization url following the OAuth2 specification
 pub async fn authorize(Path(id): Path<usize>) -> Json<Value> {
     let data = json!({ "id": id });
@@ -89,7 +95,6 @@ pub async fn token(Path(id): Path<usize>) -> Json<Value> {
     let data = json!({ "id": id });
     Json(data)
 }
-
 
 // The user data we'll get back from Google.
 #[derive(Debug, Serialize, Deserialize)]

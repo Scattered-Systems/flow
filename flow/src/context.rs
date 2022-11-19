@@ -6,10 +6,13 @@
        ... Summary ...
 */
 use super::Settings;
-use scsys::prelude::Contextual;
+use scsys::{
+    agents::Contextual,
+    prelude::{Hashable, H256},
+};
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, Default, Deserialize, Eq, Hash, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, Eq, Hash, Hashable, PartialEq, Serialize)]
 pub struct Context {
     pub settings: Settings,
 }

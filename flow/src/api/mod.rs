@@ -12,7 +12,7 @@ pub mod routes;
 pub(crate) mod utils {
     use super::Api;
     use crate::Context;
-    use scsys::prelude::BoxResult;
+    use scsys::BoxResult;
 
     pub async fn spawn_api_with_ctx(ctx: Context) -> BoxResult {
         let api = Api::new(ctx);

@@ -16,7 +16,7 @@ pub(crate) mod settings;
 pub(crate) mod states;
 
 #[tokio::main]
-async fn main() -> scsys::prelude::BoxResult {
+async fn main() -> scsys::BoxResult {
     dotenv::dotenv()?;
     Application::<String>::default().run().await?;
 

@@ -4,7 +4,10 @@
     Description:
         ... Summary ...
 */
-use scsys::prelude::{messages::Message, Stateful, Timestamp};
+use scsys::{
+    agents::Stateful,
+    prelude::{Message, Timestamp},
+};
 use serde::{Deserialize, Serialize};
 use strum::{EnumString, EnumVariantNames};
 
