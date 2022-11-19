@@ -39,11 +39,10 @@ impl AuthRouter {
         let store = MemoryStore::new();
 
         Router::new()
-            .route("/auth", get(index))
+            .route("/auth", get(protected))
             .route("/token/:id", post(token))
             .route("/auth/jetbrains", get(auth_jbspace))
             .route("/auth/login", get(login_authorized))
-            .route("/protected", get(protected))
             .route("/logout", get(logout))
             .layer(Extension(store))
             .layer(Extension(oauth_client))
@@ -57,17 +56,10 @@ impl Default for AuthRouter {
 }
 
 fn oauth_client() -> BasicClient {
-    // Environment variables (* = required):
-    // *"CLIENT_ID"     "REPLACE_ME";
-    // *"CLIENT_SECRET" "REPLACE_ME";
-    //  "REDIRECT_URL"  "http://127.0.0.1:3000/auth/authorized";
-    //  "AUTH_URL"      "https://accounts.google.com/o/oauth2/v2/auth";
-    //  "TOKEN_URL"     "https://www.googleapis.com/oauth2/v4/token";
-
     let client_id = std::env::var("CLIENT_ID").expect("Missing CLIENT_ID!");
     let client_secret = std::env::var("CLIENT_SECRET").expect("Missing CLIENT_SECRET!");
     let redirect_url = std::env::var("REDIRECT_URL")
-        .unwrap_or_else(|_| "https://localhost:9000/auth/redirect".to_string());
+        .unwrap_or_else(|_| "http://localhost:9000/auth/".to_string());
 
     let auth_url = std::env::var("AUTH_URL")
         .unwrap_or_else(|_| "https://scsys.jetbrains.space/oauth/auth".to_string());
@@ -117,12 +109,7 @@ async fn index(user: Option<User>) -> impl IntoResponse {
 }
 
 async fn auth_jbspace(Extension(client): Extension<BasicClient>) -> impl IntoResponse {
-    // append("response_type", "code")
-    // append("redirect_uri", "https://scattered-systems.com")
-    // append("client_id", "897bd650-093e-44f3-97b5-142e76ddb795")
-    // append("access_type", "offline")
-    // append("request_credentials", "default")
-    // append("scope", "**")
+
     let (auth_url, _csrf_token) = client
         .authorize_url(CsrfToken::new_random)
         .add_scope(Scope::new("**".to_string()))
