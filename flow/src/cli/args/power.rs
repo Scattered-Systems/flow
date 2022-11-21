@@ -6,7 +6,8 @@
 */
 use clap::ValueEnum;
 use scsys::{
-    prelude::{Hashable, H256},
+    prelude::H256,
+    Hashable,
     BoxResult,
 };
 use serde::{Deserialize, Serialize};
