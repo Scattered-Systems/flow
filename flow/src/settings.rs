@@ -4,8 +4,8 @@
    Description: ... Summary ...
 */
 use config::{Config, Environment};
+use scsys::agents::Configurable;
 use scsys::{
-    agents::Configurable,
     collect_config_files,
     prelude::{Hashable, Logger, Server, H256},
     ConfigResult,

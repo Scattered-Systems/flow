@@ -7,6 +7,7 @@
 pub use super::states::State;
 use crate::{api::Api, cli::CommandLineInterface, Context, Settings};
 use scsys::BoxResult;
+use scsys::agents::Configurable;
 use serde::{Deserialize, Serialize};
 use std::fmt::Display;
 
