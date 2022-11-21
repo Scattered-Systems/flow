@@ -5,8 +5,8 @@
         ... Summary ...
 */
 use scsys::{
-    agents::Stateful,
-    prelude::{Message, Timestamp},
+    Timestamp,
+    prelude::{Message, Stateful},
 };
 use serde::{Deserialize, Serialize};
 use strum::{EnumString, EnumVariantNames};
