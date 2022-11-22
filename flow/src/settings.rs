@@ -4,11 +4,10 @@
    Description: ... Summary ...
 */
 use config::{Config, Environment};
-use scsys::prelude::{Configurable, H256};
+use scsys::Hashable;
 use scsys::{
     collect_config_files,
-    Hashable,
-    prelude::{Logger, Server},
+    prelude::{Configurable, Logger, Server},
     ConfigResult,
 };
 use serde::{Deserialize, Serialize};

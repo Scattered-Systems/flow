@@ -6,7 +6,8 @@
        ... Summary ...
 */
 use super::Settings;
-use scsys::{prelude::{Contextual, H256}, Hashable};
+use scsys::Hashable;
+use scsys::prelude::Contextual;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Default, Deserialize, Eq, Hash, Hashable, PartialEq, Serialize)]
