@@ -10,7 +10,7 @@ use axum::{
     routing::{get, post},
     Extension, Json, Router,
 };
-use scsys::prelude::messages::Message;
+use scsys::prelude::Message;
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 

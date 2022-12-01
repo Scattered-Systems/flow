@@ -6,7 +6,8 @@
 */
 pub use super::states::State;
 use crate::{api::Api, cli::CommandLineInterface, Context, Settings};
-use scsys::prelude::BoxResult;
+use scsys::BoxResult;
+use scsys::prelude::Configurable;
 use serde::{Deserialize, Serialize};
 use std::fmt::Display;
 
@@ -27,7 +28,8 @@ impl<T: Clone + Default + Display> Application<T> {
         }
     }
     pub fn setup_logger(&self) -> &Self {
-        self.clone().settings.logger.unwrap_or_default().setup();
+        self.clone().settings.logger.unwrap_or_default().setup(None);
+        tracing_subscriber::fmt::init();
 
         self
     }

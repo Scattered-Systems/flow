@@ -7,7 +7,7 @@
 use crate::{api::routes, Context};
 use axum::{Router, Server};
 use http::header::{HeaderName, AUTHORIZATION};
-use scsys::prelude::BoxResult;
+use scsys::BoxResult;
 use serde::{Deserialize, Serialize};
 use tower_http::{
     compression::CompressionLayer,
@@ -29,7 +29,7 @@ impl Api {
         let mut router = Router::new();
         router = router
             .merge(routes::Homepage::default().router())
-            .merge(routes::AuthRouter::default().router());
+            .merge(routes::AuthRouter::default().router(self.ctx.clone()));
         router = router
             .layer(
                 TraceLayer::new_for_http()
