@@ -1,14 +1,18 @@
-FROM rust:latest as builder-base
+FROM rust:latest as base
 
 RUN apt-get update -y && apt-get upgrade -y
 
+FROM base as builder-base
+
 RUN apt-get install -y \
-    apt-utils \
     protobuf-compiler
 
-RUN rustup update 
+RUN rustup default nightly && \
+    rustup target add wasm32-unknown-unknown wasm32-wasi --toolchain nightly
 
 FROM builder-base as builder
+
+ENV CARGO_TERM_COLOR=always
 
 ADD . /app
 WORKDIR /app
@@ -25,10 +29,14 @@ FROM runner-base as runner
 ENV CLIENT_ID="" \
     CLIENT_SECRET="" \
     RUST_LOG="info" \
-    SERVER_PORT=9000
+    SERVER_PORT=9090
+
+COPY .config ./config
+VOLUME ["/config"]
 
 COPY --from=builder /app/target/release/flow /bin/flow
 
 EXPOSE ${SERVER_PORT}
 
-CMD [ "flow", "system", "on" ]
+ENTRYPOINT [ "flow" ]
+CMD [ "system", "on" ]
