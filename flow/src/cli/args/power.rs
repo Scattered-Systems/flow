@@ -4,10 +4,7 @@
     Description: ... Summary ...
 */
 use clap::ValueEnum;
-use scsys::{
-    BoxResult,
-    Hashable
-};
+use scsys::prelude::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(ValueEnum, Clone, Debug, Deserialize, Hash, Hashable, PartialEq, Serialize)]

@@ -16,11 +16,6 @@ WORKDIR /app
 COPY . .
 RUN cargo build --color always --release --verbose -p flow
 
-FROM scratch as cache 
-
-COPY --from=builder /app/target/release/flow /space/bin/flow
-VOLUME /space
-
 FROM debian:buster-slim as runner-base
 
 RUN apt-get update -y && apt-get upgrade -y 

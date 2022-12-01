@@ -6,8 +6,8 @@
 use config::{Config, Environment};
 use scsys::Hashable;
 use scsys::{
-    collect_config_files,
-    prelude::{Configurable, Logger, Server},
+    try_collect_config_files,
+    prelude::*,
     ConfigResult,
 };
 use serde::{Deserialize, Serialize};
@@ -26,10 +26,15 @@ pub struct Settings {
 
 impl Settings {
     pub fn build() -> ConfigResult<Self> {
-        let mut builder = Config::builder().add_source(Environment::default().separator("__"));
-
-        builder = builder.add_source(collect_config_files("**/.config/*.toml", false));
-        builder = builder.add_source(Environment::default().separator("__"));
+        let mut builder = Config::builder()
+            .add_source(Environment::default().separator("__"))
+            .set_default("logger.level", Some("info"))?
+            .set_default("server.host", "127.0.0.1")?
+            .set_default("server.port", 9090)?;
+        match try_collect_config_files("**/Flow.toml", false) {
+            Err(_) => {},
+            Ok(v) => {builder = builder.add_source(v);}
+        }
         match std::env::var("CLIENT_ID") {
             Err(_) => {}
             Ok(v) => {
@@ -78,7 +83,7 @@ impl Default for Settings {
                 mode: Some("production".to_string()),
                 name: Some("Flow".to_string()),
                 logger: Some(Logger::default()),
-                server: Server::default(),
+                server: Server::new("127.0.0.1".to_string(), 9090),
             },
         }
     }

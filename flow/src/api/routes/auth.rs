@@ -5,19 +5,16 @@
        ... Summary ...
 */
 use async_session::{MemoryStore, Session, SessionStore};
-use axum::extract::{
-    rejection::TypedHeaderRejectionReason, Extension, FromRequest, Path, Query, RequestParts,
-    TypedHeader,
+use axum::extract::{Extension, Path, Query,
+    TypedHeader
 };
 use axum::response::{IntoResponse, Redirect, Response};
 use axum::{
-    async_trait,
     headers::Cookie,
     http::{header::SET_COOKIE, HeaderMap},
     routing::{get, post},
     Json, Router,
 };
-use http::header;
 use oauth2::{
     basic::BasicClient, reqwest::async_http_client, AuthType, AuthUrl, AuthorizationCode, ClientId,
     ClientSecret, CsrfToken, RedirectUrl, Scope, TokenResponse, TokenUrl,
@@ -39,7 +36,7 @@ impl AuthRouter {
         let store = MemoryStore::new();
 
         Router::new()
-            .route("/auth", get(protected))
+            // .route("/auth", get(index))
             .route("/token/:id", post(token))
             .route("/auth/jetbrains", get(auth_jbspace))
             .route("/auth/login", get(login_authorized))
@@ -99,13 +96,14 @@ struct User {
 
 // Session is optional
 async fn index(user: Option<User>) -> impl IntoResponse {
-    match user {
+    let msg = match user {
         Some(u) => format!(
             "Hey {}! You're logged in!\nYou may now access `/protected`.\nLog out with `/logout`.",
             u.name
         ),
         None => "You're not logged in.\nVisit `/auth/google` to do so.".to_string(),
-    }
+    };
+    scsys::prelude::Message::new(vec![msg]).to_string()
 }
 
 async fn auth_jbspace(Extension(client): Extension<BasicClient>) -> impl IntoResponse {
@@ -200,38 +198,39 @@ impl IntoResponse for AuthRedirect {
     }
 }
 
-#[async_trait]
-impl<B> FromRequest<B> for User
-where
-    B: Send,
-{
-    // If anything goes wrong or no session is found, redirect to the auth page
-    type Rejection = AuthRedirect;
+// #[async_trait]
+// impl<S, B> FromRequest<S, B> for User
+// where
+//     S: Send + Sync,
+//     B: Send + 'static,
+// {
+//     // If anything goes wrong or no session is found, redirect to the auth page
+//     type Rejection = AuthRedirect;
 
-    async fn from_request(req: &mut RequestParts<B>) -> Result<Self, Self::Rejection> {
-        let Extension(store) = Extension::<MemoryStore>::from_request(req)
-            .await
-            .expect("`MemoryStore` extension is missing");
+//     async fn from_request(req: Request<B>, state: &'_ S) -> Result<Self, Self::Rejection> {
+//         let Extension(store) = Extension::<MemoryStore>::from_request(req, state)
+//             .await
+//             .expect("`MemoryStore` extension is missing");
 
-        let cookies = TypedHeader::<Cookie>::from_request(req)
-            .await
-            .map_err(|e| match *e.name() {
-                header::COOKIE => match e.reason() {
-                    TypedHeaderRejectionReason::Missing => AuthRedirect,
-                    _ => panic!("unexpected error getting Cookie header(s): {}", e),
-                },
-                _ => panic!("unexpected error getting cookies: {}", e),
-            })?;
-        let session_cookie = cookies.get(COOKIE_NAME).ok_or(AuthRedirect)?;
+//         let cookies = TypedHeader::<Cookie>::from_request(req, state)
+//             .await
+//             .map_err(|e| match *e.name() {
+//                 header::COOKIE => match e.reason() {
+//                     TypedHeaderRejectionReason::Missing => AuthRedirect,
+//                     _ => panic!("unexpected error getting Cookie header(s): {}", e),
+//                 },
+//                 _ => panic!("unexpected error getting cookies: {}", e),
+//             })?;
+//         let session_cookie = cookies.get(COOKIE_NAME).ok_or(AuthRedirect)?;
 
-        let session = store
-            .load_session(session_cookie.to_string())
-            .await
-            .unwrap()
-            .ok_or(AuthRedirect)?;
+//         let session = store
+//             .load_session(session_cookie.to_string())
+//             .await
+//             .unwrap()
+//             .ok_or(AuthRedirect)?;
 
-        let user = session.get::<User>("user").ok_or(AuthRedirect)?;
+//         let user = session.get::<User>("user").ok_or(AuthRedirect)?;
 
-        Ok(user)
-    }
-}
+//         Ok(user)
+//     }
+// }

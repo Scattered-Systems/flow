@@ -28,7 +28,8 @@ impl<T: Clone + Default + Display> Application<T> {
         }
     }
     pub fn setup_logger(&self) -> &Self {
-        self.clone().settings.logger.unwrap_or_default().setup();
+        self.clone().settings.logger.unwrap_or_default().setup(None);
+        tracing_subscriber::fmt::init();
 
         self
     }
