@@ -18,7 +18,7 @@ ADD . /app
 WORKDIR /app
 
 COPY . .
-RUN cargo build --color always --release --verbose -p flow
+RUN cargo build --release -v --workspace
 
 FROM debian:buster-slim as runner-base
 
