@@ -57,17 +57,10 @@ impl Settings {
         if lvl.is_ok() {
             builder = builder.set_override("logger.level", lvl.ok().unwrap())?;
         }
-        let port = std::env::var("RUST_LOG");
+        let port = std::env::var("SERVER_PORT");
         if port.is_ok() {
             builder = builder.set_override("server.port", port.ok().unwrap())?;
         }
-
-        match std::env::var("SERVER_PORT") {
-            Err(_) => {}
-            Ok(v) => {
-                builder = builder.set_override("server.port", v)?;
-            }
-        };
 
         builder.build()?.try_deserialize()
     }
