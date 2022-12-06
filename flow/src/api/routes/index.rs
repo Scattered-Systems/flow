@@ -1,38 +1,19 @@
 /*
    Appellation: index <module>
-   Contributors: FL03 <jo3mccain@icloud.com>
-   Description:
-       ... Summary ...
+   Contrib: FL03 <jo3mccain@icloud.com>
+   Description: ... Summary ...
 */
 use crate::Context;
-use axum::{
-    extract::Path,
-    routing::{get, post},
-    Extension, Json, Router,
-};
+use axum::extract::Path;
+use axum::{routing::get, Extension, Json, Router};
 use scsys::prelude::Message;
-use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 
-#[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
-pub struct Homepage(pub String);
-
-impl Homepage {
-    pub fn new(data: String) -> Self {
-        Self(data)
-    }
-    pub fn router(&mut self) -> Router {
-        Router::new()
-            .route("/", get(landing))
-            .route("/settings", get(settings))
-            .route("/notifications/:id", get(notifications).post(notifications))
-    }
-}
-
-impl Default for Homepage {
-    fn default() -> Self {
-        Self::new("/".to_string())
-    }
+pub fn router() -> Router {
+    Router::new()
+        .route("/", get(landing))
+        .route("/settings", get(settings))
+        .route("/notifications/:id", get(notifications).post(notifications))
 }
 
 /// Define the landing endpoint
