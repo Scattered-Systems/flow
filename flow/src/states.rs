@@ -5,8 +5,8 @@
         ... Summary ...
 */
 use scsys::{
-    Timestamp,
     prelude::{Message, Stateful},
+    Timestamp,
 };
 use serde::{Deserialize, Serialize};
 use strum::{EnumString, EnumVariantNames};

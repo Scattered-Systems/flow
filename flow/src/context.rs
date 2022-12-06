@@ -1,12 +1,10 @@
 /*
-   Appellation: context
-   Context:
-   Creator: FL03 <jo3mccain@icloud.com>
-   Description:
-       ... Summary ...
+   Appellation: context <module>
+   Contrib: FL03 <jo3mccain@icloud.com>
+   Description: ... Summary ...
 */
 use super::Settings;
-use scsys::prelude::{hasher, Contextual, H256, Hashable};
+use scsys::prelude::{hasher, Contextual, Hashable, H256};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Default, Deserialize, Eq, Hash, PartialEq, Serialize)]

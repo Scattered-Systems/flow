@@ -9,10 +9,8 @@ on:
   workflow_dispatch:
 
 env:
-  # Use docker.io for Docker Hub if empty
-  REGISTRY: hub.docker.com
-  # github.repository as <account>/<repo>
-  IMAGE_NAME: scsys/proton
+  DOCKERHUB_USERNAME: scsys
+  IMAGE_NAME: scsys/flow
   IMAGE_TAG: latest
 
 
@@ -22,9 +20,9 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Publish to Registry
-      uses: elgohr/Publish-Docker-Github-Action@v4
+      uses: elgohr/Publish-Docker-Github-Action@v5
       with:
-        name: scsys/flow
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        name: ${{ env.IMAGE_NAME }}
+        username: ${{ env.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
         dockerfile: Dockerfile

@@ -3,37 +3,42 @@
    Contrib: FL03 <jo3mccain@icloud.com>
    Description: ... Summary ...
 */
-use config::{Config, Environment};
+use scsys::prelude::config::{Config, Environment};
 use scsys::Hashable;
-use scsys::{
-    try_collect_config_files,
-    prelude::*,
-    ConfigResult,
-};
+use scsys::{prelude::*, try_collect_config_files, ConfigResult};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Eq, Hash, Hashable, PartialEq, Serialize)]
 pub struct Settings {
-    #[serde(skip)]
-    pub(crate) client_id: String,
-    #[serde(skip)]
-    pub(crate) client_secret: String,
     pub mode: Option<String>,
     pub name: Option<String>,
-    pub logger: Option<Logger>,
+    pub logger: Logger,
     pub server: Server,
 }
 
 impl Settings {
+    pub fn new(mode: Option<String>) -> Self {
+        let name = Some("Flow".to_string());
+        let logger = Logger::default();
+        let server = Server::new("127.0.0.1".to_string(), 9090);
+        Self {
+            mode,
+            name,
+            logger,
+            server,
+        }
+    }
     pub fn build() -> ConfigResult<Self> {
         let mut builder = Config::builder()
             .add_source(Environment::default().separator("__"))
-            .set_default("logger.level", Some("info"))?
+            .set_default("logger.level", "info")?
             .set_default("server.host", "127.0.0.1")?
             .set_default("server.port", 9090)?;
-        match try_collect_config_files("**/Flow.toml", false) {
-            Err(_) => {},
-            Ok(v) => {builder = builder.add_source(v);}
+        match try_collect_config_files("**/Puzzled.toml", false) {
+            Err(_) => {}
+            Ok(v) => {
+                builder = builder.add_source(v);
+            }
         }
         match std::env::var("CLIENT_ID") {
             Err(_) => {}
@@ -41,18 +46,21 @@ impl Settings {
                 builder = builder.set_override("client_id", Some(v))?;
             }
         };
-        match std::env::var("CLIENT_SECRET") {
-            Err(_) => {}
-            Ok(v) => {
-                builder = builder.set_override("client_secret", Some(v))?;
-            }
+        let (pk, sk) = (std::env::var("CLIENT_ID"), std::env::var("CLIENT_SECRET"));
+        if pk.is_ok() {
+            builder = builder.set_override("client_secret", Some(pk.ok().unwrap()))?;
+        }
+        if sk.is_ok() {
+            builder = builder.set_override("client_secret", Some(sk.ok().unwrap()))?;
         };
-        match std::env::var("RUST_LOG") {
-            Err(_) => {}
-            Ok(v) => {
-                builder = builder.set_override("logger.level", Some(v))?;
-            }
-        };
+        let lvl = std::env::var("RUST_LOG");
+        if lvl.is_ok() {
+            builder = builder.set_override("logger.level", lvl.ok().unwrap())?;
+        }
+        let port = std::env::var("RUST_LOG");
+        if port.is_ok() {
+            builder = builder.set_override("server.port", port.ok().unwrap())?;
+        }
 
         match std::env::var("SERVER_PORT") {
             Err(_) => {}
@@ -77,14 +85,7 @@ impl Default for Settings {
     fn default() -> Self {
         match Self::build() {
             Ok(v) => v,
-            Err(_) => Self {
-                client_id: Default::default(),
-                client_secret: Default::default(),
-                mode: Some("production".to_string()),
-                name: Some("Flow".to_string()),
-                logger: Some(Logger::default()),
-                server: Server::new("127.0.0.1".to_string(), 9090),
-            },
+            Err(_) => Self::new(Some("dev".to_string())),
         }
     }
 }
