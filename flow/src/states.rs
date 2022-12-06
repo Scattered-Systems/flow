@@ -59,3 +59,16 @@ impl<T: Default + Serialize + std::fmt::Display> std::fmt::Display for State<T> 
         write!(f, "{}", serde_json::to_string_pretty(&self).unwrap())
     }
 }
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_states() {
+        let a = States::Request(State::<String>::default());
+        let b: States<String> = States::try_from("request").ok().unwrap();
+        assert_eq!(a, b)
+    }
+}
