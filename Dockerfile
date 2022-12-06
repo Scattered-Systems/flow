@@ -11,8 +11,8 @@ FROM builder-base as builder
 
 ENV CARGO_TERM_COLOR=always
 
-ADD . /app
-WORKDIR /app
+ADD . /workspace
+WORKDIR /workspace
 
 COPY . .
 RUN cargo build --release -v --workspace
@@ -27,7 +27,7 @@ RUN apt-get update -y && apt-get upgrade -y
 COPY Flow.toml /config/Flow.toml
 VOLUME ["/config"]
 
-COPY --from=builder /app/target/release/flow /bin/flow
+COPY --from=builder /workspace/target/release/flow /bin/flow
 
 FROM runner
 

@@ -1,9 +1,8 @@
 /*
-   Appellation: Pzzld <binary>
+   Appellation: Flow <binary>
    Contrib: FL03 <jo3mccain@icloud.com>
    Description: ... Summary ...
 */
-extern crate dotenv;
 pub use self::{context::*, settings::*, states::*};
 
 pub mod api;
@@ -18,7 +17,6 @@ use std::{fmt::Display, sync::Arc};
 
 #[tokio::main]
 async fn main() -> AsyncResult {
-    dotenv::dotenv()?;
     Application::<String>::default().run().await?;
 
     Ok(())

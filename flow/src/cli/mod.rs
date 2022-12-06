@@ -12,6 +12,20 @@ pub fn new() -> CommandLineInterface {
     CommandLineInterface::default()
 }
 
+pub async fn handler(cli: &CommandLineInterface) -> scsys::AsyncResult {
+    let cli = cli.clone();
+
+    if let Some(command) = cli.command {
+        match command {
+            Commands::Account { address } => todo!(),
+            Commands::Services { update } => todo!(),
+            Commands::System { up } => todo!(),
+        }
+    };
+
+    Ok(())
+}
+
 pub(crate) mod interface {
     use super::Commands;
     use clap::Parser;
@@ -19,7 +33,7 @@ pub(crate) mod interface {
 
     #[derive(Clone, Debug, Deserialize, Hash, Parser, PartialEq, Serialize)]
     #[clap(about, author, version)]
-    #[clap(long_about = "")]
+    #[clap(long_about = "Flow implements in inner-core of all valid nodes operating remote surfaces harmonically with an extensively developed isomorphic state-channel management system")]
     pub struct CommandLineInterface {
         #[clap(subcommand)]
         pub command: Option<Commands>,

@@ -34,32 +34,14 @@ impl Settings {
             .set_default("logger.level", "info")?
             .set_default("server.host", "127.0.0.1")?
             .set_default("server.port", 9090)?;
-        match try_collect_config_files("**/Puzzled.toml", false) {
-            Err(_) => {}
-            Ok(v) => {
-                builder = builder.add_source(v);
-            }
+        if let Ok(f) = try_collect_config_files("**/Flow.toml", false) {
+            builder = builder.add_source(f);
         }
-        match std::env::var("CLIENT_ID") {
-            Err(_) => {}
-            Ok(v) => {
-                builder = builder.set_override("client_id", Some(v))?;
-            }
-        };
-        let (pk, sk) = (std::env::var("CLIENT_ID"), std::env::var("CLIENT_SECRET"));
-        if pk.is_ok() {
-            builder = builder.set_override("client_secret", Some(pk.ok().unwrap()))?;
+        if let Ok(lvl) = std::env::var("RUST_LOG") {
+            builder = builder.set_override("logger.level", lvl)?;
         }
-        if sk.is_ok() {
-            builder = builder.set_override("client_secret", Some(sk.ok().unwrap()))?;
-        };
-        let lvl = std::env::var("RUST_LOG");
-        if lvl.is_ok() {
-            builder = builder.set_override("logger.level", lvl.ok().unwrap())?;
-        }
-        let port = std::env::var("SERVER_PORT");
-        if port.is_ok() {
-            builder = builder.set_override("server.port", port.ok().unwrap())?;
+        if let Ok(port) = std::env::var("SERVER_PORT") {
+            builder = builder.set_override("server.port", port)?;
         }
 
         builder.build()?.try_deserialize()
