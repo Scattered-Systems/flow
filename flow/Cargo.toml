@@ -42,6 +42,8 @@ tracing-subscriber = { features = ["env-filter"], version = "0.3.16" }
 utoipa = { features = ["axum_extras", "serde_json", "serde_yaml"], version = "2.4.2" }
 utoipa-swagger-ui = { features = ["axum"], version = "3.0.1" }
 
+fluidity = { features = [], path = "../lib/fluidity", version = "0.1.12"}
+
 [package.metadata.docs.rs]
 all-features = true
 rustc-args = ["--cfg", "docsrs"]

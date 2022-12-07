@@ -17,7 +17,7 @@ use std::{fmt::Display, sync::Arc};
 
 #[tokio::main]
 async fn main() -> AsyncResult {
-    Application::<String>::default().run().await?;
+    Application::<String>::default().start().await?;
 
     Ok(())
 }
@@ -47,7 +47,7 @@ impl<T: Clone + Default + Display> Application<T> {
         self.state = Arc::new(state.clone());
         self
     }
-    pub async fn run(&mut self) -> AsyncResult<&Self> {
+    pub async fn start(&mut self) -> AsyncResult<&Self> {
         self.setup().await?;
         let cli = cli::new();
         tracing::info!("Success: Commands parsed, processing requests...");
