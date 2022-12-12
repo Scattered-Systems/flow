@@ -40,7 +40,7 @@ pub struct State<T: Default + Display> {
 
 impl<T: Default + Display> State<T> {
     pub fn new(message: Message<States<T>>) -> Self {
-        let timestamp = Timestamp::pretty();
+        let timestamp = Timestamp::default().to_string();
         Self { message, timestamp }
     }
 }
