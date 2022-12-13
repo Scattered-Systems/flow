@@ -1,0 +1,30 @@
+[package]
+authors = ["FL03 <jo3mccain@icloud.com> (https://github.com/FL03)"]
+categories = []
+description = "fluidity"
+edition = "2021"
+homepage = "https://github.com/scattered-systems/flow/wiki"
+keywords = [ "scsys" ]
+license = "Apache-2.0"
+name = "fluidity-macros"
+repository = "https://github.com/scattered-systems/flow"
+version = "0.1.12"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+test = true
+
+[build-dependencies]
+
+[dev-dependencies]
+
+[dependencies]
+scsys = { features = ["full"], version = "0.1.36" }
+serde = { features = ["derive"], version = "1.0.149" }
+serde_json = "1.0.89"
+strum = { features = ["derive"], version = "0.24.1" }
+syn = { features = [], version = "1.0.105" }
+
+[package.metadata.docs.rs]
+all-features = true
+rustc-args = ["--cfg", "docsrs"]

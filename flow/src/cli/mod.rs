@@ -6,6 +6,7 @@
 */
 pub use self::{commands::*, interface::*};
 
+pub mod args;
 pub(crate) mod commands;
 
 pub fn new() -> CommandLineInterface {

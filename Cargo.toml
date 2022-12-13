@@ -3,7 +3,7 @@ default-members = [
     "flow",
     "lib/fluidity"
 ]
-
+exclude = ["xtask"]
 members = [
     "flow",
     "lib/fluidity"
