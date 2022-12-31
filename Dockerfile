@@ -4,8 +4,13 @@ RUN apt-get update -y && apt-get upgrade -y
 
 FROM base as builder-base
 
-RUN apt-get install -y \
-    protobuf-compiler
+RUN curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
+RUN export NVM_DIR="$HOME/.nvm"
+
+RUN apt-get install nodejs npm
+
+RUN rustup default nightly \
+    rustup target add wasm32-unknown-unknown --toolchain nightly
 
 FROM builder-base as builder
 
@@ -15,23 +20,9 @@ ADD . /workspace
 WORKDIR /workspace
 
 COPY . .
-RUN cargo build --release -v --workspace
+RUN cargo xtask build
 
-FROM debian:buster-slim as runner-base
+FROM scratch as runner-base
 
-ENV RUST_LOG="info" \
-    SERVER_PORT=9090
+COPY --from=builder /workspace/flow/pkg /artifacts/pkg
 
-RUN apt-get update -y && apt-get upgrade -y 
-
-COPY Flow.toml /config/Flow.toml
-VOLUME ["/config"]
-
-COPY --from=builder /workspace/target/release/flow /bin/flow
-
-FROM runner
-
-EXPOSE ${SERVER_PORT}
-
-ENTRYPOINT [ "flow" ]
-CMD [ "system", "on" ]

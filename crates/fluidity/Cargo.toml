@@ -4,9 +4,9 @@ categories = []
 description = "fluidity"
 edition = "2021"
 homepage = "https://github.com/scattered-systems/flow/wiki"
-keywords = [ "scsys" ]
+keywords = ["blockchain", "digital identity", "management"]
 license = "Apache-2.0"
-name = "fluidity-macros"
+name = "fluidity"
 repository = "https://github.com/scattered-systems/flow"
 version = "0.1.12"
 
@@ -17,13 +17,17 @@ test = true
 [build-dependencies]
 
 [dev-dependencies]
+wasm-bindgen-test = "0.3"
 
 [dependencies]
-scsys = { features = ["full"], version = "0.1.36" }
-serde = { features = ["derive"], version = "1.0.149" }
-serde_json = "1.0.89"
-strum = { features = ["derive"], version = "0.24.1" }
-syn = { features = [], version = "1.0.105" }
+chrono = "0.4.23"
+gloo = { features = ["futures"], version = "0.8.0" }
+js-sys = "0.3.60"
+serde = { features = ["derive"], version = "1" }
+serde_json = "1"
+tokio = { features = ["macros"], version = "1.23.0" }
+wasm-bindgen = { features = ["serde-serialize"], version = "0.2.83" }
+wasm-bindgen-futures = "0.4.33"
 
 [package.metadata.docs.rs]
 all-features = true

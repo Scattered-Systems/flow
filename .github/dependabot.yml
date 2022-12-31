@@ -8,3 +8,7 @@ updates:
     directory: /flow
     schedule:
       interval: daily
+  - package-ecosystem: cargo
+    directory: /crates/fluidity
+    schedule:
+      interval: daily

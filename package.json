@@ -1,0 +1,22 @@
+{
+    "author": {
+        "email": "jo3mccain@icloud.com",
+        "name": "FL03",
+        "url": "https://github.com/FL03"
+    },
+    "license": "Apache-2.0",
+    "name": "@scsys/flow",
+    "readme": "README.md",
+    "repository": "https://github.com/scattered-systems/flow",
+    "scripts": {
+        "build": "npm run wasm:build",
+        "test": "npm run wasm:test",
+        "wasm:build": "npm run build --workspace=@flow/app",
+        "wasm:test": "npm run test --workspace=@flow/app"
+    },
+    "type": "commonjs",
+    "version": "0.1.12",
+    "workspaces": [
+        "flow"
+    ]
+}
