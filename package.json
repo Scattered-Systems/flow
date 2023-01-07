@@ -9,6 +9,7 @@
     "readme": "README.md",
     "repository": "https://github.com/scattered-systems/flow",
     "scripts": {
+        "preinstall": "npm install -g wasm-pack",
         "build": "npm run wasm:build",
         "test": "npm run wasm:test",
         "wasm:build": "npm run build --workspace=@flow/app",

@@ -5,4 +5,5 @@
 */
 use wasm_bindgen::prelude::*;
 
+
 pub type JsResult<T = ()> = Result<T, JsError>;

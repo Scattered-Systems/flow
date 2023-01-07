@@ -29,6 +29,17 @@ tokio = { features = ["macros"], version = "1.23.0" }
 wasm-bindgen = { features = ["serde-serialize"], version = "0.2.83" }
 wasm-bindgen-futures = "0.4.33"
 
+[dependencies.web-sys]
+features = [
+    "HtmlElement",
+    "Node"
+]
+version = "0.3.60"
+
 [package.metadata.docs.rs]
 all-features = true
 rustc-args = ["--cfg", "docsrs"]
+
+[target.wasm32-unknown-unknown]
+
+[target.wasm32-wasi]
