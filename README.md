@@ -6,7 +6,7 @@
 
 ***
 
-Flow lies at the heart of each portal, enabling users to quickly port their information onto whatever device they may find themselves on. Additionally, Flow modules operate as the tonal center of each surface following our composable runtime specifications which is derive from the Neo-Riemannian Theory.
+Flow encompasses a host of capabilities native to the ecosystem.
 
 ## Installation
 
