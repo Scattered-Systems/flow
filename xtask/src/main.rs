@@ -6,8 +6,8 @@
 #[doc(inline)]
 pub use self::{primitives::*, utils::*};
 
-pub(crate) mod primitives;
-pub(crate) mod utils;
+mod primitives;
+mod utils;
 
 pub mod cli;
 pub mod workspace;
@@ -15,7 +15,7 @@ pub mod workspace;
 fn main() -> anyhow::Result<()> {
     tracing_subscriber::fmt::init();
 
-    cli::new().handler()?;
+    cli::CommandLineInterface::new().handler()?;
 
     Ok(())
 }

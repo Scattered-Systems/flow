@@ -3,59 +3,44 @@
     Contrib: FL03 <jo3mccain@icloud.com>
     Description: ... Summary ...
 */
-pub use self::{args::*, commands::*, context::*};
+pub use self::{args::*, opts::*};
 
-pub(crate) mod args;
-pub(crate) mod commands;
+mod args;
+mod opts;
 
-use std::{sync::Arc, thread::JoinHandle};
+use anyhow::Result;
+use clap::Parser;
 
-///
-pub fn new() -> CommandLineInterface {
-    CommandLineInterface::default()
+#[derive(Clone, Debug, Hash, Parser, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Eq, Hash, Ord, Parser, PartialEq, PartialOrd, Serialize)]
+#[clap(about, author, long_about = None, version)]
+#[command(arg_required_else_help(true), allow_missing_positional(true))]
+pub struct CommandLineInterface {
+    #[clap(subcommand)]
+    pub command: Option<Commands>,
+    #[arg(action = clap::ArgAction::SetTrue, long, short)]
+    pub update: bool,
+    #[arg(action = clap::ArgAction::SetTrue, long, short)]
+    pub verbose: bool,
 }
-///
-pub fn handle() -> JoinHandle<Arc<CommandLineInterface>> {
-    let tmp = Arc::new(new());
-    std::thread::spawn(move || {
-        tmp.handler().expect("");
-        tmp
-    })
-}
 
-pub(crate) mod context {
-    use super::Commands;
-    use anyhow::Result;
-    use clap::Parser;
-
-    #[derive(Clone, Debug, Hash, Parser, PartialEq)]
-    #[clap(about, author, version)]
-    #[clap(long_about = None)]
-    pub struct CommandLineInterface {
-        #[clap(subcommand)]
-        pub command: Option<Commands>,
-        #[arg(action = clap::ArgAction::SetTrue, long, short)]
-        pub debug: bool,
-        #[arg(action = clap::ArgAction::SetTrue, long, short)]
-        pub update: bool,
+impl CommandLineInterface {
+    pub fn new() -> Self {
+        Self::parse()
     }
+    pub fn handler(&self) -> Result<&Self> {
+        if self.verbose {}
 
-    impl CommandLineInterface {
-        pub fn new() -> Self {
-            Self::parse()
+        if let Some(cmds) = &self.command {
+            cmds.handler()?;
         }
-        pub fn handler(&self) -> Result<&Self> {
-            if self.debug {}
-            if let Some(cmds) = &self.command {
-                cmds.handler()?;
-            }
-            Ok(self)
-        }
-    }
-
-    impl Default for CommandLineInterface {
-        fn default() -> Self {
-            Self::parse()
-        }
+        Ok(self)
     }
 }
+
+impl Default for CommandLineInterface {
+    fn default() -> Self {
+        Self::parse()
+    }
+}
+
