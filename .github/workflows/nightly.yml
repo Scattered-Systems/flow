@@ -17,7 +17,7 @@ jobs:
       - name: build (${{ matrix.toolchain }}) (${{ matrix.platform }})
         run: cargo build --release --workspace -v
       - name: upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: nightly-flow-${{ matrix.platform }}
           path: target/release/flow
