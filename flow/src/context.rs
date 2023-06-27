@@ -15,6 +15,9 @@ impl Context {
     pub fn new(cnf: Settings) -> Self {
         Self { cnf }
     }
+    pub fn init_tracing(&self) {
+        self.cnf.clone().logger.init_tracing();
+    }
     pub fn settings(&self) -> &Settings {
         &self.cnf
     }

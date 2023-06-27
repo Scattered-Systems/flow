@@ -15,7 +15,9 @@ version.workspace = true
 default = [
     "tokio"
 ]
-
+net = [
+    "fluidity-net"
+]
 wasm = []
 
 [lib]
@@ -26,6 +28,9 @@ test = true
 [build-dependencies]
 
 [dependencies]
+# SDK
+fluidity-net = { features = [], optional = true, path = "../net/network", version = "0.1.12" }
+
 chrono = "0.4"
 serde.workspace = true
 serde_json.workspace = true
@@ -43,7 +48,7 @@ js-sys = "0.3"
 wasm-bindgen = { features = ["serde-serialize"], version = "0.2" }
 wasm-bindgen-futures = "0.4"
 
-[target.wasm32-unknown-unknown.web-sys]
+[target.wasm32-unknown-unknown.dependencies.web-sys]
 features = [
     "HtmlElement",
     "Node"
@@ -53,5 +58,5 @@ version = "0.3"
 [target.wasm32-unknown-unknown.dev-dependencies]
 wasm-bindgen-test = "0.3"
 
-[target.wasm32-wasi]
+[target.wasm32-wasi.dependencies]
 tokio_wasi = { features = ["macros"], version = "1"}

@@ -4,7 +4,7 @@ categories = []
 description = "Flow"
 edition = "2021"
 homepage = "https://github.com/scattered-systems/flow/wiki"
-keywords = ["blockchain", "digital identity", "management"]
+keywords = ["blockchain", "digital identity", "management", "scsys", "orchestration"]
 license = "Apache-2.0"
 readme = "README.md"
 repository = "https://github.com/scattered-systems/flow"
@@ -24,7 +24,9 @@ default-members = [
 exclude = ["xtask"]
 members = [
     "flow",
-    "crates/fluidity"
+    "crates/fluidity",
+    "crates/net/layers",
+    "crates/net/network"
 ]
 
 [profile.dev]
