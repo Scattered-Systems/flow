@@ -31,6 +31,7 @@ serde.workspace = true
 serde_json.workspace = true
 smart-default.workspace = true
 strum.workspace = true
+
 tokio = { features = ["full"], version = "1" }
 tracing = { features = [], version = "0.1" }
 tracing-subscriber = { features = [], version = "0.3" }
@@ -43,4 +44,6 @@ rustc-args = ["--cfg", "docsrs"]
 
 [target.wasm32-unknown-unknown]
 
-[target.wasm32-wasi]
+[target.wasm32-wasi.dependencies]
+tokio_wasi = { features = ["full"], version = "1" }
+

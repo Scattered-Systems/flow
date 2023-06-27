@@ -4,12 +4,17 @@
    Description: ... Summary ...
 */
 pub use self::{constants::*, types::*};
+#[cfg(target_family = "wasm32-unknown-unknown")]
+pub use self::wasm::*;
 
 mod constants {
 
 }
 
-mod types {
+mod types {}
+
+#[cfg(target_family = "wasm32-unknown-unknown")]
+mod wasm {
    use wasm_bindgen::prelude::JsError;
 
 
