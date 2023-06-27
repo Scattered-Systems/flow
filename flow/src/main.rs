@@ -28,8 +28,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
 }
 
 pub fn starter() -> Flow {
-    let (events_tx, events_rx) = mpsc::unbounded_channel::<FlowEvent>();
-    let (power_tx, power_rx) = watch::channel::<PowerEvent>(Default::default());
+    let (_, events_rx) = mpsc::unbounded_channel::<FlowEvent>();
+    let (power_tx, _) = watch::channel::<PowerEvent>(Default::default());
 
     let settings = Settings::new(None);
     

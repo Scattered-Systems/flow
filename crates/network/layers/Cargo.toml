@@ -4,7 +4,7 @@ categories.workspace = true
 description.workspace = true
 edition.workspace = true
 homepage.workspace = true
-keywords.workspace = true
+keywords = ["layers", "libp2p", "network", "scsys"]
 license.workspace = true
 name = "fluidity-layers"
 readme.workspace = true
@@ -17,16 +17,18 @@ default = []
 wasm = []
 
 [lib]
-bench = true
+bench = false
 crate-type = ["cdylib", "rlib"]
 test = true
 
 [build-dependencies]
 
 [dependencies]
-chrono = "0.4"
+chrono.workspace = true
 serde.workspace = true
 serde_json.workspace = true
+smart-default.workspace = true
+strum.workspace = true
 
 [dev-dependencies]
 

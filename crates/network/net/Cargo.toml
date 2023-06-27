@@ -4,7 +4,7 @@ categories.workspace = true
 description.workspace = true
 edition.workspace = true
 homepage.workspace = true
-keywords.workspace = true
+keywords = ["networking", "scsys"]
 license.workspace = true
 name = "fluidity-net"
 readme.workspace = true
@@ -24,12 +24,17 @@ test = true
 [build-dependencies]
 
 [dependencies]
-fluidity-layers = { path = "../layers" }
+fluidity-layers = { features = [], path = "../layers", version = "0.1.12" }
 
-chrono = "0.4"
+chrono.workspace = true
 serde.workspace = true
 serde_json.workspace = true
+smart-default.workspace = true
+strum.workspace = true
 
+[dependencies.libp2p]
+features = []
+version = "0.51.1"
 
 [dev-dependencies]
 

@@ -5,10 +5,16 @@
 */
 pub use self::{core::*, primitives::*, utils::*};
 
-pub(crate) mod core;
-pub(crate) mod primitives;
-pub(crate) mod utils;
+mod core;
+mod primitives;
+mod utils;
+
+#[cfg(feature = "net")]
+pub use fluidity_net as net;
 
 pub mod prelude {
     pub use super::*;
+
+    #[cfg(feature = "net")]
+    pub use super::net::prelude::*;
 }

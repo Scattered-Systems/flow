@@ -13,12 +13,14 @@ version.workspace = true
 
 [features]
 default = [
+    "net",
     "tokio"
 ]
+full = ["net"]
 net = [
     "fluidity-net"
 ]
-wasm = []
+
 
 [lib]
 bench = true
@@ -29,7 +31,7 @@ test = true
 
 [dependencies]
 # SDK
-fluidity-net = { features = [], optional = true, path = "../net/network", version = "0.1.12" }
+fluidity-net = { features = [], optional = true, path = "../network/net", version = "0.1.12" }
 
 chrono = "0.4"
 serde.workspace = true
