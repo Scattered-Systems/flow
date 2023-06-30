@@ -17,6 +17,18 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: cargo
+    directory: /crates/core
+    schedule:
+      interval: daily
+  - package-ecosystem: cargo
     directory: /crates/fluidity
+    schedule:
+      interval: daily
+  - package-ecosystem: cargo
+    directory: /crates/network/net
+    schedule:
+      interval: daily
+  - package-ecosystem: cargo
+    directory: /crates/network/proto
     schedule:
       interval: daily
