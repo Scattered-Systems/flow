@@ -20,7 +20,7 @@ pub use fluidity_net as net;
 pub mod prelude {
 
     #[cfg(feature = "core")]
-    pub use super::core::*;
+    pub use super::core::prelude::*;
     #[cfg(feature = "net")]
     pub use super::net::prelude::*;
 }

@@ -1,7 +1,6 @@
 /*
     Appellation: context <module>
     Contrib: FL03 <jo3mccain@icloud.com>
-    Description: ... summary ...
 */
 use super::Settings;
 use serde::{Deserialize, Serialize};

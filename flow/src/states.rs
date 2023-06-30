@@ -28,20 +28,25 @@ use strum::{Display, EnumIter, EnumString, EnumVariantNames};
 #[repr(u8)]
 #[strum(serialize_all = "snake_case")]
 pub enum State {
+    Error(String) = 0,
     #[default]
-    Idle = 0,
-    Processing {
+    Idle = 1,
+    Process {
         transaction: String,
-    } = 1,
+    } = 2,
 }
 
 impl State {
+    /// [State::Error] variant
+    pub fn error(message: impl ToString) -> Self {
+        Self::Error(message.to_string())
+    }
     /// [State::Idle] variant
     pub fn idle() -> Self {
         Self::Idle
     }
     pub fn processing(transaction: String) -> Self {
-        Self::Processing { transaction }
+        Self::Process { transaction }
     }
     pub fn is_idle(&self) -> bool {
         match self {
@@ -51,7 +56,7 @@ impl State {
     }
     pub fn is_processing(&self) -> bool {
         match self {
-            Self::Processing { .. } => true,
+            Self::Process { .. } => true,
             _ => false,
         }
     }

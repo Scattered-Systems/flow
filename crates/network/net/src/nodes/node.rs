@@ -8,6 +8,8 @@ use crate::{
     mainnet::{Mainnet, MainnetEvent},
 };
 use anyhow::Result;
+use fluidity_core::prelude::Power;
+use futures::StreamExt;
 use libp2p::kad::{self, KademliaEvent, QueryResult};
 use libp2p::{
     multiaddr::Protocol,
@@ -16,11 +18,12 @@ use libp2p::{
     Swarm,
 };
 use std::collections::hash_map::Entry;
-use tokio::sync::mpsc;
+use tokio::sync::{mpsc, watch};
 
 pub struct NetworkNode {
     pub cmds: mpsc::Receiver<Command>,
     pub events: mpsc::Sender<NetworkEvent>,
+    pub power: watch::Receiver<Power>,
     pub queue: Queue,
     pub swarm: Swarm<Mainnet>,
 }
@@ -29,11 +32,13 @@ impl NetworkNode {
     pub fn new(
         cmds: mpsc::Receiver<Command>,
         events: mpsc::Sender<NetworkEvent>,
+        power: watch::Receiver<Power>,
         swarm: Swarm<Mainnet>,
     ) -> Self {
         Self {
             cmds,
             events,
+            power,
             queue: Queue::default(),
             swarm,
         }
@@ -196,5 +201,43 @@ impl NetworkNode {
             e => tracing::warn!("Unhandled swarm event: {:?}", e),
         };
         Ok(())
+    }
+
+    pub async fn run(mut self) -> Result<()> {
+        
+        Ok(
+            loop {
+                tokio::select! {
+                    cmd = self.cmds.recv() => {
+                        if let Some(cmd) = cmd {
+                            self.handle_command(cmd)?;
+                        } else {
+                            tracing::info!("Command channel closed");
+                            break;
+                        }
+                    }
+                    event = self.swarm.next() => {
+                        if let Some(event) = event {
+                            self.handle_event(event).await?;
+                        } else {
+                            tracing::info!("Swarm channel closed");
+                            break;
+                        }
+                    }
+                    Ok(_) = self.power.changed() => {
+                        match *self.power.borrow() {
+                            Power::Off => {
+                                tracing::info!("Node: shutting down...");
+                                break;
+                            }
+                            Power::On => {
+                                tracing::info!("Node: powering on...");
+                            }
+                        }
+                    }
+                    
+                }
+            }
+        )
     }
 }

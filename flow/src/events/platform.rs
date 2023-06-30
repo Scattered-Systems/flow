@@ -1,16 +1,22 @@
 /*
-    Appellation: commands <module>
+    Appellation: platform <module>
     Contrib: FL03 <jo3mccain@icloud.com>
 */
-use super::args::Runner;
-use clap::Subcommand;
+/// # Platform Events
+///
 use serde::{Deserialize, Serialize};
 use smart_default::SmartDefault;
+use strum::{Display, EnumIter, EnumString, EnumVariantNames};
 
 #[derive(
     Clone,
+    Copy,
     Debug,
     Deserialize,
+    Display,
+    EnumIter,
+    EnumString,
+    EnumVariantNames,
     Eq,
     Hash,
     Ord,
@@ -18,9 +24,11 @@ use smart_default::SmartDefault;
     PartialOrd,
     Serialize,
     SmartDefault,
-    Subcommand,
 )]
-pub enum Commands {
+#[repr(u8)]
+pub enum PlatformEvent {
+    Initializing,
     #[default]
-    Run(Runner),
+    Idle,
+    Terminate
 }

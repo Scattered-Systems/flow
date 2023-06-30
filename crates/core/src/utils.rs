@@ -2,16 +2,16 @@
    Appellation: utils <module>
    Contrib: FL03 <jo3mccain@icloud.com>
 */
-#[cfg(target_family = "wasm32-unknown-unknown")]
+#[cfg(any(feature = "wasm", all(target_family = "wasm", not(target_os = "wasi"))))]
 pub use self::wasm::*;
 
 /// [timestamp] is a simple wrapper for a [chrono::Utc] timestamp.
-#[cfg(not(target_family = "wasm32-unknown-unknown"))]
+#[cfg(any(target_family = "unix", target_family = "windows"))]
 pub fn timestamp() -> i64 {
     chrono::Utc::now().timestamp()
 }
 
-#[cfg(target_family = "wasm32-unknown-unknown")]
+#[cfg(any(feature = "wasm", all(target_family = "wasm", not(target_os = "wasi"))))]
 mod wasm {
     use crate::JsResult;
     use gloo::net::http::{Request, Response};

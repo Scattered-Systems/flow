@@ -2,17 +2,19 @@
    Appellation: app <module>
    Contrib: FL03 <jo3mccain@icloud.com>
 */
-use crate::events::*;
+use crate::events::FlowEvent;
 use crate::{Context, Settings};
-use anyhow::Result;
-#[cfg(not(feature = "wasm"))]
+use fluidity::prelude::{AsyncResult, Power, EventHandle};
+
+#[cfg(any(target_family = "unix", target_family = "windows"))]
+#[cfg(not(any(feature = "wasi", feature = "wasm", target_family = "wasm", target_os = "wasi")))]
 use tokio::sync::{mpsc, watch};
-#[cfg(feature = "wasi")]
+#[cfg(any(feature = "wasi", target_os = "wasi"))]
 use tokio_wasi::sync::{mpsc, watch};
 
 pub fn starter() -> Flow {
     let (_, events_rx) = mpsc::unbounded_channel::<FlowEvent>();
-    let (power_tx, _) = watch::channel::<PowerEvent>(Default::default());
+    let (power_tx, _) = watch::channel::<Power>(Default::default());
 
     let settings = Settings::new(None);
 
@@ -22,13 +24,14 @@ pub fn starter() -> Flow {
 pub struct Flow {
     context: Context,
     events: mpsc::UnboundedReceiver<FlowEvent>,
-    power: watch::Sender<PowerEvent>,
+    
+    power: watch::Sender<Power>,
 }
 
 impl Flow {
     pub fn new(
         events: mpsc::UnboundedReceiver<FlowEvent>,
-        power: watch::Sender<PowerEvent>,
+        power: watch::Sender<Power>,
         settings: Settings,
     ) -> Self {
         Self {
@@ -44,29 +47,31 @@ impl Flow {
     }
 }
 
-impl EventHandler for Flow {
-    fn handle_event(&self, event: FlowEvent) -> Result<()> {
+impl EventHandle<FlowEvent> for Flow {
+    fn handle_event(&self, event: FlowEvent) -> AsyncResult<()> {
         match event {
-            FlowEvent::Power(power) => {
-                tracing::info!("{:?}", power);
+            _ => {
+                tracing::warn!("Unhandled Event: {:?}", event);
             }
         }
         Ok(())
     }
 }
 
-#[cfg(not(target_family = "wasm32-wasi"))]
+#[cfg(any(target_family = "unix", target_family = "windows"))]
+#[cfg(not(any(feature = "wasi", feature = "wasm", target_family = "wasm", target_os = "wasi")))]
 impl Flow {
-    pub async fn run(mut self) -> Result<()> {
+    pub async fn run(mut self) -> anyhow::Result<()> {
         Ok(loop {
             tokio::select! {
                 event = self.events.recv() => {
                     if let Some(event) = event {
-                        EventHandler::handle_event(&self, event).expect("Event Error");
+                        EventHandle::handle_event(&self, event).expect("Event Error");
                     }
                 }
+                
                 _ = tokio::signal::ctrl_c() => {
-                    let _ = self.power.send(PowerEvent::Off);
+                    let _ = self.power.send(Power::Off);
                     tracing::info!("Shutting down...");
                     break;
                 }
@@ -74,14 +79,15 @@ impl Flow {
         })
     }
 }
-#[cfg(target_family = "wasm32-wasi")]
+
+#[cfg(any(feature = "wasi", target_os = "wasi"))]
 impl Flow {
-    pub async fn run(mut self) -> Result<()> {
+    pub async fn run(mut self) -> anyhow::Result<()> {
         Ok(loop {
             tokio_wasi::select! {
                 event = self.events.recv() => {
                     if let Some(event) = event {
-                        EventHandler::handle_event(&self, event).expect("Event Error");
+                        EventHandle::handle_event(&self, event).expect("Event Error");
                     }
                 }
                 _ = tokio_wasi::signal::ctrl_c() => {

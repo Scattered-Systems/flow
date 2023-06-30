@@ -3,7 +3,7 @@
    Contrib: FL03 <jo3mccain@icloud.com>
    Description: ... Summary ...
 */
-#[cfg(target_family = "wasm32-unknown-unknown")]
+#[cfg(any(feature = "wasm", all(target_family = "wasm", not(target_os = "wasi"))))]
 pub use self::wasm::*;
 pub use self::{constants::*, statics::*, types::*};
 
@@ -29,7 +29,7 @@ mod types {
     pub type BoxResult<T = ()> = Result<T, BoxError>;
 }
 
-#[cfg(target_family = "wasm32-unknown-unknown")]
+#[cfg(any(feature = "wasm", all(target_family = "wasm", not(target_os = "wasi"))))]
 mod wasm {
     use wasm_bindgen::prelude::JsError;
 

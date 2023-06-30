@@ -1,24 +1,16 @@
 /*
-    Appellation: events <module>
+    Appellation: opts <module>
     Contrib: FL03 <jo3mccain@icloud.com>
 */
-pub use self::platform::*;
-
-mod platform;
-
+use super::args::Runner;
+use clap::Subcommand;
 use serde::{Deserialize, Serialize};
 use smart_default::SmartDefault;
-use strum::{Display, EnumIter, EnumString, EnumVariantNames};
-
 
 #[derive(
     Clone,
     Debug,
     Deserialize,
-    Display,
-    EnumIter,
-    EnumString,
-    EnumVariantNames,
     Eq,
     Hash,
     Ord,
@@ -26,11 +18,9 @@ use strum::{Display, EnumIter, EnumString, EnumVariantNames};
     PartialOrd,
     Serialize,
     SmartDefault,
+    Subcommand,
 )]
-pub enum FlowEvent {
-    Client,
+pub enum Options {
     #[default]
-    Platform(PlatformEvent),
+    Run(Runner),
 }
-
-
