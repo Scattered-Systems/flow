@@ -6,7 +6,6 @@ pub use self::power::*;
 
 mod power;
 
-use fluidity::net::events::NetworkEvent;
 use serde::{Deserialize, Serialize};
 use smart_default::SmartDefault;
 use strum::{Display, EnumIter, EnumString, EnumVariantNames};
