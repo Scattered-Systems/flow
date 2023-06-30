@@ -12,6 +12,11 @@ readme.workspace = true
 repository.workspace = true
 version.workspace = true
 
+[features]
+default = []
+wasi = []
+wasm = []
+
 [[bin]]
 bench = true
 doctest = false
@@ -21,10 +26,10 @@ name = "flow"
 
 [dependencies]
 # SDK
-fluidity = { features = [], path = "../crates/fluidity", version = "0.1.12" }
+fluidity = { features = ["full"], path = "../crates/fluidity", version = "0.1.12" }
 
 anyhow.workspace = true
-async-trait = "0.1"
+async-trait.workspace = true
 clap = { features = ["cargo", "derive", "env"], version = "4" }
 config = "0.13"
 decanter = { features = ["derive"], git = "https://github.com/FL03/decanter", branch = "v0.1.4", version = "0.1.4" }

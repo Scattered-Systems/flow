@@ -25,9 +25,9 @@ net = [
     "fluidity-net"
 ]
 
-async = ["tokio"]
-
-wasi = []
+wasi = [
+    
+]
 wasm = []
 
 
@@ -44,32 +44,16 @@ test = true
 fluidity-core = { features = [], optional = true, path = "../core", version = "0.1.12" }
 fluidity-net = { features = [], optional = true, path = "../network/net", version = "0.1.12" }
 
-chrono.workspace = true
-serde.workspace = true
-serde_json.workspace = true
-tokio = { features = ["macros"], optional = true, version = "1" }
-
 [dev-dependencies]
 
 [package.metadata.docs.rs]
 all-features = true
 rustc-args = ["--cfg", "docsrs"]
 
-[target.wasm32-unknown-unknown.dependencies]
-gloo = { features = ["futures"], version = "0.8" }
-js-sys = "0.3"
-wasm-bindgen = { features = ["serde-serialize"], version = "0.2" }
-wasm-bindgen-futures = "0.4"
+[target.wasm32-unknown-unknown]
 
-[target.wasm32-unknown-unknown.dependencies.web-sys]
-features = [
-    "HtmlElement",
-    "Node"
-]
-version = "0.3"
 
 [target.wasm32-unknown-unknown.dev-dependencies]
 wasm-bindgen-test = "0.3"
 
-[target.wasm32-wasi.dependencies]
-tokio_wasi = { features = ["macros"], version = "1"}
+[target.wasm32-wasi]

@@ -1,7 +1,6 @@
 /*
     Appellation: codec <module>
     Contrib: FL03 <jo3mccain@icloud.com>
-    Description: ... summary ...
 */
 use super::{Proto, Request, Response};
 use async_trait::async_trait;

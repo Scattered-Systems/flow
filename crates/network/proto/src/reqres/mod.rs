@@ -9,8 +9,8 @@ mod codec;
 mod request;
 mod response;
 
-use crate::NetworkError;
-use libp2p::request_response::{self, ProtocolName, ProtocolSupport};
+use crate::ProtocolError;
+use libp2p::request_response::{self, ProtocolSupport};
 use serde::{Deserialize, Serialize};
 use smart_default::SmartDefault;
 use strum::{Display, EnumString, EnumVariantNames};
@@ -22,11 +22,8 @@ pub type ProtoBehaviour = request_response::Behaviour<ProtocolCodec>;
 pub type ReqResEvent = request_response::Event<Request, Response>;
 
 pub fn new() -> ProtoBehaviour {
-    request_response::Behaviour::new(
-        ProtocolCodec::default(),
-        std::iter::once((Proto::Cluster, ProtocolSupport::Full)),
-        Default::default(),
-    )
+    let protocols: Vec<(Proto, ProtocolSupport)> = vec![(Proto::default(), ProtocolSupport::Full)];
+    request_response::Behaviour::new(protocols, request_response::Config::default())
 }
 
 #[derive(
@@ -48,7 +45,7 @@ pub fn new() -> ProtoBehaviour {
 pub enum Frame {
     Wasm(Vec<u8>),
     #[default]
-    Error(NetworkError),
+    Error(ProtocolError),
 }
 
 #[derive(
@@ -70,13 +67,13 @@ pub enum Frame {
 #[strum(serialize_all = "snake_case")]
 pub enum Proto {
     #[default]
-    Cluster,
+    V1,
 }
 
-impl ProtocolName for Proto {
-    fn protocol_name(&self) -> &[u8] {
+impl AsRef<str> for Proto {
+    fn as_ref(&self) -> &str {
         match self {
-            Proto::Cluster => b"/cluster/1.0.0",
+            Proto::V1 => "/flow/reqres/1.0.0",
         }
     }
 }

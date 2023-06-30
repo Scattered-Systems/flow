@@ -1,16 +1,19 @@
 /*
-    Appellation: commands <module>
+    Appellation: errors <module>
     Contrib: FL03 <jo3mccain@icloud.com>
 */
-use super::args::Runner;
-use clap::Subcommand;
 use serde::{Deserialize, Serialize};
 use smart_default::SmartDefault;
+use strum::{Display, EnumIter, EnumString, EnumVariantNames};
 
 #[derive(
     Clone,
     Debug,
     Deserialize,
+    Display,
+    EnumIter,
+    EnumString,
+    EnumVariantNames,
     Eq,
     Hash,
     Ord,
@@ -18,9 +21,9 @@ use smart_default::SmartDefault;
     PartialOrd,
     Serialize,
     SmartDefault,
-    Subcommand,
 )]
-pub enum Commands {
+#[serde(rename_all = "snake_case")]
+pub enum ProtocolError {
     #[default]
-    Run(Runner),
+    Error(String),
 }

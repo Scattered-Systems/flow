@@ -7,6 +7,7 @@ pub use self::{errors::*, primitives::*, specs::*, utils::*};
 pub use fluidity_proto as proto;
 
 pub mod events;
+pub mod mainnet;
 pub mod nodes;
 pub mod peers;
 

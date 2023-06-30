@@ -4,7 +4,7 @@
     Description: ... Summary ...
 */
 use crate::{BoxedTransport, Conduct};
-use libp2p::identity::{DecodingError, Keypair, PublicKey};
+use libp2p::identity::{DecodingError, Keypair, PublicKey, SigningError};
 use libp2p::swarm::{Swarm, SwarmBuilder};
 use libp2p::{core::upgrade, noise, tcp, yamux, PeerId, Transport};
 
@@ -35,24 +35,24 @@ impl Peer {
     pub fn new(kp: Keypair) -> Self {
         Self { kp }
     }
-    pub fn keypair(self) -> Keypair {
-        self.kp
-    }
     pub fn pk(&self) -> PublicKey {
         self.kp.public()
     }
     pub fn pid(&self) -> PeerId {
         self.pk().to_peer_id()
     }
+    pub fn sign(&self, data: impl AsRef<[u8]>) -> Result<Vec<u8>, SigningError> {
+        self.kp.sign(data.as_ref())
+    }
     ///
     pub fn transport(&self) -> BoxedTransport {
         tcp::tokio::Transport::new(tcp::Config::default().nodelay(true))
             .upgrade(upgrade::Version::V1)
             .authenticate(
-                noise::NoiseAuthenticated::xx(&self.clone().keypair())
+                noise::Config::new(&self.kp)
                     .expect("Signing libp2p-noise static DH keypair failed."),
             )
-            .multiplex(yamux::YamuxConfig::default())
+            .multiplex(yamux::Config::default())
             .boxed()
     }
 }
@@ -62,6 +62,12 @@ impl Default for Peer {
         Self {
             kp: Keypair::generate_ed25519(),
         }
+    }
+}
+
+impl AsRef<Keypair> for Peer {
+    fn as_ref(&self) -> &Keypair {
+        &self.kp
     }
 }
 
@@ -82,12 +88,6 @@ impl TryFrom<u8> for Peer {
     }
 }
 
-impl From<Peer> for Keypair {
-    fn from(peer: Peer) -> Keypair {
-        peer.kp
-    }
-}
-
 impl<C> From<Peer> for Swarm<C>
 where
     C: Conduct,
@@ -95,6 +95,18 @@ where
     fn from(peer: Peer) -> Self {
         let behaviour = C::from_peer(peer.clone());
         SwarmBuilder::with_tokio_executor(peer.transport(), behaviour, peer.pid()).build()
+    }
+}
+
+impl From<Peer> for PeerId {
+    fn from(peer: Peer) -> Self {
+        peer.kp.public().to_peer_id()
+    }
+}
+
+impl From<Peer> for PublicKey {
+    fn from(peer: Peer) -> Self {
+        peer.kp.public()
     }
 }
 

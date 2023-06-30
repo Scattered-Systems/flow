@@ -19,7 +19,9 @@ impl Context {
     }
     pub fn init_tracing(&self) {
         self.settings().logger.setup_env();
-        fmt::fmt().with_env_filter(EnvFilter::from_default_env()).init();
+        fmt::fmt()
+            .with_env_filter(EnvFilter::from_default_env())
+            .init();
     }
     pub fn settings(&self) -> Settings {
         self.cnf.clone()

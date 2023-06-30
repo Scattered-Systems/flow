@@ -5,12 +5,10 @@
 use crate::events::*;
 use crate::{Context, Settings};
 use anyhow::Result;
-#[cfg(not(target_family = "wasm32-wasi"))]
+#[cfg(not(feature = "wasm"))]
 use tokio::sync::{mpsc, watch};
-#[cfg(target_family = "wasm32-wasi")]
+#[cfg(feature = "wasi")]
 use tokio_wasi::sync::{mpsc, watch};
-
-
 
 pub fn starter() -> Flow {
     let (_, events_rx) = mpsc::unbounded_channel::<FlowEvent>();
@@ -47,10 +45,7 @@ impl Flow {
 }
 
 impl EventHandler for Flow {
-    fn handle_event(
-        &self,
-        event: FlowEvent,
-    ) -> Result<()> {
+    fn handle_event(&self, event: FlowEvent) -> Result<()> {
         match event {
             FlowEvent::Power(power) => {
                 tracing::info!("{:?}", power);

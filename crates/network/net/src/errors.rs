@@ -1,18 +1,18 @@
 /*
     Appellation: errors <module>
     Contrib: FL03 <jo3mccain@icloud.com>
-    Description: ... Summary ...
 */
-use fluidity_core::{AsyncError, Error};
+use fluidity_core::AsyncError;
 use serde::{Deserialize, Serialize};
 use smart_default::SmartDefault;
-use strum::{Display, EnumString, EnumVariantNames};
+use strum::{Display, EnumIter, EnumString, EnumVariantNames};
 
 #[derive(
     Clone,
     Debug,
     Deserialize,
     Display,
+    EnumIter,
     EnumString,
     EnumVariantNames,
     Eq,
@@ -25,7 +25,7 @@ use strum::{Display, EnumString, EnumVariantNames};
 )]
 #[strum(serialize_all = "title_case")]
 pub enum NetworkError {
-    AsyncError(AsyncError),
+    AsyncError(String),
     AddrError(String),
     ConnectionError(String),
     DecodeError(String),
@@ -42,15 +42,9 @@ pub enum NetworkError {
 
 impl std::error::Error for NetworkError {}
 
-impl From<NetworkError> for Error {
-    fn from(error: NetworkError) -> Self {
-        Self::AsyncError(error.into())
-    }
-}
-
-impl From<NetworkError> for AsyncError {
-    fn from(error: NetworkError) -> Self {
-        Self::Error(error.to_string())
+impl From<AsyncError> for NetworkError {
+    fn from(error: AsyncError) -> Self {
+        Self::AsyncError(error.to_string())
     }
 }
 
@@ -99,12 +93,6 @@ where
     }
 }
 
-impl From<libp2p::core::upgrade::UpgradeError<Self>> for NetworkError {
-    fn from(error: libp2p::core::upgrade::UpgradeError<Self>) -> Self {
-        Self::UpgradeError(error.to_string())
-    }
-}
-
 impl From<libp2p::request_response::InboundFailure> for NetworkError {
     fn from(error: libp2p::request_response::InboundFailure) -> Self {
         Self::ReqResError(error.to_string())
@@ -129,20 +117,14 @@ impl From<libp2p::swarm::ConnectionError<Box<dyn std::error::Error>>> for Networ
     }
 }
 
-impl From<Box<dyn std::error::Error + Send + Sync>> for NetworkError {
-    fn from(error: Box<dyn std::error::Error + Send + Sync>) -> Self {
-        Self::AsyncError(error.into())
-    }
-}
-
 impl<T> From<tokio::sync::mpsc::error::SendError<T>> for NetworkError {
     fn from(error: tokio::sync::mpsc::error::SendError<T>) -> Self {
-        Self::AsyncError(error.into())
+        Self::AsyncError(error.to_string())
     }
 }
 
 impl From<tokio::sync::oneshot::error::RecvError> for NetworkError {
     fn from(error: tokio::sync::oneshot::error::RecvError) -> Self {
-        Self::AsyncError(error.into())
+        Self::AsyncError(error.to_string())
     }
 }
