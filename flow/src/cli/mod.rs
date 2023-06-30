@@ -17,9 +17,9 @@ pub struct FlowCli {
     #[clap(subcommand)]
     pub commands: Options,
     #[arg(action = clap::ArgAction::SetTrue, long, short)]
-    pub update: bool,
-    #[arg(action = clap::ArgAction::SetTrue, long, short)]
     pub verbose: bool,
+    #[arg(action = clap::ArgAction::SetTrue, long, short)]
+    pub update: bool,
 }
 
 impl FlowCli {
