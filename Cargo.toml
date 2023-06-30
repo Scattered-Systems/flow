@@ -1,3 +1,25 @@
+[workspace]
+default-members = [
+    "flow",
+    "crates/fluidity"
+]
+exclude = ["xtask"]
+members = [
+    "flow",
+    "crates/core",
+    "crates/fluidity",
+    "crates/network/*"
+]
+
+[workspace.dependencies]
+anyhow = "1"
+async-trait = "0.1"
+chrono = "0.4"
+serde = { features = ["derive"], version = "1" }
+serde_json = "1"
+smart-default = "0.6"
+strum = "0.24"
+
 [workspace.package]
 authors = ["FL03 <jo3mccain@icloud.com> (https://github.com/FL03)"]
 categories = []
@@ -10,26 +32,7 @@ readme = "README.md"
 repository = "https://github.com/scattered-systems/flow"
 version = "0.1.12"
 
-[workspace.dependencies]
-anyhow = "1"
-chrono = "0.4"
-serde = { features = ["derive"], version = "1" }
-serde_json = "1"
-smart-default = "0.6"
-strum = "0.24"
-
-[workspace]
-default-members = [
-    "flow",
-    "crates/fluidity"
-]
-exclude = ["xtask"]
-members = [
-    "flow",
-    "crates/fluidity",
-    "crates/core",
-    "crates/network/*"
-]
+workspace.resolver = "2"
 
 [profile.dev]
 codegen-units = 256

@@ -1,11 +1,23 @@
 /*
-   Appellation: fluidity <library>
+   Appellation: fluidity-net <library>
    Contrib: FL03 <jo3mccain@icloud.com>
-   Description: ... Summary ...
 */
-pub use fluidity_layers as layers;
+pub use self::{errors::*, primitives::*, specs::*, utils::*};
+
+pub use fluidity_proto as proto;
+
+pub mod events;
+pub mod nodes;
+pub mod peers;
+
+mod errors;
+mod primitives;
+mod specs;
+mod utils;
 
 pub mod prelude {
 
-    pub use super::layers::*;
+    pub use super::nodes::*;
+    pub use super::peers::*;
+    pub use super::proto::*;
 }
