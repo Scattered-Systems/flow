@@ -6,7 +6,7 @@
 use crate::proto::reqres::ReqResEvent;
 use libp2p::{identify, kad, mdns, ping};
 
-/// [Events] describes the events considered by the network
+/// [MainnetEvent] describes the events considered by the network
 #[allow(clippy::large_enum_variant)]
 #[derive(Debug)]
 pub enum MainnetEvent {
