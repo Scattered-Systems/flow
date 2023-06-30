@@ -4,10 +4,23 @@
 */
 /// # Flow
 ///
-///
-// #[cfg_attr(norm, any(target_family = "unix", target_family = "windows", not(target_family = "wasm")))]
-// #[cfg_attr(wasi, feature = "wasi", target_os = "wasi")]
-// #[cfg_attr(wasm, target_family = "wasm", feature = "wasm", not(target_os = "wasi"))]
+/// Flow describes the core node logic that all network participants must run.
+/// With the extensive integrations with Proton, Flow essentially becomes a 
+/// type of headless operating system capable of synchronizing its activites
+/// across devices maximizing the users control and available resources.
+/// 
+/// ## Harmonics
+/// 
+/// Flow incorperates the Neo-Riemannian theory of music to describe the
+/// harmonics of the network(s) as well as the execution process of any transactions.
+/// 
+/// 
+/// ## Features
+/// 
+/// - [x] Flow Client
+/// - [x] Flow Cluster
+/// - [x] Flow Network
+/// - [x] Flow Node
 
 pub use self::{context::*, settings::*, states::*};
 

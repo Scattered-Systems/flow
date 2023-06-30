@@ -6,7 +6,12 @@
 
 ***
 
-Flow encompasses a host of capabilities native to the ecosystem.
+Flow describes the core node logic that all network participants must run. With the extensive integrations with Proton, Flow essentially becomes a 
+type of headless operating system capable of synchronizing its activites across devices maximizing the users control and available resources.
+
+In order to accomplish this, Flow implements a novel harmonic orchestration mechanism used to describe the behaviour of the networks and the execution 
+of individual transactions. [Contained](https://github.com/FL03/contained) is derivied from the Neo-Riemannian theory, elegantly blending
+harmonics and music theory with distributed / multi-way systems. 
 
 ## Installation
 
