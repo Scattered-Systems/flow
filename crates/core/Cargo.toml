@@ -4,33 +4,16 @@ categories.workspace = true
 description.workspace = true
 edition.workspace = true
 homepage.workspace = true
-keywords.workspace = true
+keywords = ["core", "flow", "scsys"]
 license.workspace = true
-name = "fluidity"
+name = "fluidity-core"
 readme.workspace = true
 repository.workspace = true
 version.workspace = true
 
 [features]
-default = [
-    "core",
-    "net",
-]
-full = ["core", "net"]
-
-core = [
-    "fluidity-core"
-]
-net = [
-    "fluidity-net"
-]
-
-async = ["tokio"]
-
-wasi = []
+default = []
 wasm = []
-
-
 
 [lib]
 bench = true
@@ -40,14 +23,12 @@ test = true
 [build-dependencies]
 
 [dependencies]
-# SDK
-fluidity-core = { features = [], optional = true, path = "../core", version = "0.1.12" }
-fluidity-net = { features = [], optional = true, path = "../network/net", version = "0.1.12" }
-
+async-trait = "0.1"
 chrono.workspace = true
 serde.workspace = true
 serde_json.workspace = true
-tokio = { features = ["macros"], optional = true, version = "1" }
+smart-default.workspace = true
+strum.workspace = true
 
 [dev-dependencies]
 
@@ -61,15 +42,4 @@ js-sys = "0.3"
 wasm-bindgen = { features = ["serde-serialize"], version = "0.2" }
 wasm-bindgen-futures = "0.4"
 
-[target.wasm32-unknown-unknown.dependencies.web-sys]
-features = [
-    "HtmlElement",
-    "Node"
-]
-version = "0.3"
-
-[target.wasm32-unknown-unknown.dev-dependencies]
-wasm-bindgen-test = "0.3"
-
-[target.wasm32-wasi.dependencies]
-tokio_wasi = { features = ["macros"], version = "1"}
+[target.wasm32-wasi]

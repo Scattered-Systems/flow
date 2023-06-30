@@ -1,8 +1,15 @@
 /*
    Appellation: utils <module>
    Contrib: FL03 <jo3mccain@icloud.com>
-   Description: ... Summary ...
 */
+#[cfg(target_family = "wasm32-unknown-unknown")]
+pub use self::wasm::*;
+
+/// [timestamp] is a simple wrapper for a [chrono::Utc] timestamp.
+#[cfg(not(target_family = "wasm32-unknown-unknown"))]
+pub fn timestamp() -> i64 {
+    chrono::Utc::now().timestamp()
+}
 
 #[cfg(target_family = "wasm32-unknown-unknown")]
 mod wasm {

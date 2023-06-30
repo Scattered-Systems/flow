@@ -6,6 +6,8 @@
 use super::Settings;
 use serde::{Deserialize, Serialize};
 
+use tracing_subscriber::{fmt, EnvFilter};
+
 #[derive(Clone, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
 pub struct Context {
     cnf: Settings,
@@ -16,10 +18,11 @@ impl Context {
         Self { cnf }
     }
     pub fn init_tracing(&self) {
-        self.cnf.clone().logger.init_tracing();
+        self.settings().logger.setup_env();
+        fmt::fmt().with_env_filter(EnvFilter::from_default_env()).init();
     }
-    pub fn settings(&self) -> &Settings {
-        &self.cnf
+    pub fn settings(&self) -> Settings {
+        self.cnf.clone()
     }
 }
 

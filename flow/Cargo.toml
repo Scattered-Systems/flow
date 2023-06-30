@@ -23,6 +23,7 @@ name = "flow"
 # SDK
 fluidity = { features = [], path = "../crates/fluidity", version = "0.1.12" }
 
+anyhow.workspace = true
 async-trait = "0.1"
 clap = { features = ["cargo", "derive", "env"], version = "4" }
 config = "0.13"
@@ -35,7 +36,7 @@ strum.workspace = true
 
 tokio = { features = ["full"], version = "1" }
 tracing = { features = [], version = "0.1" }
-tracing-subscriber = { features = [], version = "0.3" }
+tracing-subscriber = { features = ["env-filter"], version = "0.3" }
 
 [dev-dependencies]
 

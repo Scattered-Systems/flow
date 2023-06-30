@@ -1,7 +1,7 @@
 #[cfg(target_family = "wasm32-unknown-unknown")]
 #[cfg(test)]
 mod tests {
-    use fluidity::core::timestamp;
+    use fluidity_core::timestamp;
     use wasm_bindgen_test::wasm_bindgen_test;
 
     #[wasm_bindgen_test]
