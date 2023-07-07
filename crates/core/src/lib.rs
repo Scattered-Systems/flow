@@ -10,12 +10,13 @@ pub use self::{primitives::*, utils::*};
 mod primitives;
 mod utils;
 
+pub mod errors;
 pub mod events;
 pub mod states;
 
 pub mod prelude {
-   pub use super::events::*;
-   pub use super::states::*;
-   pub use super::primitives::*;
-   pub use super::utils::*;
+    pub use super::events::*;
+    pub use super::primitives::*;
+    pub use super::states::*;
+    pub use super::utils::*;
 }

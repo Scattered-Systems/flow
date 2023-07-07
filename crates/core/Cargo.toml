@@ -12,7 +12,10 @@ repository.workspace = true
 version.workspace = true
 
 [features]
-default = []
+default = ["std"]
+
+std = []
+wasi = []
 wasm = []
 
 [lib]

@@ -10,7 +10,6 @@ use serde::{Deserialize, Serialize};
 use smart_default::SmartDefault;
 use strum::{Display, EnumIter, EnumString, EnumVariantNames};
 
-
 #[derive(
     Clone,
     Debug,
@@ -32,5 +31,3 @@ pub enum FlowEvent {
     #[default]
     Platform(PlatformEvent),
 }
-
-

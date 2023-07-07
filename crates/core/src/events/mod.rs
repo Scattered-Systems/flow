@@ -4,8 +4,6 @@
 */
 use crate::AsyncResult;
 
-
-
 pub trait Event {
     fn event(&self) -> &Self;
 }
@@ -22,4 +20,3 @@ where
 pub trait EventHandle<T: Event>: Send + Sync + 'static {
     fn handle_event(&self, event: T) -> AsyncResult<()>;
 }
-

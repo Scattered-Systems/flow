@@ -204,40 +204,37 @@ impl NetworkNode {
     }
 
     pub async fn run(mut self) -> Result<()> {
-        
-        Ok(
-            loop {
-                tokio::select! {
-                    cmd = self.cmds.recv() => {
-                        if let Some(cmd) = cmd {
-                            self.handle_command(cmd)?;
-                        } else {
-                            tracing::info!("Command channel closed");
-                            break;
-                        }
+        Ok(loop {
+            tokio::select! {
+                cmd = self.cmds.recv() => {
+                    if let Some(cmd) = cmd {
+                        self.handle_command(cmd)?;
+                    } else {
+                        tracing::info!("Command channel closed");
+                        break;
                     }
-                    event = self.swarm.next() => {
-                        if let Some(event) = event {
-                            self.handle_event(event).await?;
-                        } else {
-                            tracing::info!("Swarm channel closed");
-                            break;
-                        }
-                    }
-                    Ok(_) = self.power.changed() => {
-                        match *self.power.borrow() {
-                            Power::Off => {
-                                tracing::info!("Node: shutting down...");
-                                break;
-                            }
-                            Power::On => {
-                                tracing::info!("Node: powering on...");
-                            }
-                        }
-                    }
-                    
                 }
+                event = self.swarm.next() => {
+                    if let Some(event) = event {
+                        self.handle_event(event).await?;
+                    } else {
+                        tracing::info!("Swarm channel closed");
+                        break;
+                    }
+                }
+                Ok(_) = self.power.changed() => {
+                    match *self.power.borrow() {
+                        Power::Off => {
+                            tracing::info!("Node: shutting down...");
+                            break;
+                        }
+                        Power::On => {
+                            tracing::info!("Node: powering on...");
+                        }
+                    }
+                }
+
             }
-        )
+        })
     }
 }

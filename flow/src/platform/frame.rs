@@ -1,16 +1,13 @@
 /*
-    Appellation: platform <module>
+    Appellation: frame <platform>
     Contrib: FL03 <jo3mccain@icloud.com>
 */
-/// # Platform Events
-///
 use serde::{Deserialize, Serialize};
 use smart_default::SmartDefault;
 use strum::{Display, EnumIter, EnumString, EnumVariantNames};
 
 #[derive(
     Clone,
-    Copy,
     Debug,
     Deserialize,
     Display,
@@ -26,9 +23,11 @@ use strum::{Display, EnumIter, EnumString, EnumVariantNames};
     SmartDefault,
 )]
 #[repr(u8)]
-pub enum PlatformEvent {
-    Initializing,
+#[strum(serialize_all = "snake_case")]
+pub enum PlatformFrame {
     #[default]
-    Idle,
-    Terminate,
+    Empty,
+    Request,
+    Response,
+    Transaction(String),
 }

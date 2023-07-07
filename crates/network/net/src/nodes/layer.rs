@@ -13,31 +13,31 @@ use libp2p::{Multiaddr, PeerId};
 use std::collections::HashSet;
 use tokio::sync::oneshot;
 
-pub type Commander<T = ()> = oneshot::Sender<NetworkResult<T>>;
+pub type NetworkCommandTx<T = ()> = oneshot::Sender<NetworkResult<T>>;
 
 #[derive(Debug)]
 pub enum Command {
     Listen {
         addr: Multiaddr,
-        tx: Commander<ListenerId>,
+        tx: NetworkCommandTx<ListenerId>,
     },
     Dial {
         addr: Multiaddr,
         pid: PeerId,
-        tx: Commander,
+        tx: NetworkCommandTx,
     },
     Provide {
         cid: String,
-        tx: Commander,
+        tx: NetworkCommandTx,
     },
     Providers {
         cid: String,
-        tx: Commander<HashSet<PeerId>>,
+        tx: NetworkCommandTx<HashSet<PeerId>>,
     },
     Request {
         payload: String,
         peer: PeerId,
-        tx: Commander<Response>,
+        tx: NetworkCommandTx<Response>,
     },
     Respond {
         payload: Vec<u8>,
@@ -46,19 +46,19 @@ pub enum Command {
 }
 
 impl Command {
-    pub fn dial(addr: Multiaddr, pid: PeerId, tx: Commander) -> Self {
+    pub fn dial(addr: Multiaddr, pid: PeerId, tx: NetworkCommandTx) -> Self {
         Self::Dial { addr, pid, tx }
     }
-    pub fn listen(addr: Multiaddr, tx: Commander<ListenerId>) -> Self {
+    pub fn listen(addr: Multiaddr, tx: NetworkCommandTx<ListenerId>) -> Self {
         Self::Listen { addr, tx }
     }
-    pub fn provide(cid: String, tx: Commander) -> Self {
+    pub fn provide(cid: String, tx: NetworkCommandTx) -> Self {
         Self::Provide { cid, tx }
     }
-    pub fn providers(cid: String, tx: Commander<HashSet<PeerId>>) -> Self {
+    pub fn providers(cid: String, tx: NetworkCommandTx<HashSet<PeerId>>) -> Self {
         Self::Providers { cid, tx }
     }
-    pub fn request(payload: String, peer: PeerId, tx: Commander<Response>) -> Self {
+    pub fn request(payload: String, peer: PeerId, tx: NetworkCommandTx<Response>) -> Self {
         Self::Request { payload, peer, tx }
     }
     pub fn response(payload: Vec<u8>, channel: ResponseChannel<Response>) -> Self {

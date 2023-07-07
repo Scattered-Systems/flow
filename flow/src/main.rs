@@ -5,23 +5,22 @@
 /// # Flow
 ///
 /// Flow describes the core node logic that all network participants must run.
-/// With the extensive integrations with Proton, Flow essentially becomes a 
+/// With the extensive integrations with Proton, Flow essentially becomes a
 /// type of headless operating system capable of synchronizing its activites
 /// across devices maximizing the users control and available resources.
-/// 
+///
 /// ## Harmonics
-/// 
+///
 /// Flow incorperates the Neo-Riemannian theory of music to describe the
 /// harmonics of the network(s) as well as the execution process of any transactions.
-/// 
-/// 
+///
+///
 /// ## Features
-/// 
+///
 /// - [x] Flow Client
 /// - [x] Flow Cluster
 /// - [x] Flow Network
 /// - [x] Flow Node
-
 pub use self::{context::*, settings::*, states::*};
 
 mod context;
@@ -32,16 +31,19 @@ pub mod app;
 pub mod cli;
 pub mod client;
 pub mod events;
-pub mod frames;
+pub mod platform;
 
 use anyhow::Result;
+use clap::Parser;
 
-#[cfg(not(any(feature = "wasi", feature = "wasm", target_family = "wasm", target_os = "wasi")))]
+#[cfg(not(any(
+    feature = "wasi",
+    feature = "wasm",
+    target_family = "wasm",
+    target_os = "wasi"
+)))]
 #[tokio::main]
 async fn main() -> Result<()> {
-    let mut args = std::env::args_os();
-    let _ = args.next().expect("No args");
-    println!("{:?}", args);
     app::starter().run().await?;
 
     Ok(())
