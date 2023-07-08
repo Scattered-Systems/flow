@@ -11,3 +11,13 @@ pub struct TaskManager {
     handle: Handle,
     registry: TaskRegistry,
 }
+
+impl TaskManager {
+    pub fn into_registry(self) -> TaskRegistry {
+        self.registry
+    }
+
+    pub fn push(&mut self, task: TaskManager) {
+        self.children.push(task)
+    }
+}

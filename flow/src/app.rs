@@ -56,7 +56,7 @@ impl Flow {
         self
     }
 
-    pub fn handle_command(&self, command: PlatformCommand) -> AsyncResult<()> {
+    pub async fn handle_command(&self, command: PlatformCommand) -> AsyncResult<()> {
         match command {
             _ => {
                 tracing::warn!("Unhandled Command: {:?}", command);
@@ -93,7 +93,7 @@ impl Flow {
         Ok(loop {
             tokio::select! {
                 Some(command) = self.commands.recv() => {
-                    self.handle_command(command).expect("Command Error");
+                    self.handle_command(command).await.expect("Command Error");
                 }
                 Some(event) = self.events.recv() => {
                     EventHandle::handle_event(&self, event).expect("Event Error");

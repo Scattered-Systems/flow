@@ -20,7 +20,7 @@ std = ["tokio"]
 wasi = []
 wasm = []
 
-tokio = ["tokio/macros", "tokio/sync"]
+tokio = ["tokio/macros", "tokio/sync", "tokio/time"]
 
 [lib]
 bench = true
@@ -37,7 +37,7 @@ serde.workspace = true
 serde_json.workspace = true
 smart-default.workspace = true
 strum.workspace = true
-tokio = { features = ["macros", "sync"], optional = true, version = "1"}
+tokio = { features = ["macros", "sync", "time"], version = "1"}
 
 [dev-dependencies]
 

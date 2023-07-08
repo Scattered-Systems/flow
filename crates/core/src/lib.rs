@@ -26,5 +26,6 @@ pub mod prelude {
     pub use super::primitives::*;
     pub use super::specs::*;
     pub use super::states::*;
+    pub use super::tasks::*;
     pub use super::utils::*;
 }

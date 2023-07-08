@@ -10,3 +10,15 @@ mod task;
 
 pub const DEFAULT_GROUP_NAME: &str = "default";
 
+
+use serde::{Deserialize, Serialize};
+use smart_default::SmartDefault;
+use strum::{Display, EnumIter, EnumString, EnumVariantNames};
+
+#[derive(Clone, Copy, Debug, Deserialize, Display, EnumIter, EnumString, EnumVariantNames, PartialEq, Serialize, SmartDefault)]
+#[serde(rename_all = "snake_case")]
+pub enum GroupName {
+   #[default]
+   Default,
+   Custom(&'static str),
+}
