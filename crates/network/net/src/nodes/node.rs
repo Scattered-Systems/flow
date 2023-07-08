@@ -3,9 +3,8 @@
    Contrib: FL03 <jo3mccain@icloud.com>
 */
 use super::{Command, Queue};
-use crate::{
-    events::NetworkEvent,
-    mainnet::{Mainnet, MainnetEvent},
+use crate::prelude::{
+    NetworkEvent, Mainnet, MainnetEvent,
 };
 use anyhow::Result;
 use fluidity_core::prelude::Power;

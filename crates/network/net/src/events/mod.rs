@@ -7,7 +7,3 @@ pub use self::network::*;
 
 mod network;
 
-#[derive(Debug)]
-pub enum Event {
-    Network(NetworkEvent),
-}

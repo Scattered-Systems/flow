@@ -3,7 +3,7 @@
     Contrib: FL03 <jo3mccain@icloud.com>
     Description: ... Summary ...
 */
-use crate::proto::reqres::{Request, Response};
+use crate::minis::reqres::{Request, Response};
 use libp2p::request_response::ResponseChannel;
 
 #[derive(Debug)]

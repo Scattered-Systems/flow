@@ -1,5 +1,5 @@
 use super::MainnetEvent;
-use crate::{peers::*, proto, Conduct};
+use crate::{peers::*, minis, Conduct};
 use libp2p::kad::{record::store::MemoryStore, Kademlia};
 use libp2p::swarm::NetworkBehaviour;
 use libp2p::{identify, identity::Keypair, mdns, ping};
@@ -12,7 +12,7 @@ pub struct Mainnet {
     pub kademlia: Kademlia<MemoryStore>,
     pub mdns: mdns::tokio::Behaviour,
     pub ping: ping::Behaviour,
-    pub reqres: proto::reqres::ProtoBehaviour,
+    pub reqres: minis::reqres::ProtoBehaviour,
 }
 
 impl Mainnet {
@@ -29,7 +29,7 @@ impl Mainnet {
             kademlia,
             mdns,
             ping: Default::default(),
-            reqres: proto::reqres::new(),
+            reqres: minis::reqres::new(),
         }
     }
 }

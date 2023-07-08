@@ -35,17 +35,25 @@ pub enum Power {
 
 impl Power {
     pub fn is_on(&self) -> bool {
-        if let Self::On = self {
-            true
+        match *self {
+            Self::On => true,
+            _ => false,
         }
-        false
+    }
+}
+
+impl From<Power> for u8 {
+    fn from(p: Power) -> Self {
+        match p {
+            Power::On => 1,
+            Power::Off => 0,
+        }
     }
 }
 
 impl From<u8> for Power {
     fn from(u: u8) -> Self {
         match u % 2 {
-            0 => Self::Off,
             1 => Self::On,
             _ => Self::Off,
         }

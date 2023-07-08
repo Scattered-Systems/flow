@@ -1,12 +1,12 @@
 [package]
 authors.workspace = true
 categories = []
-description = "This crate implements the Fluidity networking protocol stack."
+description = "This crate provides the individual protocols powering Flow's adaptive peer-to-peer networking stack"
 edition.workspace = true
 homepage.workspace = true
 keywords = ["minis", "libp2p", "network", "scsys"]
 license.workspace = true
-name = "fluidity-proto"
+name = "fluidity-minis"
 readme.workspace = true
 repository.workspace = true
 version.workspace = true

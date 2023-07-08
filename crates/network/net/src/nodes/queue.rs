@@ -3,7 +3,7 @@
     Contrib: FL03 <jo3mccain@icloud.com>
 */
 use super::NetworkCommandTx;
-use crate::proto::reqres::{self, RequestId};
+use crate::minis::reqres::{self, RequestId};
 use libp2p::{kad::QueryId, PeerId};
 use std::collections::{HashMap, HashSet};
 

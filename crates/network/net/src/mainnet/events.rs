@@ -3,7 +3,7 @@
     Contrib: FL03 <jo3mccain@icloud.com>
     Description: Custom Network Events
 */
-use crate::proto::reqres::ReqResEvent;
+use crate::minis::reqres::ReqResEvent;
 use libp2p::{identify, kad, mdns, ping};
 
 /// [MainnetEvent] describes the events considered by the network

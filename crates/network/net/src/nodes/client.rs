@@ -3,7 +3,7 @@
    Contrib: FL03 <jo3mccain@icloud.com>
 */
 use super::Command;
-use crate::{proto::reqres::Response, NetworkResult};
+use crate::{minis::reqres::Response, NetworkResult};
 use libp2p::core::transport::ListenerId;
 use libp2p::request_response::ResponseChannel;
 use libp2p::{Multiaddr, PeerId};
