@@ -12,10 +12,15 @@ mod utils;
 
 pub mod errors;
 pub mod events;
+#[cfg(feature = "frames")]
+pub mod frames;
 pub mod states;
 
 pub mod prelude {
+    pub use super::errors::*;
     pub use super::events::*;
+    #[cfg(feature = "frames")]
+    pub use super::frames::*;
     pub use super::primitives::*;
     pub use super::states::*;
     pub use super::utils::*;

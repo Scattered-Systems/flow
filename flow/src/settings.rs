@@ -110,7 +110,7 @@ impl Settings {
                 .prefix(env!("CARGO_PKG_NAME").to_ascii_uppercase().as_str()),
         );
         // Try gathering valid configuration files...
-        if let Ok(files) = try_collect_config_files("**/*.config.*", false) {
+        if let Ok(files) = try_collect_config_files("**/Flow.toml", false) {
             builder = builder.add_source(files);
         }
         builder.build()?.try_deserialize()

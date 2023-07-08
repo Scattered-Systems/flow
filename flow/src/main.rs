@@ -34,7 +34,6 @@ pub mod events;
 pub mod platform;
 
 use anyhow::Result;
-use clap::Parser;
 
 #[cfg(not(any(
     feature = "wasi",

@@ -6,3 +6,7 @@ pub use self::{cmds::*, frame::*};
 
 mod cmds;
 mod frame;
+
+pub struct Platform {
+   
+}
