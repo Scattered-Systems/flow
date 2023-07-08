@@ -17,6 +17,7 @@ where
     }
 }
 
+#[async_trait::async_trait]
 pub trait EventHandle<T: Event>: Send + Sync + 'static {
-    fn handle_event(&self, event: T) -> AsyncResult<()>;
+    async fn handle_event(&self, event: T) -> AsyncResult<()>;
 }

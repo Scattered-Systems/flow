@@ -38,8 +38,10 @@ use anyhow::Result;
 #[cfg(any(feature = "std", target_family = "unix", target_family = "windows"))]
 #[tokio::main]
 async fn main() -> Result<()> {
-
-    app::starter().spawn().await?;
+    let (app, client) = app::starter();
+    let (cmd, _rx) = platform::PlatformCommand::connect_init("".to_string());
+    let _ = client.commands.send(cmd).await?;
+    let _ = app.spawn().await?;
 
     Ok(())
 }

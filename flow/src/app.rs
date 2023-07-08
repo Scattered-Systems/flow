@@ -11,7 +11,7 @@ use std::sync::{Arc, Mutex};
 
 use tokio::sync::{mpsc, watch};
 
-pub fn starter() -> Flow {
+pub fn starter() -> (Flow, FlowClient) {
     let buffer: usize = 12;
     let mut args = std::env::args_os();
     let _ = args.next().expect("No args");
@@ -22,8 +22,9 @@ pub fn starter() -> Flow {
     let (power_tx, _) = watch::channel::<Power>(Default::default());
 
     let settings = Settings::new(None);
+    let app = Flow::new(commands_rx, events_rx, power_tx, settings).init();
     let client = FlowClient::new(commands_tx);
-    return Flow::new(commands_rx, events_rx, power_tx, settings).init();
+    return (app, client);
 }
 
 
@@ -70,8 +71,9 @@ impl Flow {
     }
 }
 
+#[async_trait::async_trait]
 impl EventHandle<FlowEvent> for Flow {
-    fn handle_event(&self, event: FlowEvent) -> AsyncResult<()> {
+    async fn handle_event(&self, event: FlowEvent) -> AsyncResult<()> {
         match event {
             _ => {
                 tracing::warn!("Unhandled Event: {:?}", event);
@@ -96,7 +98,7 @@ impl Flow {
                     self.handle_command(command).await.expect("Command Error");
                 }
                 Some(event) = self.events.recv() => {
-                    EventHandle::handle_event(&self, event).expect("Event Error");
+                    EventHandle::handle_event(&self, event).await.expect("Event Error");
                 }
                 _ = tokio::signal::ctrl_c() => {
                     let _ = self.power.send(Power::Off);
