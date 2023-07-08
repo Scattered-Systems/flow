@@ -15,20 +15,27 @@ version.workspace = true
 [features]
 default = ["std"]
 
+std = [
+    "tokio/full"
+]
 wasi = [
     "wasi-ext"
 ]
 wasm = []
 
 
-std = [
-    "tokio/full"
-]
-
 wasi-ext = [
+    "tokio",
     "tokio_wasi/full"
 ]
 
+tokio = [
+    "tokio/io-util",
+    "tokio/macros",
+    "tokio/rt",
+    "tokio/sync",
+    "tokio/time"
+]
 
 [[bin]]
 bench = true

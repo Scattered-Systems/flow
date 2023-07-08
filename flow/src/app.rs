@@ -6,17 +6,10 @@ use crate::events::FlowEvent;
 use crate::platform::PlatformCommand;
 use crate::{Context, Settings};
 use fluidity::prelude::{AsyncResult, EventHandle, Power};
+use std::sync::{Arc, Mutex};
 
-#[cfg(any(target_family = "unix", target_family = "windows"))]
-#[cfg(not(any(
-    feature = "wasi",
-    feature = "wasm",
-    target_family = "wasm",
-    target_os = "wasi"
-)))]
+
 use tokio::sync::{mpsc, watch};
-#[cfg(any(feature = "wasi", target_os = "wasi"))]
-use tokio_wasi::sync::{mpsc, watch};
 
 pub fn starter() -> Flow {
     let buffer: usize = 12;
@@ -44,7 +37,7 @@ impl FlowClient {
 }
 
 pub struct Flow {
-    context: Context,
+    context: Arc<Mutex<Context>>,
     commands: mpsc::Receiver<PlatformCommand>,
     
     events: mpsc::Receiver<FlowEvent>,
@@ -59,14 +52,14 @@ impl Flow {
         settings: Settings,
     ) -> Self {
         Self {
-            context: Context::new(settings.clone()),
+            context: Arc::new(Mutex::new(Context::new(settings.clone()))),
             commands,
             events,
             power,
         }
     }
     pub fn init(self) -> Self {
-        self.context.init_tracing();
+        self.context.lock().unwrap().init_tracing();
         tracing::info!("Flow: Initializing systems...");
         self
     }
