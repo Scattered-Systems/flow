@@ -21,7 +21,7 @@ pub struct NetworkStarter {
 impl NetworkStarter {
    pub fn new(capacity: Option<usize>, peer: Option<Peer>, power: watch::Receiver<Power>) -> Self {
       let buffer: usize = capacity.unwrap_or(1024);
-      let (cmds_tx, cmds_rx) = mpsc::channel::<Command>(buffer);
+      let (cmds_tx, cmds_rx) = mpsc::channel::<NetworkCommand>(buffer);
       let (events_tx, events_rx) = mpsc::channel::<NetworkEvent>(buffer);
       let swarm = libp2p::Swarm::from_peer(peer.unwrap_or_default());
       let client = NetworkClient::new(cmds_tx);

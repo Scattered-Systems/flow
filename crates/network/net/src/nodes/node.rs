@@ -2,7 +2,7 @@
    Appellation: node <nodes>
    Contrib: FL03 <jo3mccain@icloud.com>
 */
-use super::{Command, Queue};
+use super::{NetworkCommand, Queue};
 use crate::prelude::{
     NetworkEvent, Mainnet, MainnetEvent,
 };
@@ -20,7 +20,7 @@ use std::collections::hash_map::Entry;
 use tokio::sync::{mpsc, watch};
 
 pub struct NetworkNode {
-    pub cmds: mpsc::Receiver<Command>,
+    pub cmds: mpsc::Receiver<NetworkCommand>,
     pub events: mpsc::Sender<NetworkEvent>,
     pub power: watch::Receiver<Power>,
     pub queue: Queue,
@@ -29,7 +29,7 @@ pub struct NetworkNode {
 
 impl NetworkNode {
     pub fn new(
-        cmds: mpsc::Receiver<Command>,
+        cmds: mpsc::Receiver<NetworkCommand>,
         events: mpsc::Sender<NetworkEvent>,
         power: watch::Receiver<Power>,
         swarm: Swarm<Mainnet>,
@@ -43,9 +43,9 @@ impl NetworkNode {
         }
     }
 
-    pub fn handle_command(&mut self, cmd: Command) -> Result<()> {
+    pub fn handle_command(&mut self, cmd: NetworkCommand) -> Result<()> {
         match cmd {
-            Command::Dial { addr, pid, tx } => match self.queue.dial.entry(pid) {
+            NetworkCommand::Dial { addr, pid, tx } => match self.queue.dial.entry(pid) {
                 Entry::Occupied(_) => {
                     tracing::warn!("The peer ({}) is already being dialed", pid);
                 }
@@ -65,7 +65,7 @@ impl NetworkNode {
                     }
                 }
             },
-            Command::Listen { addr, tx } => {
+            NetworkCommand::Listen { addr, tx } => {
                 let msg = self.swarm.listen_on(addr).map_err(|e| e.into());
                 tracing::info!("Listening on {:?}", msg);
                 tx.send(msg).expect("Receiver to be still open.");

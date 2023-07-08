@@ -16,7 +16,7 @@ use tokio::sync::oneshot;
 pub type NetworkCommandTx<T = ()> = oneshot::Sender<NetworkResult<T>>;
 
 #[derive(Debug)]
-pub enum Command {
+pub enum NetworkCommand {
     Listen {
         addr: Multiaddr,
         tx: NetworkCommandTx<ListenerId>,
@@ -45,7 +45,7 @@ pub enum Command {
     },
 }
 
-impl Command {
+impl NetworkCommand {
     pub fn dial(addr: Multiaddr, pid: PeerId, tx: NetworkCommandTx) -> Self {
         Self::Dial { addr, pid, tx }
     }

@@ -9,19 +9,6 @@ use libp2p::identity::{Keypair, PublicKey};
 use libp2p::swarm::NetworkBehaviour;
 use libp2p::PeerId;
 
-#[async_trait]
-pub trait AsyncHandle<T: Send + Sync> {
-    type Output: Send + Sync;
-
-    async fn handle(&mut self, msg: T) -> Self::Output;
-}
-
-pub trait Handle<T> {
-    type Output;
-
-    fn handle(&mut self, msg: T) -> Self::Output;
-}
-
 pub trait Conduct: FromPeer + NetworkBehaviour {}
 
 pub trait FromPeerId {
