@@ -27,22 +27,27 @@ use strum::{Display, EnumIter, EnumString, EnumVariantNames};
 )]
 #[repr(u8)]
 pub enum Power {
+    Off = 0,
     #[default]
-    On = 0,
-    Off = 1,
+    On = 1,
+    
 }
 
 impl Power {
     pub fn is_on(&self) -> bool {
-        match self {
-            Self::On => true,
-            Self::Off => false,
+        if let Self::On = self {
+            true
         }
+        false
     }
-    pub fn is_off(&self) -> bool {
-        match self {
-            Self::On => false,
-            Self::Off => true,
+}
+
+impl From<u8> for Power {
+    fn from(u: u8) -> Self {
+        match u % 2 {
+            0 => Self::Off,
+            1 => Self::On,
+            _ => Self::Off,
         }
     }
 }
