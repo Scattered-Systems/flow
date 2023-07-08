@@ -21,11 +21,11 @@ mod types {
     /// [AsyncError] is a simple type alias for a [Box]ed [dyn std::error::Error] that is [Send] and [Sync].
     pub type AsyncError = Box<dyn std::error::Error + Send + Sync>;
     /// [AsyncResult] is a simple type alias for a [Result] with a [Box]ed [dyn std::error::Error] as its [Err] variant.
-    pub type AsyncResult<T = ()> = Result<T, AsyncError>;
+    pub type AsyncResult<T = ()> = std::result::Result<T, AsyncError>;
     ///
     pub type BoxError = Box<dyn std::error::Error>;
     /// [BoxResult] is a simple type alias for a [Result] with a [Box]ed [dyn std::error::Error] as its [Err] variant.
-    pub type BoxResult<T = ()> = Result<T, BoxError>;
+    pub type BoxResult<T = ()> = std::result::Result<T, BoxError>;
 }
 
 #[cfg(any(feature = "wasm", all(target_family = "wasm", not(target_os = "wasi"))))]

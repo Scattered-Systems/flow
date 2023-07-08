@@ -7,9 +7,8 @@ use crate::platform::{client::FlowClient, PlatformCommand};
 use crate::{Context, Settings};
 use fluidity::prelude::{AsyncResult, EventHandle, Power};
 use std::sync::{Arc, Mutex};
-
-
 use tokio::sync::{mpsc, watch};
+use tokio::task::JoinHandle;
 
 pub fn starter() -> (Flow, FlowClient) {
     let buffer: usize = 12;
@@ -17,30 +16,57 @@ pub fn starter() -> (Flow, FlowClient) {
     let _ = args.next().expect("No args");
     let (_, io_rx) = watch::channel::<std::env::ArgsOs>(args);
     let (commands_tx, commands_rx) = mpsc::channel::<PlatformCommand>(buffer);
-    let (_, events_rx) = mpsc::channel::<FlowEvent>(buffer);
+    let (events_tx, _erx) = mpsc::channel::<FlowEvent>(buffer);
 
     let (power_tx, _) = watch::channel::<Power>(Default::default());
 
     let settings = Settings::new(None);
-    let app = Flow::new(commands_rx, events_rx, power_tx, settings).init();
+    let app = Flow::new(commands_rx, events_tx, power_tx, settings).init();
     let client = FlowClient::new(commands_tx);
     return (app, client);
 }
 
+pub struct FlowStarter {
+    pub app: Flow,
+    pub client: FlowClient,
+    pub events: mpsc::Receiver<FlowEvent>,
+}
 
+impl FlowStarter {
+    pub fn new(buffer: Option<usize>) -> Self {
+        let buffer = buffer.unwrap_or(12);
+        let (commands_tx, commands_rx) = mpsc::channel::<PlatformCommand>(buffer);
+        let (events_tx, events_rx) = mpsc::channel::<FlowEvent>(buffer);
+
+        let (power_tx, _) = watch::channel::<Power>(Default::default());
+
+        let settings = Settings::new(None);
+        let app = Flow::new(commands_rx, events_tx, power_tx, settings).init();
+        let client = FlowClient::new(commands_tx);
+        Self {
+            app,
+            client,
+            events: events_rx,
+        }
+    }
+
+    pub async fn start(mut self) -> tokio::task::JoinHandle<()> {
+        self.app.spawn()
+    }
+}
 
 pub struct Flow {
     context: Arc<Mutex<Context>>,
     commands: mpsc::Receiver<PlatformCommand>,
-    
-    events: mpsc::Receiver<FlowEvent>,
+
+    events: mpsc::Sender<FlowEvent>,
     power: watch::Sender<Power>,
 }
 
 impl Flow {
     pub fn new(
         commands: mpsc::Receiver<PlatformCommand>,
-        events: mpsc::Receiver<FlowEvent>,
+        events: mpsc::Sender<FlowEvent>,
         power: watch::Sender<Power>,
         settings: Settings,
     ) -> Self {
@@ -60,45 +86,23 @@ impl Flow {
     pub async fn handle_command(&self, command: PlatformCommand) -> AsyncResult<()> {
         match command {
             _ => {
+                self.events
+                    .send(FlowEvent::Response {
+                        message: "".to_string(),
+                    })
+                    .await
+                    .expect("Event Error");
                 tracing::warn!("Unhandled Command: {:?}", command);
             }
         }
         Ok(())
     }
 
-    pub fn spawn(self) -> tokio::task::JoinHandle<anyhow::Result<()>> {
-        tokio::spawn(self.run())
-    }
-}
-
-#[async_trait::async_trait]
-impl EventHandle<FlowEvent> for Flow {
-    async fn handle_event(&self, event: FlowEvent) -> AsyncResult<()> {
-        match event {
-            _ => {
-                tracing::warn!("Unhandled Event: {:?}", event);
-            }
-        }
-        Ok(())
-    }
-}
-
-#[cfg(any(target_family = "unix", target_family = "windows"))]
-#[cfg(not(any(
-    feature = "wasi",
-    feature = "wasm",
-    target_family = "wasm",
-    target_os = "wasi"
-)))]
-impl Flow {
-    pub async fn run(mut self) -> anyhow::Result<()> {
-        Ok(loop {
+    pub async fn run(mut self) -> () {
+        loop {
             tokio::select! {
                 Some(command) = self.commands.recv() => {
                     self.handle_command(command).await.expect("Command Error");
-                }
-                Some(event) = self.events.recv() => {
-                    EventHandle::handle_event(&self, event).await.expect("Event Error");
                 }
                 _ = tokio::signal::ctrl_c() => {
                     let _ = self.power.send(Power::Off);
@@ -106,7 +110,11 @@ impl Flow {
                     break;
                 }
             }
-        })
+        }
+    }
+
+    pub fn spawn(self) -> tokio::task::JoinHandle<()> {
+        tokio::spawn(self.run())
     }
 }
 

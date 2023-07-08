@@ -12,9 +12,7 @@ repository.workspace = true
 version.workspace = true
 
 [features]
-default = ["frames", "std"]
-
-frames = []
+default = ["std"]
 
 std = ["tokio"]
 wasi = ["tokio"]
