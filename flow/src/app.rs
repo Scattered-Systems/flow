@@ -44,7 +44,7 @@ impl Flow {
         settings: Settings,
     ) -> Self {
         Self {
-            context: Arc::new(Mutex::new(Context::new(settings.clone()))),
+            context: Arc::new(Mutex::new(Context::new(settings))),
             commands,
             events,
             power,
@@ -63,6 +63,10 @@ impl Flow {
             }
         }
         Ok(())
+    }
+
+    pub fn spawn(self) -> tokio::task::JoinHandle<anyhow::Result<()>> {
+        tokio::spawn(self.run())
     }
 }
 

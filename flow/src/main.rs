@@ -38,7 +38,8 @@ use anyhow::Result;
 #[cfg(any(feature = "std", target_family = "unix", target_family = "windows"))]
 #[tokio::main]
 async fn main() -> Result<()> {
-    app::starter().run().await?;
+
+    app::starter().spawn().await?;
 
     Ok(())
 }
