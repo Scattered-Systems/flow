@@ -29,18 +29,13 @@ mod states;
 
 pub mod app;
 pub mod cli;
-pub mod client;
 pub mod events;
 pub mod platform;
+pub mod rpc;
 
 use anyhow::Result;
 
-#[cfg(not(any(
-    feature = "wasi",
-    feature = "wasm",
-    target_family = "wasm",
-    target_os = "wasi"
-)))]
+#[cfg(any(feature = "std", target_family = "unix", target_family = "windows"))]
 #[tokio::main]
 async fn main() -> Result<()> {
     app::starter().run().await?;

@@ -4,6 +4,8 @@
 */
 pub use self::{cmds::*, frame::*};
 
+pub mod client;
+
 mod cmds;
 mod frame;
 

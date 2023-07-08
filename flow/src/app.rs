@@ -3,7 +3,7 @@
    Contrib: FL03 <jo3mccain@icloud.com>
 */
 use crate::events::FlowEvent;
-use crate::platform::PlatformCommand;
+use crate::platform::{client::FlowClient, PlatformCommand};
 use crate::{Context, Settings};
 use fluidity::prelude::{AsyncResult, EventHandle, Power};
 use std::sync::{Arc, Mutex};
@@ -26,15 +26,7 @@ pub fn starter() -> Flow {
     return Flow::new(commands_rx, events_rx, power_tx, settings).init();
 }
 
-pub struct FlowClient {
-    pub commands: mpsc::Sender<PlatformCommand>,
-}
 
-impl FlowClient {
-    pub fn new(commands: mpsc::Sender<PlatformCommand>) -> Self {
-        Self { commands }
-    }
-}
 
 pub struct Flow {
     context: Arc<Mutex<Context>>,
@@ -102,7 +94,6 @@ impl Flow {
                 Some(event) = self.events.recv() => {
                     EventHandle::handle_event(&self, event).expect("Event Error");
                 }
-
                 _ = tokio::signal::ctrl_c() => {
                     let _ = self.power.send(Power::Off);
                     tracing::info!("Shutting down...");
