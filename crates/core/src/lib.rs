@@ -16,6 +16,7 @@ pub mod events;
 #[cfg(feature = "frames")]
 pub mod frames;
 pub mod states;
+pub mod tasks;
 
 pub mod prelude {
     pub use super::errors::*;

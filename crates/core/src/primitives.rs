@@ -1,7 +1,6 @@
 /*
    Appellation: primitives <module>
    Contrib: FL03 <jo3mccain@icloud.com>
-   Description: ... Summary ...
 */
 #[cfg(any(feature = "wasm", all(target_family = "wasm", not(target_os = "wasi"))))]
 pub use self::wasm::*;

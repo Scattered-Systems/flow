@@ -52,7 +52,7 @@ impl Flow {
     }
     pub fn init(self) -> Self {
         self.context.lock().unwrap().init_tracing();
-        tracing::info!("Flow: Initializing systems...");
+        tracing::info!("Initializing systems...");
         self
     }
 
