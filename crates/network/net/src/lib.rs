@@ -6,6 +6,7 @@ pub use self::{errors::*, primitives::*, specs::*, utils::*};
 
 pub use fluidity_minis as minis;
 
+pub mod config;
 pub mod events;
 pub mod mainnet;
 pub mod nodes;
@@ -17,6 +18,7 @@ mod specs;
 mod utils;
 
 pub mod prelude {
+    pub use super::config::*;
     pub use super::errors::*;
     pub use super::events::*;
     pub use super::mainnet::*;
