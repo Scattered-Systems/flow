@@ -2,11 +2,11 @@
    Appellation: layer <module>
    Contrib: FL03 <jo3mccain@icloud.com>
 */
+use crate::minis::reqres::Response;
 /// # Node Layer
 ///
 /// This module implements the node layer; describing the available async operations
 use crate::NetworkResult;
-use crate::minis::reqres::Response;
 use libp2p::core::transport::ListenerId;
 use libp2p::request_response::ResponseChannel;
 use libp2p::{Multiaddr, PeerId};

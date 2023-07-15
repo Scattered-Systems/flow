@@ -15,27 +15,27 @@ use smart_default::SmartDefault;
 use strum::{Display, EnumIter, EnumString, EnumVariantNames};
 
 #[derive(
-   Clone,
-   Copy,
-   Debug,
-   Deserialize,
-   Display,
-   EnumIter,
-   EnumString,
-   EnumVariantNames,
-   Eq,
-   Hash,
-   Ord,
-   PartialEq,
-   PartialOrd,
-   Serialize,
-   SmartDefault,
+    Clone,
+    Copy,
+    Debug,
+    Deserialize,
+    Display,
+    EnumIter,
+    EnumString,
+    EnumVariantNames,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    Serialize,
+    SmartDefault,
 )]
 #[serde(rename_all = "snake_case")]
 pub enum GroupName {
-   #[default]
-   Default,
-   Custom(&'static str),
+    #[default]
+    Default,
+    Custom(&'static str),
 }
 
 impl GroupName {

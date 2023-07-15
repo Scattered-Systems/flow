@@ -14,19 +14,18 @@ use fluidity_core::prelude::Power;
 use tokio::sync::{mpsc, watch};
 
 pub struct NetworkStarter {
-   client: NetworkClient,
-   node: NetworkNode
+    client: NetworkClient,
+    node: NetworkNode,
 }
 
 impl NetworkStarter {
-   pub fn new(capacity: Option<usize>, peer: Option<Peer>, power: watch::Receiver<Power>) -> Self {
-      let buffer: usize = capacity.unwrap_or(1024);
-      let (cmds_tx, cmds_rx) = mpsc::channel::<NetworkCommand>(buffer);
-      let (events_tx, events_rx) = mpsc::channel::<NetworkEvent>(buffer);
-      let swarm = libp2p::Swarm::from_peer(peer.unwrap_or_default());
-      let client = NetworkClient::new(cmds_tx);
-      let node = NetworkNode::new(cmds_rx, events_tx, power, swarm);
-      Self { client, node }
-   }
-
+    pub fn new(capacity: Option<usize>, peer: Option<Peer>, power: watch::Receiver<Power>) -> Self {
+        let buffer: usize = capacity.unwrap_or(1024);
+        let (cmds_tx, cmds_rx) = mpsc::channel::<NetworkCommand>(buffer);
+        let (events_tx, events_rx) = mpsc::channel::<NetworkEvent>(buffer);
+        let swarm = libp2p::Swarm::from_peer(peer.unwrap_or_default());
+        let client = NetworkClient::new(cmds_tx);
+        let node = NetworkNode::new(cmds_rx, events_tx, power, swarm);
+        Self { client, node }
+    }
 }

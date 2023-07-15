@@ -14,7 +14,7 @@ use fluidity::prelude::Power;
 use tokio::sync::{mpsc, watch};
 
 pub struct Platform {
-    commands: mpsc::Sender<PlatformCommand>,
-    events: mpsc::Receiver<PlatformEvent>,
+    commands: mpsc::Receiver<PlatformCommand>,
+    events: mpsc::Sender<PlatformEvent>,
     power: watch::Receiver<Power>,
 }

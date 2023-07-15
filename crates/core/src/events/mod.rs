@@ -8,6 +8,12 @@ pub trait Event {
     fn event(&self) -> &Self;
 }
 
+pub trait Eventful {
+    type Event: Event;
+
+    fn event(&self) -> &Self::Event;
+}
+
 impl<T> Event for T
 where
     T: Sized,

@@ -8,7 +8,7 @@ mod power;
 mod state;
 
 pub trait StateSpec<T> {
-    fn content(&self) -> Option<T>;
+    fn message(&self) -> &T;
     fn state(&self) -> &Self {
         self
     }
@@ -20,5 +20,9 @@ pub trait StateSpace<T> {
 
 pub enum BaseState {
     Invalid(),
-    Valid()
+    Valid(),
+}
+
+pub trait StateTransition<T> {
+    fn transition(&self, state: T) -> T;
 }

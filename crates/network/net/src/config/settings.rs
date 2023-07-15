@@ -9,11 +9,23 @@ use strum::{Display, EnumIter, EnumString, EnumVariantNames};
 #[derive(Clone, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
 pub struct NetworkConfig {
     pub max_peers: Option<usize>,
-    
 }
 
-
-#[derive(Clone, Debug, Deserialize, Display, EnumIter, EnumString, EnumVariantNames, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(
+    Clone,
+    Debug,
+    Deserialize,
+    Display,
+    EnumIter,
+    EnumString,
+    EnumVariantNames,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    Serialize,
+)]
 pub enum OverlayConfig {
     Kademlia {
         k: usize,
@@ -23,4 +35,3 @@ pub enum OverlayConfig {
     },
     None,
 }
-

@@ -13,10 +13,18 @@ version.workspace = true
 
 [features]
 default = ["tokio"]
-wasi = [
-    "tokio_wasi"
-]
+
+
+wasi = []
 wasm = []
+
+tokio = [
+    "tokio/io-util",
+    "tokio/macros",
+    "tokio/rt",
+    "tokio/sync",
+    "tokio/time"
+]
 
 
 [lib]
@@ -36,8 +44,8 @@ serde.workspace = true
 serde_json.workspace = true
 smart-default.workspace = true
 strum.workspace = true
-
-tokio = { features = ["macros"], optional = true, version = "1" }
+tokio = { features = ["io-util", "macros", "sync", "time"], version = "1"}
+tracing = { features = [], version = "0.1" }
 
 [dependencies.libp2p]
 features = [
@@ -55,3 +63,8 @@ rustc-args = ["--cfg", "docsrs"]
 
 [target.wasm32-wasi.dependencies]
 tokio_wasi = { features = ["macros"], optional = true, version = "1" }
+
+[target.wasm32-wasi.features]
+tokio_wasi = [
+    "tokio_wasi/macros"
+]

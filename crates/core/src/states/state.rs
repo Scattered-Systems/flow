@@ -9,8 +9,63 @@ use serde::{Deserialize, Serialize};
 use smart_default::SmartDefault;
 use strum::{Display, EnumIter, EnumString, EnumVariantNames};
 
+#[derive(Clone, Debug, Default, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+pub struct State {
+    message: String,
+    state: States,
+}
+
+impl State {
+    pub fn new(message: impl ToString, state: States) -> Self {
+        Self {
+            message: message.to_string(),
+            state,
+        }
+    }
+    /// Sets the state to [States::Invalid]
+    pub fn invalidate(&mut self) {
+        self.state = States::Invalid;
+    }
+    /// Returns true if the state is [States::Valid]
+    pub fn is_valid(&self) -> bool {
+        self.state == States::Valid
+    }
+    /// Returns the message
+    pub fn message(&self) -> &str {
+        &self.message
+    }
+
+    pub fn set_message(&mut self, message: impl ToString) {
+        self.message = message.to_string();
+    }
+    pub fn set_state(&mut self, state: States) {
+        self.state = state;
+    }
+    /// Returns the current state
+    pub fn state(&self) -> States {
+        self.state
+    }
+
+    pub fn update(&mut self, state: State) {
+        *self = state;
+    }
+}
+
+impl From<States> for State {
+    fn from(state: States) -> Self {
+        Self::new("", state)
+    }
+}
+
+impl From<State> for States {
+    fn from(q: State) -> Self {
+        q.state
+    }
+}
+
 #[derive(
     Clone,
+    Copy,
     Debug,
     Deserialize,
     Display,
@@ -27,64 +82,43 @@ use strum::{Display, EnumIter, EnumString, EnumVariantNames};
 )]
 #[repr(u8)]
 #[strum(serialize_all = "snake_case")]
-pub enum State {
-    Invalid {
-        message: String,
-    } = 0,
+pub enum States {
+    Invalid = 0,
     #[default]
-    Valid {
-        message: String,
-    } = 1,
+    Valid = 1,
 }
 
-impl State {
+impl States {
     /// [State::Invalid] variant constructor
-    pub fn invalid(message: impl ToString) -> Self {
-        Self::Invalid { message: message.to_string() }
+    pub fn invalid() -> Self {
+        Self::Invalid
     }
     /// [State::Valid] variant constructor
-    pub fn valid(message: impl ToString) -> Self {
-        Self::Valid { message: message.to_string() }
+    pub fn valid() -> Self {
+        Self::Valid
     }
+    /// [State::is_valid]
     pub fn is_valid(&self) -> bool {
-        match *self {
-            Self::Invalid { .. } => false,
-            _ => true,
-        }
+        *self == Self::Valid
     }
-    pub fn message(&self) -> &str {
-        match *self {
-            Self::Invalid { ref message } => message,
-            Self::Valid { ref message } => message,
-        }
-    }
-    pub fn set(&mut self, message: impl ToString) {
-        let state = self.with(message);
-        *self = state;
-    }
-    pub fn with(&self, message: impl ToString) -> Self {
-        match *self {
-            Self::Invalid { .. } => Self::invalid(message),
-            _ => Self::valid(message),
-        }
-    }
+    ///
     pub fn update(&mut self, state: Self) {
         *self = state;
     }
 }
 
-impl AsMut<str> for State {
-    fn as_mut(&mut self) -> &mut str {
-        match *self {
-            Self::Invalid { ref mut message } => message,
-            Self::Valid { ref mut message } => message,
+impl From<u8> for States {
+    fn from(u: u8) -> Self {
+        match u % 2 {
+            1 => Self::Valid,
+            _ => Self::Invalid,
         }
     }
 }
 
-impl AsRef<str> for State {
-    fn as_ref(&self) -> &str {
-        self.message()
+impl From<States> for u8 {
+    fn from(s: States) -> Self {
+        s as u8
     }
 }
 
@@ -94,11 +128,11 @@ mod tests {
 
     #[test]
     fn test_state() {
-        let mut state = State::valid("");
+        let mut state = State::new("", States::valid());
+        state.set_message("test");
         assert!(state.is_valid());
-        state.set("test");
+        state.invalidate();
         assert_eq!(state.message(), "test");
-        state.update(State::invalid("test"));
         assert!(!state.is_valid())
     }
 }

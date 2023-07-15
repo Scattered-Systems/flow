@@ -36,11 +36,9 @@ use anyhow::Result;
 
 use app::Flow;
 use events::FlowEvent;
-use platform::{client::FlowClient, PlatformCommand};
 use fluidity::prelude::Power;
+use platform::{client::FlowClient, PlatformCommand};
 use tokio::sync::{mpsc, watch};
-
-
 
 #[tokio::main]
 async fn main() -> Result<()> {

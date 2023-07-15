@@ -12,25 +12,27 @@ use tokio::sync::{mpsc, oneshot};
 
 #[derive(Clone)]
 pub struct NetworkClient {
-    pub sender: mpsc::Sender<NetworkCommand>,
+    command: mpsc::Sender<NetworkCommand>,
 }
 
 impl NetworkClient {
-    pub fn new(sender: mpsc::Sender<NetworkCommand>) -> Self {
-        Self { sender }
+    pub fn new(command: mpsc::Sender<NetworkCommand>) -> Self {
+        Self { command }
     }
     pub fn sender(&self) -> mpsc::Sender<NetworkCommand> {
-        self.sender.clone()
+        self.command.clone()
     }
     pub fn try_send(&mut self, command: NetworkCommand) -> anyhow::Result<()> {
-        self.sender.try_send(command)?;
+        self.command.try_send(command)?;
         Ok(())
     }
     /// Dial the given peer at the given address.
     pub async fn dial(&mut self, addr: Multiaddr, pid: PeerId) -> NetworkResult {
         tracing::info!("Dialing {} at {}", pid, addr);
         let (tx, rx) = oneshot::channel();
-        self.sender().send(NetworkCommand::dial(addr, pid, tx)).await?;
+        self.sender()
+            .send(NetworkCommand::dial(addr, pid, tx))
+            .await?;
         rx.await?
     }
     /// Listen for incoming connections on the given address.
@@ -49,7 +51,9 @@ impl NetworkClient {
     /// Find the providers for the given file on the DHT.
     pub async fn providers(&mut self, cid: String) -> NetworkResult<HashSet<PeerId>> {
         let (tx, rx) = oneshot::channel();
-        self.sender().send(NetworkCommand::providers(cid, tx)).await?;
+        self.sender()
+            .send(NetworkCommand::providers(cid, tx))
+            .await?;
         rx.await?
     }
     /// Request the content of the given file from the given peer.

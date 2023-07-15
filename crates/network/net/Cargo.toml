@@ -31,12 +31,6 @@ test = true
 [build-dependencies]
 
 [dependencies]
-# core sdk
-fluidity-core = { features = [], path = "../../core", version = "0.1.12" }
-# re-exports
-fluidity-minis = { features = [], path = "../minis", version = "0.1.12" }
-
-# base 
 anyhow.workspace = true
 async-trait.workspace = true
 bytes = "1"
@@ -48,6 +42,16 @@ smart-default.workspace = true
 strum.workspace = true
 tokio = { features = ["io-util", "macros", "sync", "time"], version = "1"}
 tracing = { features = [], version = "0.1" }
+
+[dependencies.fluidity-core]
+features = []
+path = "../../core"
+version = "0.1.12"
+
+[dependencies.fluidity-minis]
+features = []
+path = "../minis"
+version = "0.1.12"
 
 [dependencies.libp2p]
 features = [

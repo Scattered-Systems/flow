@@ -31,6 +31,6 @@ pub enum PlatformEvent {
     Initializing,
     #[default]
     Idle,
-    
+
     Terminate,
 }

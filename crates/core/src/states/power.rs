@@ -30,7 +30,6 @@ pub enum Power {
     Off = 0,
     #[default]
     On = 1,
-    
 }
 
 impl Power {

@@ -1,5 +1,5 @@
 use super::MainnetEvent;
-use crate::{peers::*, minis, Conduct};
+use crate::{minis, peers::*, Conduct};
 use libp2p::kad::{record::store::MemoryStore, Kademlia};
 use libp2p::swarm::NetworkBehaviour;
 use libp2p::{identify, identity::Keypair, mdns, ping};
