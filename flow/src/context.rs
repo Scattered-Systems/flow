@@ -28,11 +28,3 @@ impl Context {
         self.cnf.clone()
     }
 }
-
-impl Default for Context {
-    fn default() -> Self {
-        Self {
-            cnf: Settings::default(),
-        }
-    }
-}

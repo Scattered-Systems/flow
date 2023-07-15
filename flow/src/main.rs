@@ -39,7 +39,7 @@ use anyhow::Result;
 #[tokio::main]
 async fn main() -> Result<()> {
     let (app, client) = app::starter();
-    let (cmd, _rx) = platform::PlatformCommand::connect_init("".to_string());
+    let cmd = platform::PlatformCommand::connect("".to_string());
     let _ = client.commands.send(cmd).await?;
     let _ = app.spawn().await?;
 

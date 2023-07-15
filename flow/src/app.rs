@@ -4,7 +4,7 @@
 */
 use crate::events::FlowEvent;
 use crate::platform::{client::FlowClient, PlatformCommand};
-use crate::{Context, Settings};
+use crate::{Context, Settings, State};
 use fluidity::prelude::{AsyncResult, EventHandle, Power};
 use std::sync::{Arc, Mutex};
 use tokio::sync::{mpsc, watch};
@@ -50,7 +50,7 @@ impl FlowStarter {
         }
     }
 
-    pub async fn start(mut self) -> tokio::task::JoinHandle<()> {
+    pub async fn start(self) -> JoinHandle<()> {
         self.app.spawn()
     }
 }
@@ -58,8 +58,8 @@ impl FlowStarter {
 pub struct Flow {
     context: Arc<Mutex<Context>>,
     commands: mpsc::Receiver<PlatformCommand>,
-
     events: mpsc::Sender<FlowEvent>,
+    state: Arc<Mutex<State>>,
     power: watch::Sender<Power>,
 }
 
@@ -74,6 +74,7 @@ impl Flow {
             context: Arc::new(Mutex::new(Context::new(settings))),
             commands,
             events,
+            state: Arc::new(Mutex::new(State::default())),
             power,
         }
     }
@@ -83,7 +84,7 @@ impl Flow {
         self
     }
 
-    pub async fn handle_command(&self, command: PlatformCommand) -> AsyncResult<()> {
+    async fn handle_command(&mut self, command: PlatformCommand) -> AsyncResult<()> {
         match command {
             _ => {
                 self.events
@@ -102,6 +103,9 @@ impl Flow {
         loop {
             tokio::select! {
                 Some(command) = self.commands.recv() => {
+                    let mut state = self.state();
+                    state.update(State::processing(command.clone().to_string()));
+                    self.state.lock().unwrap().update(state);
                     self.handle_command(command).await.expect("Command Error");
                 }
                 _ = tokio::signal::ctrl_c() => {
@@ -113,10 +117,15 @@ impl Flow {
         }
     }
 
-    pub fn spawn(self) -> tokio::task::JoinHandle<()> {
+    pub fn spawn(self) -> JoinHandle<()> {
         tokio::spawn(self.run())
     }
+
+    pub fn state(&self) -> State {
+        self.state.lock().unwrap().clone()
+    }
 }
+
 
 #[cfg(any(feature = "wasi", target_os = "wasi"))]
 impl Flow {

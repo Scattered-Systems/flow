@@ -60,6 +60,9 @@ impl State {
             _ => false,
         }
     }
+    pub fn update(&mut self, state: Self) {
+        *self = state;
+    }
 }
 
 #[cfg(test)]
@@ -68,9 +71,9 @@ mod tests {
 
     #[test]
     fn test_state_idle() {
-        let state = State::idle();
+        let mut state = State::idle();
         assert!(state.is_idle());
-        assert!(!state.is_processing());
-        assert_eq!(state.to_string(), "idle")
+        state.update(State::processing("test".to_string()));
+        assert!(state.is_processing())
     }
 }

@@ -27,8 +27,10 @@ use strum::{Display, EnumIter, EnumString, EnumVariantNames};
 )]
 #[repr(u8)]
 pub enum PlatformEvent {
+    Connect,
     Initializing,
     #[default]
     Idle,
+    
     Terminate,
 }
