@@ -1,12 +1,39 @@
 /*
     Appellation: settings <module>
     Contrib: FL03 <jo3mccain@icloud.com>
-    Description: ... Summary ...
 */
 use config::{Config, Environment};
 use decanter::prelude::Hashable;
 use scsys::prelude::{try_collect_config_files, ConfigResult, SerdeDisplay};
 use serde::{Deserialize, Serialize};
+use strum::{Display, EnumIter, EnumString, EnumVariantNames};
+
+#[derive(
+    Clone,
+    Copy,
+    Debug,
+    Default,
+    Deserialize,
+    Display,
+    EnumIter,
+    EnumString,
+    EnumVariantNames,
+    Eq,
+    Hash,
+    Hashable,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    Serialize,
+)]
+#[repr(u8)]
+#[serde(rename_all = "lowercase")]
+pub enum Mode {
+    #[default]
+    Development = 0,
+    Staging = 1,
+    Production = 2,
+}
 
 #[derive(
     Clone,
@@ -79,14 +106,14 @@ impl From<tracing::Level> for Logger {
 )]
 pub struct Settings {
     pub logger: Logger,
-    pub mode: String,
+    pub mode: Mode,
 }
 
 impl Settings {
-    pub fn new(mode: Option<String>) -> Self {
+    pub fn new(logger: Option<Logger>, mode: Option<Mode>) -> Self {
         Self {
-            logger: Default::default(),
-            mode: mode.unwrap_or_else(|| String::from("production")),
+            logger: logger.unwrap_or_default(),
+            mode: mode.unwrap_or_default(),
         }
     }
     pub fn builder() -> config::ConfigBuilder<config::builder::DefaultState> {
@@ -116,14 +143,18 @@ impl Settings {
         builder.build()?.try_deserialize()
     }
 
-    pub fn logger(&self) -> &Logger {
-        &self.logger
+    pub fn logger(&self) -> Logger {
+        self.logger.clone()
+    }
+
+    pub fn mode(&self) -> Mode {
+        self.mode
     }
 }
 
 impl Default for Settings {
     fn default() -> Self {
-        let d = Self::new(None);
+        let d = Self::new(None, None);
         Self::build().unwrap_or(d)
     }
 }

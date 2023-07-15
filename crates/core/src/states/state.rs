@@ -51,6 +51,12 @@ impl State {
     }
 }
 
+impl std::fmt::Display for State {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", serde_json::to_string(self).unwrap())
+    }
+}
+
 impl From<States> for State {
     fn from(state: States) -> Self {
         Self::new("", state)
@@ -135,7 +141,11 @@ mod tests {
         state.set_message(message);
         // Set the state to invalid
         state.invalidate();
-        assert_eq!(state.message(), message, "State Error: the message isn't equal to the assigned message");
+        assert_eq!(
+            state.message(),
+            message,
+            "State Error: the message isn't equal to the assigned message"
+        );
         assert!(!state.is_valid())
     }
 }

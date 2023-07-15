@@ -21,32 +21,41 @@
 /// - [x] Flow Cluster
 /// - [x] Flow Network
 /// - [x] Flow Node
-pub use self::{context::*, settings::*};
+pub use self::{app::*, context::*, settings::*};
 
+mod app;
 mod context;
 mod settings;
 
-pub mod app;
 pub mod cli;
+pub mod clients;
 pub mod events;
 pub mod platform;
 pub mod rpc;
 
-use app::Flow;
+use clients::FlowClient;
 use events::FlowEvent;
 use fluidity::prelude::Power;
-use platform::{client::FlowClient, PlatformCommand};
+use platform::PlatformCommand;
 
+use std::sync::{Arc, Mutex};
 use tokio::sync::{mpsc, watch};
-use tracing::Instrument;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     let (app, client) = starter();
-
     let cmd = PlatformCommand::connect("".to_string());
-    let _ = app.spawn().await.expect("Failed to spawn app");
- 
+    let _ = app.spawn();
+    let _ = client
+        .commands()
+        .send(cmd)
+        .await
+        .expect("Failed to send command");
+    // let _ = app.spawn().await.expect("Failed to spawn app");
+    // tokio::spawn(async move {
+    //     let mut client = client.clone();
+    //     let _ = client.send(cmd).await.expect("Failed to send command");
+    // }).await;
 
     Ok(())
 }
@@ -64,6 +73,5 @@ fn starter() -> (Flow, FlowClient) {
     let settings = Settings::build().expect("Failed to build settings");
     let app = Flow::new(commands_rx, events_tx, power_tx, settings).init();
     let client = FlowClient::new(commands_tx);
-
     return (app, client);
 }

@@ -14,7 +14,6 @@ version.workspace = true
 [features]
 default = ["tokio"]
 
-
 wasi = []
 wasm = []
 
@@ -64,7 +63,3 @@ rustc-args = ["--cfg", "docsrs"]
 [target.wasm32-wasi.dependencies]
 tokio_wasi = { features = ["macros"], optional = true, version = "1" }
 
-[target.wasm32-wasi.features]
-tokio_wasi = [
-    "tokio_wasi/macros"
-]

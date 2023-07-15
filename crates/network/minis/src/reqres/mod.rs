@@ -19,7 +19,7 @@ pub use libp2p::request_response::RequestId;
 
 pub type ProtoBehaviour = request_response::Behaviour<ProtocolCodec>;
 
-pub type ReqResEvent = request_response::Event<Request, Response>;
+pub type RequestResponseEvent = request_response::Event<Request, Response>;
 
 pub fn new() -> ProtoBehaviour {
     let protocols: Vec<(Proto, ProtocolSupport)> = vec![(Proto::default(), ProtocolSupport::Full)];

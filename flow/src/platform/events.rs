@@ -26,6 +26,7 @@ use strum::{Display, EnumIter, EnumString, EnumVariantNames};
     SmartDefault,
 )]
 #[repr(u8)]
+#[strum(serialize_all = "snake_case")]
 pub enum PlatformEvent {
     Connect,
     Initializing,

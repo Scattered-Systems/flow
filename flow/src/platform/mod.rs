@@ -4,8 +4,6 @@
 */
 pub use self::{cmds::*, events::*, frame::*};
 
-pub mod client;
-
 mod cmds;
 mod events;
 mod frame;

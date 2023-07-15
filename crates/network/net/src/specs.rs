@@ -1,16 +1,11 @@
 /*
     Appellation: specs <module>
     Contrib: FL03 <jo3mccain@icloud.com>
-    Description: ... summary ...
 */
-use crate::peers::FromPeer;
-use async_trait::async_trait;
 use libp2p::identity::{Keypair, PublicKey};
-use libp2p::swarm::NetworkBehaviour;
 use libp2p::PeerId;
 
-pub trait Conduct: FromPeer + NetworkBehaviour {}
-
+/// [FromPeerId] describes the conversion of a [PeerId] into some type
 pub trait FromPeerId {
     fn from_pid(pid: PeerId) -> Self;
 }
@@ -24,6 +19,7 @@ where
     }
 }
 
+/// [FromPublicKey] describes the conversion of a [PublicKey] into some type
 pub trait FromPublicKey {
     fn from_pk(pk: PublicKey) -> Self;
 }
@@ -37,6 +33,7 @@ where
     }
 }
 
+/// [FromKeypair] describes the conversion of a [Keypair] into some type
 pub trait FromKeypair {
     fn from_kp(kp: Keypair) -> Self;
 }

@@ -2,10 +2,10 @@
    Appellation: nodes <module>
    Contrib: FL03 <jo3mccain@icloud.com>
 */
-pub use self::{client::*, layer::*, node::*, queue::*};
+pub use self::{client::*, cmds::*, node::*, queue::*};
 
 mod client;
-mod layer;
+mod cmds;
 mod node;
 mod queue;
 

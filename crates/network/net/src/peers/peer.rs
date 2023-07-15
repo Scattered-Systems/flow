@@ -1,30 +1,11 @@
 /*
     Appellation: peer <module>
     Contrib: FL03 <jo3mccain@icloud.com>
-    Description: ... Summary ...
 */
-use crate::{BoxedTransport, Conduct};
+use crate::prelude::{BoxedTransport, Conduct};
 use libp2p::identity::{DecodingError, Keypair, PublicKey, SigningError};
 use libp2p::swarm::{Swarm, SwarmBuilder};
 use libp2p::{core::upgrade, noise, tcp, yamux, PeerId, Transport};
-
-pub trait IntoPeer {
-    fn into_peer(self) -> Peer;
-}
-
-pub trait FromPeer {
-    fn from_peer(peer: Peer) -> Self;
-}
-
-impl<B> FromPeer for Swarm<B>
-where
-    B: Conduct,
-{
-    fn from_peer(peer: Peer) -> Self {
-        let behaviour = B::from_peer(peer.clone());
-        SwarmBuilder::with_tokio_executor(peer.transport(), behaviour, peer.pid()).build()
-    }
-}
 
 #[derive(Clone, Debug)]
 pub struct Peer {
@@ -43,6 +24,10 @@ impl Peer {
     }
     pub fn sign(&self, data: impl AsRef<[u8]>) -> Result<Vec<u8>, SigningError> {
         self.kp.sign(data.as_ref())
+    }
+    pub fn swarm<B: Conduct>(self) -> Swarm<B> {
+        let behaviour = B::from_peer(self.clone());
+        SwarmBuilder::with_tokio_executor(self.transport(), behaviour, self.pid()).build()
     }
     ///
     pub fn transport(&self) -> BoxedTransport {
@@ -88,15 +73,15 @@ impl TryFrom<u8> for Peer {
     }
 }
 
-impl<C> From<Peer> for Swarm<C>
-where
-    C: Conduct,
-{
-    fn from(peer: Peer) -> Self {
-        let behaviour = C::from_peer(peer.clone());
-        SwarmBuilder::with_tokio_executor(peer.transport(), behaviour, peer.pid()).build()
-    }
-}
+// impl<C> From<Peer> for Swarm<C>
+// where
+//     C: Conduct,
+// {
+//     fn from(peer: Peer) -> Self {
+//         let behaviour = C::from_peer(peer.clone());
+//         SwarmBuilder::with_tokio_executor(peer.transport(), behaviour, peer.pid()).build()
+//     }
+// }
 
 impl From<Peer> for PeerId {
     fn from(peer: Peer) -> Self {

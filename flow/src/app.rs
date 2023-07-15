@@ -2,13 +2,14 @@
    Appellation: app <module>
    Contrib: FL03 <jo3mccain@icloud.com>
 */
+use crate::clients::FlowClient;
+use crate::events::FlowEvent;
+use crate::platform::PlatformCommand;
 /// # Flow
 ///
 /// The platform agnostic core of the Flow network.
-use crate::events::FlowEvent;
-use crate::platform::{client::FlowClient, PlatformCommand};
 use crate::{Context, Settings};
-use fluidity::prelude::{AsyncResult, EventHandle, Power, State};
+use fluidity::prelude::{AsyncResult, Power, State};
 use std::sync::{Arc, Mutex};
 use tokio::sync::{mpsc, watch};
 use tokio::task::JoinHandle;
@@ -21,7 +22,6 @@ pub struct Flow {
     power: watch::Sender<Power>,
     state: Arc<Mutex<State>>,
 }
-
 
 impl Flow {
     pub fn new(
@@ -49,23 +49,17 @@ impl Flow {
         tracing::info!("Initializing systems...");
         self
     }
-    #[instrument(skip(self), name = "handler")]
+    #[instrument(skip(self), name = "handler", fields(message = %command))]
     async fn handle_command(&mut self, command: &PlatformCommand) -> AsyncResult<()> {
         match command {
             _ => {
-                self.events
-                    .send(FlowEvent::Response {
-                        message: "".to_string(),
-                    })
-                    .await
-                    .expect("Event Error");
-                tracing::warn!("Unhandled Command: {:?}", command);
+                tracing::warn!("Unhandled Command");
             }
         }
         Ok(())
     }
 
-    #[instrument(skip(self), name = "runner")]
+    #[instrument(skip(self), name = "runner", fields(state = %self.state()))]
     pub async fn run(mut self) {
         loop {
             tokio::select! {

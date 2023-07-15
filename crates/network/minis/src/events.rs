@@ -1,9 +1,8 @@
 /*
     Appellation: event <module>
     Contrib: FL03 <jo3mccain@icloud.com>
-    Description: ... Summary ...
 */
-use crate::minis::reqres::{Request, Response};
+use crate::reqres::{Request, Response};
 use libp2p::request_response::ResponseChannel;
 
 #[derive(Debug)]

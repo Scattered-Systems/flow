@@ -21,6 +21,10 @@ impl TaskManager {
         self.children.clone()
     }
 
+    pub fn handle(&self) -> Handle {
+        self.handle.clone()
+    }
+
     pub fn push(&mut self, task: TaskManager) {
         self.children.push(task)
     }

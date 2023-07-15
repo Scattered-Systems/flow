@@ -1,4 +1,4 @@
-mode = "dev"
+mode = "development"
 
 [logger]
 level = "info"

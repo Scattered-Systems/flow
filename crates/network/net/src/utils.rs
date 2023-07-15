@@ -1,9 +1,9 @@
 /*
     Appellation: utils <module>
     Contrib: FL03 <jo3mccain@icloud.com>
-    Description: ... summary ...
 */
-use crate::{peers::Peer, Conduct};
+use crate::conduct::Conduct;
+use crate::peers::Peer;
 use libp2p::identity::{self, Keypair};
 use libp2p::swarm::SwarmBuilder;
 

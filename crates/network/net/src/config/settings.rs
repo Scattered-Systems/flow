@@ -25,6 +25,7 @@ pub struct NetworkConfig {
     PartialEq,
     PartialOrd,
     Serialize,
+    SmartDefault,
 )]
 pub enum OverlayConfig {
     Kademlia {
@@ -33,5 +34,6 @@ pub enum OverlayConfig {
         beta: usize,
         max_peers: Option<usize>,
     },
+    #[default]
     None,
 }
