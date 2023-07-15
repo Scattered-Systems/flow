@@ -34,21 +34,36 @@ pub mod rpc;
 
 use anyhow::Result;
 
-#[cfg(any(feature = "std", target_family = "unix", target_family = "windows"))]
+use app::Flow;
+use events::FlowEvent;
+use platform::{client::FlowClient, PlatformCommand};
+use fluidity::prelude::Power;
+use tokio::sync::{mpsc, watch};
+
+
+
 #[tokio::main]
 async fn main() -> Result<()> {
-    let (app, client) = app::starter();
-    let cmd = platform::PlatformCommand::connect("".to_string());
+    let (app, client) = starter();
+    let cmd = PlatformCommand::connect("".to_string());
     let _ = client.commands.send(cmd).await?;
     let _ = app.spawn().await?;
 
     Ok(())
 }
 
-#[cfg(any(feature = "wasi", target_os = "wasi"))]
-#[tokio_wasi::main]
-async fn main() -> Result<()> {
-    app::starter().run().await?;
+fn starter() -> (Flow, FlowClient) {
+    let buffer: usize = 12;
+    let mut args = std::env::args_os();
+    let _ = args.next().expect("No args");
+    let (_, io_rx) = watch::channel::<std::env::ArgsOs>(args);
+    let (commands_tx, commands_rx) = mpsc::channel::<PlatformCommand>(buffer);
+    let (events_tx, _erx) = mpsc::channel::<FlowEvent>(buffer);
 
-    Ok(())
+    let (power_tx, _) = watch::channel::<Power>(Default::default());
+
+    let settings = Settings::new(None);
+    let app = Flow::new(commands_rx, events_tx, power_tx, settings).init();
+    let client = FlowClient::new(commands_tx);
+    return (app, client);
 }

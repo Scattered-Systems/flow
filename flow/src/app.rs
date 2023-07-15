@@ -2,6 +2,9 @@
    Appellation: app <module>
    Contrib: FL03 <jo3mccain@icloud.com>
 */
+/// # Flow
+/// 
+/// The platform agnostic core of the Flow network.
 use crate::events::FlowEvent;
 use crate::platform::{client::FlowClient, PlatformCommand};
 use crate::{Context, Settings};
@@ -10,54 +13,7 @@ use std::sync::{Arc, Mutex};
 use tokio::sync::{mpsc, watch};
 use tokio::task::JoinHandle;
 
-pub fn starter() -> (Flow, FlowClient) {
-    let buffer: usize = 12;
-    let mut args = std::env::args_os();
-    let _ = args.next().expect("No args");
-    let (_, io_rx) = watch::channel::<std::env::ArgsOs>(args);
-    let (commands_tx, commands_rx) = mpsc::channel::<PlatformCommand>(buffer);
-    let (events_tx, _erx) = mpsc::channel::<FlowEvent>(buffer);
 
-    let (power_tx, _) = watch::channel::<Power>(Default::default());
-
-    let settings = Settings::new(None);
-    let app = Flow::new(commands_rx, events_tx, power_tx, settings).init();
-    let client = FlowClient::new(commands_tx);
-    return (app, client);
-}
-
-pub struct FlowStarter {
-    pub app: Flow,
-    pub client: FlowClient,
-    pub events: mpsc::Receiver<FlowEvent>,
-}
-
-impl FlowStarter {
-    pub fn new(buffer: Option<usize>) -> Self {
-        let buffer = buffer.unwrap_or(12);
-        let (commands_tx, commands_rx) = mpsc::channel::<PlatformCommand>(buffer);
-        let (events_tx, events_rx) = mpsc::channel::<FlowEvent>(buffer);
-
-        let (power_tx, _) = watch::channel::<Power>(Default::default());
-
-        let settings = Settings::new(None);
-        let app = Flow::new(commands_rx, events_tx, power_tx, settings).init();
-        let client = FlowClient::new(commands_tx);
-        Self {
-            app,
-            client,
-            events: events_rx,
-        }
-    }
-
-    pub async fn start(self) -> JoinHandle<()> {
-        self.app.spawn()
-    }
-}
-
-/// # Flow
-/// 
-/// The platform agnostic core of the Flow network.
 pub struct Flow {
     context: Arc<Mutex<Context>>,
     commands: mpsc::Receiver<PlatformCommand>,
@@ -89,7 +45,7 @@ impl Flow {
         self
     }
 
-    async fn handle_command(&mut self, command: PlatformCommand) -> AsyncResult<()> {
+    async fn handle_command(&mut self, command: &PlatformCommand) -> AsyncResult<()> {
         match command {
             _ => {
                 self.events
@@ -109,9 +65,9 @@ impl Flow {
             tokio::select! {
                 Some(command) = self.commands.recv() => {
                     let mut state = self.state();
-                    state.update(State::valid(command.clone().to_string()));
+                    state.update(State::valid(&command));
                     self.state.lock().unwrap().update(state);
-                    self.handle_command(command).await.expect("Command Error");
+                    self.handle_command(&command).await.expect("Command Error");
                 }
                 _ = tokio::signal::ctrl_c() => {
                     let _ = self.power.send(Power::Off);

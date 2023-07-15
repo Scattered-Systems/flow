@@ -13,8 +13,20 @@ pub struct TaskManager {
 }
 
 impl TaskManager {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn children(&self) -> Vec<TaskManager> {
+        self.children.clone()
+    }
+
     pub fn push(&mut self, task: TaskManager) {
         self.children.push(task)
+    }
+
+    pub fn registry(&self) -> TaskRegistry {
+        self.registry.clone()
     }
 }
 
@@ -31,5 +43,19 @@ impl Default for TaskManager {
 impl IntoRegistry for TaskManager {
     fn into_registry(self) -> TaskRegistry {
         self.registry
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[tokio::test]
+    async fn test_task_manager() {
+        let mut manager = TaskManager::new();
+        let mut child = TaskManager::new();
+        child.push(TaskManager::new());
+        manager.push(child);
+        assert_eq!(manager.children().len(), 1);
     }
 }

@@ -36,6 +36,9 @@ impl TaskRegistry {
         *count += 1;
         self.tasks.lock().unwrap().insert(task, *count);
     }
+    pub fn len(&self) -> usize {
+        self.tasks().len()
+    }
     pub fn tasks(&self) -> HashMap<Task, usize> {
         self.tasks.lock().unwrap().clone()
     }
