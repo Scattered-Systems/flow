@@ -32,20 +32,21 @@ pub mod events;
 pub mod platform;
 pub mod rpc;
 
-use anyhow::Result;
-
 use app::Flow;
 use events::FlowEvent;
 use fluidity::prelude::Power;
 use platform::{client::FlowClient, PlatformCommand};
+
 use tokio::sync::{mpsc, watch};
+use tracing::Instrument;
 
 #[tokio::main]
-async fn main() -> Result<()> {
+async fn main() -> anyhow::Result<()> {
     let (app, client) = starter();
+
     let cmd = PlatformCommand::connect("".to_string());
-    let _ = client.commands.send(cmd).await?;
-    let _ = app.spawn().await?;
+    let _ = app.spawn().await.expect("Failed to spawn app");
+ 
 
     Ok(())
 }
@@ -60,8 +61,9 @@ fn starter() -> (Flow, FlowClient) {
 
     let (power_tx, _) = watch::channel::<Power>(Default::default());
 
-    let settings = Settings::new(None);
+    let settings = Settings::build().expect("Failed to build settings");
     let app = Flow::new(commands_rx, events_tx, power_tx, settings).init();
     let client = FlowClient::new(commands_tx);
+
     return (app, client);
 }

@@ -5,6 +5,7 @@
 use super::PlatformCommand;
 use tokio::sync::{mpsc, watch};
 
+#[derive(Clone, Debug)]
 pub struct FlowClient {
     pub commands: mpsc::Sender<PlatformCommand>,
 }

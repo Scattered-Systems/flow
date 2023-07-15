@@ -12,6 +12,7 @@ use fluidity::prelude::{AsyncResult, EventHandle, Power, State};
 use std::sync::{Arc, Mutex};
 use tokio::sync::{mpsc, watch};
 use tokio::task::JoinHandle;
+use tracing::instrument;
 
 pub struct Flow {
     context: Arc<Mutex<Context>>,
@@ -20,6 +21,7 @@ pub struct Flow {
     power: watch::Sender<Power>,
     state: Arc<Mutex<State>>,
 }
+
 
 impl Flow {
     pub fn new(
@@ -42,13 +44,12 @@ impl Flow {
     pub fn context(&self) -> Context {
         self.context.lock().unwrap().clone()
     }
-
     pub fn init(self) -> Self {
         self.context.lock().unwrap().init_tracing();
         tracing::info!("Initializing systems...");
         self
     }
-
+    #[instrument(skip(self), name = "handler")]
     async fn handle_command(&mut self, command: &PlatformCommand) -> AsyncResult<()> {
         match command {
             _ => {
@@ -64,6 +65,7 @@ impl Flow {
         Ok(())
     }
 
+    #[instrument(skip(self), name = "runner")]
     pub async fn run(mut self) {
         loop {
             tokio::select! {
@@ -81,7 +83,7 @@ impl Flow {
             }
         }
     }
-
+    #[instrument(skip(self), name = "flow")]
     pub fn spawn(self) -> JoinHandle<()> {
         tokio::spawn(self.run())
     }

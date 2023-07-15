@@ -129,10 +129,13 @@ mod tests {
     #[test]
     fn test_state() {
         let mut state = State::new("", States::valid());
-        state.set_message("test");
-        assert!(state.is_valid());
+        let message: &str = "test";
+        assert!(state.is_valid(), "The provided state isn't valid");
+        // Set the message
+        state.set_message(message);
+        // Set the state to invalid
         state.invalidate();
-        assert_eq!(state.message(), "test");
+        assert_eq!(state.message(), message, "State Error: the message isn't equal to the assigned message");
         assert!(!state.is_valid())
     }
 }

@@ -20,7 +20,6 @@ impl Context {
         self.settings().logger.setup_env();
         fmt::fmt()
             .with_env_filter(EnvFilter::from_default_env())
-            .with_thread_ids(true)
             .init();
     }
     pub fn settings(&self) -> Settings {
