@@ -87,7 +87,7 @@ impl From<State> for States {
     SmartDefault,
 )]
 #[repr(u8)]
-#[strum(serialize_all = "snake_case")]
+#[strum(serialize_all = "lowercase")]
 pub enum States {
     Invalid = 0,
     #[default]
