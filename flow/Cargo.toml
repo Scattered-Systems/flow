@@ -41,7 +41,7 @@ tokio = [
 bench = true
 doctest = false
 name = "flow"
-test = false
+test = true
 
 [build-dependencies]
 

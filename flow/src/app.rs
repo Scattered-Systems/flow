@@ -4,8 +4,8 @@
 */
 use crate::events::FlowEvent;
 use crate::platform::{client::FlowClient, PlatformCommand};
-use crate::{Context, Settings, State};
-use fluidity::prelude::{AsyncResult, EventHandle, Power};
+use crate::{Context, Settings};
+use fluidity::prelude::{AsyncResult, EventHandle, Power, State};
 use std::sync::{Arc, Mutex};
 use tokio::sync::{mpsc, watch};
 use tokio::task::JoinHandle;
@@ -55,6 +55,9 @@ impl FlowStarter {
     }
 }
 
+/// # Flow
+/// 
+/// The platform agnostic core of the Flow network.
 pub struct Flow {
     context: Arc<Mutex<Context>>,
     commands: mpsc::Receiver<PlatformCommand>,
@@ -70,11 +73,13 @@ impl Flow {
         power: watch::Sender<Power>,
         settings: Settings,
     ) -> Self {
+        let context = Arc::new(Mutex::new(Context::new(settings)));
+        let state = Arc::new(Mutex::new(State::default()));
         Self {
-            context: Arc::new(Mutex::new(Context::new(settings))),
+            context,
             commands,
             events,
-            state: Arc::new(Mutex::new(State::default())),
+            state,
             power,
         }
     }
@@ -104,7 +109,7 @@ impl Flow {
             tokio::select! {
                 Some(command) = self.commands.recv() => {
                     let mut state = self.state();
-                    state.update(State::processing(command.clone().to_string()));
+                    state.update(State::valid(command.clone().to_string()));
                     self.state.lock().unwrap().update(state);
                     self.handle_command(command).await.expect("Command Error");
                 }
