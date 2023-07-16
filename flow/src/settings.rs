@@ -121,14 +121,11 @@ impl Settings {
     }
     pub fn build() -> ConfigResult<Self> {
         let mut builder = Self::builder()
-            .set_default("mode", "production")?
+            .set_default("mode", "development")?
             .set_default("logger.level", "info")?;
 
         if let Ok(log) = std::env::var("RUST_LOG") {
             builder = builder.set_override("logger.level", log)?;
-        };
-        if let Ok(port) = std::env::var("SERVER_PORT") {
-            builder = builder.set_override("server.port", port)?;
         };
         // Add in related environment variables
         builder = builder.add_source(
@@ -154,7 +151,7 @@ impl Settings {
 
 impl Default for Settings {
     fn default() -> Self {
-        let d = Self::new(None, None);
+        let d = Self::new(None, Mode::Development.into());
         Self::build().unwrap_or(d)
     }
 }

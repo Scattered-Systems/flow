@@ -18,7 +18,11 @@ std = ["tokio"]
 wasi = ["tokio"]
 wasm = []
 
-tokio = ["tokio/io-util", "tokio/macros", "tokio/rt", "tokio/sync", "tokio/time"]
+tokio = [
+    "tokio/macros",
+    "tokio/sync",
+    "tokio/time",
+]
 
 [lib]
 bench = true
@@ -36,7 +40,14 @@ serde.workspace = true
 serde_json.workspace = true
 smart-default.workspace = true
 strum.workspace = true
-tokio = { features = ["io-util", "macros", "rt", "sync", "time"], version = "1"}
+
+[dependencies.tokio]
+features = [
+    "macros",
+    "sync",
+    "time",
+]
+version = "1"
 
 [dev-dependencies]
 
@@ -50,4 +61,4 @@ js-sys = "0.3"
 wasm-bindgen = { features = ["serde-serialize"], version = "0.2" }
 wasm-bindgen-futures = "0.4"
 
-[target.wasm32-wasi]
+[target.wasm32-wasi.dependencies]
