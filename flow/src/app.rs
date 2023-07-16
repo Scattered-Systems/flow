@@ -49,7 +49,7 @@ impl Flow {
         tracing::info!("Initializing systems...");
         self
     }
-    #[instrument(skip(self), name = "handler", fields(message = %command))]
+    #[instrument(fields(message = %command), skip(self), name = "handler", target = "flow")]
     async fn handle_command(&mut self, command: &PlatformCommand) -> AsyncResult<()> {
         match command {
             _ => {
@@ -59,25 +59,24 @@ impl Flow {
         Ok(())
     }
 
-    #[instrument(skip(self), name = "runner", fields(state = %self.state()))]
+    #[instrument(fields(state = %self.state()), skip(self), name = "runner", target = "flow")]
     pub async fn run(mut self) {
         loop {
             tokio::select! {
                 Some(command) = self.commands.recv() => {
-                    let mut state = self.state();
-                    state.set_message(&command);
                     self.state.lock().unwrap().set_message(&command);
                     self.handle_command(&command).await.expect("Command Error");
                 }
                 _ = tokio::signal::ctrl_c() => {
-                    let _ = self.power.send(Power::Off);
+                    let _ = self.power.send(Power::Off).expect("Power Error");
+
                     tracing::info!("Shutting down...");
                     break;
                 }
             }
         }
     }
-    #[instrument(skip(self), name = "flow")]
+    #[instrument(skip(self), name = "spawn", target = "flow")]
     pub fn spawn(self) -> JoinHandle<()> {
         tokio::spawn(self.run())
     }
