@@ -14,6 +14,12 @@ use std::sync::{Arc, Mutex};
 use tokio::sync::{mpsc, watch};
 use tokio::task::JoinHandle;
 use tracing::instrument;
+use tracing_subscriber::{fmt, EnvFilter};
+
+pub trait AppInitializer {
+    fn init(self) -> Self;
+    fn init_tracing(self) -> Self;
+}
 
 pub struct Flow {
     context: Arc<Mutex<Context>>,
@@ -41,11 +47,12 @@ impl Flow {
     pub fn context(&self) -> Context {
         self.context.lock().unwrap().clone()
     }
+    #[instrument(skip(self), name = "init", target = "flow")]
     pub fn init(self) -> Self {
-        self.context.lock().unwrap().init_tracing();
         tracing::info!("Initializing systems...");
         self
     }
+    
     #[instrument(fields(message = %command), skip(self), name = "handler", target = "flow")]
     async fn handle_command(&mut self, command: &PlatformCommand) -> AsyncResult<()> {
         match command {
@@ -78,4 +85,15 @@ impl Flow {
         tokio::spawn(self.run())
     }
 
+    pub fn with_tracing(self) -> Self {
+        self.context().settings().logger.setup_env();
+        fmt::fmt()
+            .compact()
+            .with_env_filter(EnvFilter::from_default_env())
+            .with_line_number(false)
+            .with_target(true)
+            .with_thread_ids(false)
+            .init();
+        self
+    }
 }

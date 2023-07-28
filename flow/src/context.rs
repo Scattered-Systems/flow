@@ -18,16 +18,7 @@ impl Context {
     pub fn new(cnf: Settings, state: State) -> Self {
         Self { cnf, state }
     }
-    pub fn init_tracing(&self) {
-        self.settings().logger.setup_env();
-        fmt::fmt()
-            .compact()
-            .with_env_filter(EnvFilter::from_default_env())
-            .with_line_number(false)
-            .with_target(true)
-            .with_thread_ids(false)
-            .init();
-    }
+    
     pub fn settings(&self) -> Settings {
         self.cnf.clone()
     }
