@@ -76,7 +76,10 @@ impl Flow {
             tokio::select! {
                 Some(command) = self.commands.recv() => {
                     self.context.lock().unwrap().state_mut().set_message(&command);
-                    self.handle_command(&command).await.expect("Command Error");
+                    if Err(e) = self.handle_command(&command).await {
+                        tracing::error!("Command Error: {:?}", e);
+                        self.context.lock().unwrap().state_mut().invalidate();
+                    }
                 }
                 _ = tokio::signal::ctrl_c() => {
                     let _ = self.power.send(Power::Off).expect("Power Error");
