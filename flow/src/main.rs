@@ -38,7 +38,6 @@ use events::FlowEvent;
 use fluidity::prelude::Power;
 use platform::PlatformCommand;
 
-use std::sync::{Arc, Mutex};
 use tokio::sync::{mpsc, watch};
 
 #[tokio::main]

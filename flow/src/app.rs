@@ -15,10 +15,7 @@ use tokio::sync::{mpsc, watch};
 use tokio::task::JoinHandle;
 use tracing::instrument;
 use tracing_subscriber::{
-    fmt::{
-        self,
-        format::{Compact, DefaultFields, Format},
-    },
+    fmt,
     util::SubscriberInitExt,
     EnvFilter,
 };
@@ -76,7 +73,7 @@ impl Flow {
             tokio::select! {
                 Some(command) = self.commands.recv() => {
                     self.context.lock().unwrap().state_mut().set_message(&command);
-                    if Err(e) = self.handle_command(&command).await {
+                    if let Err(e) = self.handle_command(&command).await {
                         tracing::error!("Command Error: {:?}", e);
                         self.context.lock().unwrap().state_mut().invalidate();
                     }
