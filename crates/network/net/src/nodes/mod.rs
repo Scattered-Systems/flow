@@ -14,8 +14,8 @@ use fluidity_core::prelude::Power;
 use tokio::sync::{mpsc, watch};
 
 pub struct NetworkStarter {
-    client: NetworkClient,
-    node: NetworkNode,
+    pub client: NetworkClient,
+    pub node: NetworkNode,
 }
 
 impl NetworkStarter {

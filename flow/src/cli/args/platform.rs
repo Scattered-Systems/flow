@@ -10,5 +10,5 @@ use serde::{Deserialize, Serialize};
 )]
 pub struct PlatformArgs {
     #[clap(long, short)]
-    pub target: String,
+    pub target: Option<String>,
 }

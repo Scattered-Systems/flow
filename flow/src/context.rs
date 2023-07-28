@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 
 use tracing_subscriber::{fmt, EnvFilter};
 
-#[derive(Clone, Debug, Default, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub struct Context {
     cnf: Settings,
     state: State,
@@ -18,7 +18,7 @@ impl Context {
     pub fn new(cnf: Settings, state: State) -> Self {
         Self { cnf, state }
     }
-    
+
     pub fn settings(&self) -> Settings {
         self.cnf.clone()
     }
@@ -34,5 +34,4 @@ impl Context {
     pub fn set_state(&mut self, state: State) {
         self.state = state;
     }
-
 }

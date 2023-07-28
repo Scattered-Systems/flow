@@ -7,11 +7,19 @@ pub use self::opts::*;
 pub mod args;
 mod opts;
 
+use crate::Context;
 use clap::Parser;
 use serde::{Deserialize, Serialize};
 
 pub fn new() -> FlowCli {
     FlowCli::parse()
+}
+
+pub async fn handler(ctx: &mut Context, command: FlowCli) -> anyhow::Result<()> {
+    match command.command {
+        Options::Platform(args) => {}
+    }
+    Ok(())
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, Hash, Ord, Parser, PartialEq, PartialOrd, Serialize)]

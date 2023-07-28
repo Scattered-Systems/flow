@@ -8,7 +8,12 @@ use scsys::prelude::{try_collect_config_files, ConfigResult, SerdeDisplay};
 use serde::{Deserialize, Serialize};
 use std::str::FromStr;
 use strum::{Display, EnumIter, EnumString, EnumVariantNames};
-
+use tracing::Level;
+use tracing_subscriber::fmt::{
+    self,
+    format::{Compact, DefaultFields, Format},
+};
+use tracing_subscriber::EnvFilter;
 #[derive(
     Clone,
     Copy,
@@ -65,28 +70,42 @@ pub enum LogLevel {
     Warn = 4,
 }
 
-impl From<tracing::Level> for LogLevel {
-    fn from(level: tracing::Level) -> Self {
+impl From<LogLevel> for tracing::level_filters::LevelFilter {
+    fn from(level: LogLevel) -> Self {
+        use tracing::level_filters::LevelFilter;
         use LogLevel::*;
         match level {
-            tracing::Level::DEBUG => Debug,
-            tracing::Level::ERROR => Error,
-            tracing::Level::INFO => Info,
-            tracing::Level::TRACE => Trace,
-            tracing::Level::WARN => Warn,
+            Debug => LevelFilter::DEBUG,
+            Error => LevelFilter::ERROR,
+            Info => LevelFilter::INFO,
+            Trace => LevelFilter::TRACE,
+            Warn => LevelFilter::WARN,
         }
     }
 }
 
-impl From<LogLevel> for tracing::Level {
-    fn from(level: LogLevel) -> tracing::Level {
+impl From<Level> for LogLevel {
+    fn from(level: Level) -> Self {
         use LogLevel::*;
         match level {
-            Debug => tracing::Level::DEBUG,
-            Error => tracing::Level::ERROR,
-            Info => tracing::Level::INFO,
-            Trace => tracing::Level::TRACE,
-            Warn => tracing::Level::WARN,
+            Level::DEBUG => Debug,
+            Level::ERROR => Error,
+            Level::INFO => Info,
+            Level::TRACE => Trace,
+            Level::WARN => Warn,
+        }
+    }
+}
+
+impl From<LogLevel> for Level {
+    fn from(level: LogLevel) -> Level {
+        use LogLevel::*;
+        match level {
+            Debug => Level::DEBUG,
+            Error => Level::ERROR,
+            Info => Level::INFO,
+            Trace => Level::TRACE,
+            Warn => Level::WARN,
         }
     }
 }
@@ -111,9 +130,7 @@ pub struct Logger {
 
 impl Logger {
     pub fn new(level: LogLevel) -> Self {
-        Self {
-            level,
-        }
+        Self { level }
     }
     pub fn from_env() -> Self {
         if let Ok(v) = std::env::var("RUST_LOG") {
@@ -132,10 +149,19 @@ impl Logger {
         std::env::set_var("RUST_LOG", self.level.to_string());
         self
     }
-    pub fn init_tracing(self) {
+    pub fn subscriber_builder(self) -> fmt::Subscriber<DefaultFields, Format<Compact>> {
         self.setup_env();
-        tracing_subscriber::fmt::init();
-        tracing::debug!("Success: tracing layer initialized...");
+        let filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("info"));
+        fmt::fmt()
+            .compact()
+            .with_ansi(true)
+            .with_env_filter(filter)
+            .with_line_number(false)
+            .with_max_level(self.level())
+            .with_target(false)
+            .with_thread_ids(false)
+            .with_thread_names(false)
+            .finish()
     }
 }
 

@@ -16,6 +16,7 @@ use libp2p::{
 };
 use std::collections::hash_map::Entry;
 use tokio::sync::{mpsc, watch};
+use tracing::instrument;
 
 pub struct NetworkNode {
     pub cmds: mpsc::Receiver<NetworkCommand>,
@@ -40,8 +41,8 @@ impl NetworkNode {
             swarm,
         }
     }
-
-    pub fn handle_command(&mut self, cmd: NetworkCommand) -> Result<()> {
+    #[instrument(skip(self), name = "handle::command", target = "node")]
+    fn handle_command(&mut self, cmd: NetworkCommand) -> Result<()> {
         match cmd {
             NetworkCommand::Dial { addr, pid, tx } => match self.queue.dial.entry(pid) {
                 Entry::Occupied(_) => {
@@ -74,7 +75,8 @@ impl NetworkNode {
     }
 
     /// Handle events from the swarm; the stateful network manager
-    pub async fn handle_event(
+    #[instrument(skip(self), name = "handle::event", target = "node")]
+    async fn handle_event(
         &mut self,
         event: SwarmEvent<MainnetEvent, THandlerErr<Mainnet>>,
     ) -> Result<()> {
@@ -199,25 +201,19 @@ impl NetworkNode {
         };
         Ok(())
     }
-
-    pub async fn run(mut self) -> Result<()> {
-        Ok(loop {
+    #[instrument(skip(self), name = "run", target = "node")]
+    pub async fn run(mut self) {
+        loop {
             tokio::select! {
-                cmd = self.cmds.recv() => {
-                    if let Some(cmd) = cmd {
-                        self.handle_command(cmd)?;
-                    } else {
-                        tracing::info!("Command channel closed");
-                        break;
-                    }
+                Some(cmd) = self.cmds.recv() => {
+                    self.handle_command(cmd).expect("Command Error");
                 }
-                event = self.swarm.next() => {
-                    if let Some(event) = event {
-                        self.handle_event(event).await?;
-                    } else {
-                        tracing::info!("Swarm channel closed");
-                        break;
-                    }
+                Some(event) = self.swarm.next() => {
+                    self.handle_event(event).await.expect("Event Error");
+                }
+                _ = tokio::signal::ctrl_c() => {
+                    tracing::info!("Shutting down...");
+                    break;
                 }
                 Ok(_) = self.power.changed() => {
                     match *self.power.borrow() {
@@ -232,6 +228,10 @@ impl NetworkNode {
                 }
 
             }
-        })
+        }
+    }
+
+    pub fn spawn(self) -> tokio::task::JoinHandle<()> {
+        tokio::spawn(self.run())
     }
 }
