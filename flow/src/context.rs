@@ -3,18 +3,20 @@
     Contrib: FL03 <jo3mccain@icloud.com>
 */
 use super::Settings;
+use fluidity::prelude::State;
 use serde::{Deserialize, Serialize};
 
 use tracing_subscriber::{fmt, EnvFilter};
 
-#[derive(Clone, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
 pub struct Context {
     cnf: Settings,
+    state: State,
 }
 
 impl Context {
-    pub fn new(cnf: Settings) -> Self {
-        Self { cnf }
+    pub fn new(cnf: Settings, state: State) -> Self {
+        Self { cnf, state }
     }
     pub fn init_tracing(&self) {
         self.settings().logger.setup_env();
@@ -29,4 +31,17 @@ impl Context {
     pub fn settings(&self) -> Settings {
         self.cnf.clone()
     }
+
+    pub fn state(&self) -> State {
+        self.state.clone()
+    }
+
+    pub fn state_mut(&mut self) -> &mut State {
+        &mut self.state
+    }
+
+    pub fn set_state(&mut self, state: State) {
+        self.state = state;
+    }
+
 }

@@ -71,6 +71,7 @@ fn starter() -> (Flow, FlowClient) {
     let (power_tx, _) = watch::channel::<Power>(Default::default());
 
     let settings = Settings::build().expect("Failed to build settings");
+    println!("{:?}", &settings);
     let app = Flow::new(commands_rx, events_tx, power_tx, settings).init();
     let client = FlowClient::new(commands_tx);
     return (app, client);

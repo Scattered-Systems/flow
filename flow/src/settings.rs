@@ -2,10 +2,11 @@
     Appellation: settings <module>
     Contrib: FL03 <jo3mccain@icloud.com>
 */
-use config::{Config, Environment};
+use config::{Config, Environment, File};
 use decanter::prelude::Hashable;
 use scsys::prelude::{try_collect_config_files, ConfigResult, SerdeDisplay};
 use serde::{Deserialize, Serialize};
+use std::str::FromStr;
 use strum::{Display, EnumIter, EnumString, EnumVariantNames};
 
 #[derive(
@@ -37,6 +38,62 @@ pub enum Mode {
 
 #[derive(
     Clone,
+    Copy,
+    Debug,
+    Default,
+    Deserialize,
+    Display,
+    EnumIter,
+    EnumString,
+    EnumVariantNames,
+    Eq,
+    Hash,
+    Hashable,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    Serialize,
+)]
+#[repr(u8)]
+#[serde(rename_all = "lowercase")]
+pub enum LogLevel {
+    #[default]
+    Debug = 0,
+    Error = 1,
+    Info = 2,
+    Trace = 3,
+    Warn = 4,
+}
+
+impl From<tracing::Level> for LogLevel {
+    fn from(level: tracing::Level) -> Self {
+        use LogLevel::*;
+        match level {
+            tracing::Level::DEBUG => Debug,
+            tracing::Level::ERROR => Error,
+            tracing::Level::INFO => Info,
+            tracing::Level::TRACE => Trace,
+            tracing::Level::WARN => Warn,
+        }
+    }
+}
+
+impl From<LogLevel> for tracing::Level {
+    fn from(level: LogLevel) -> tracing::Level {
+        use LogLevel::*;
+        match level {
+            Debug => tracing::Level::DEBUG,
+            Error => tracing::Level::ERROR,
+            Info => tracing::Level::INFO,
+            Trace => tracing::Level::TRACE,
+            Warn => tracing::Level::WARN,
+        }
+    }
+}
+
+#[derive(
+    Clone,
+    Copy,
     Debug,
     Deserialize,
     Eq,
@@ -49,25 +106,30 @@ pub enum Mode {
     Serialize,
 )]
 pub struct Logger {
-    pub level: String,
+    level: LogLevel,
 }
 
 impl Logger {
-    pub fn new() -> Self {
+    pub fn new(level: LogLevel) -> Self {
         Self {
-            level: tracing::Level::INFO.to_string(),
+            level,
         }
     }
-    pub fn set_level(mut self, level: impl ToString) {
-        self.level = level.to_string();
+    pub fn from_env() -> Self {
+        if let Ok(v) = std::env::var("RUST_LOG") {
+            let level = LogLevel::from_str(&v).unwrap_or_default();
+            return Self::new(level);
+        }
+        Self::default()
+    }
+    pub fn level(&self) -> LogLevel {
+        self.level
+    }
+    pub fn set_level(mut self, level: LogLevel) {
+        self.level = level;
     }
     pub fn setup_env(mut self) -> Self {
-        let key = "RUST_LOG";
-        if let Some(v) = std::env::var_os(key) {
-            self.level = v.into_string().expect("Failed to convert into string...");
-        } else {
-            std::env::set_var(key, self.level.clone());
-        }
+        std::env::set_var("RUST_LOG", self.level.to_string());
         self
     }
     pub fn init_tracing(self) {
@@ -79,14 +141,14 @@ impl Logger {
 
 impl Default for Logger {
     fn default() -> Self {
-        Self::new()
+        Self::new(LogLevel::default())
     }
 }
 
 impl From<tracing::Level> for Logger {
     fn from(level: tracing::Level) -> Self {
         Self {
-            level: level.to_string(),
+            level: level.into(),
         }
     }
 }
@@ -134,9 +196,7 @@ impl Settings {
                 .prefix(env!("CARGO_PKG_NAME").to_ascii_uppercase().as_str()),
         );
         // Try gathering valid configuration files...
-        if let Ok(files) = try_collect_config_files("**/Flow.toml", false) {
-            builder = builder.add_source(files);
-        }
+        builder = builder.add_source(File::with_name("Flow").required(false));
         builder.build()?.try_deserialize()
     }
 

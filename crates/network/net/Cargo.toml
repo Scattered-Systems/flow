@@ -68,7 +68,7 @@ features = [
     "tokio",
     "yamux",
 ]
-version = "0.52.1"
+version = "0.52"
 
 [dev-dependencies]
 

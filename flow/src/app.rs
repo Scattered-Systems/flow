@@ -20,7 +20,6 @@ pub struct Flow {
     commands: mpsc::Receiver<PlatformCommand>,
     events: mpsc::Sender<FlowEvent>,
     power: watch::Sender<Power>,
-    state: Arc<Mutex<State>>,
 }
 
 impl Flow {
@@ -30,14 +29,12 @@ impl Flow {
         power: watch::Sender<Power>,
         settings: Settings,
     ) -> Self {
-        let context = Arc::new(Mutex::new(Context::new(settings)));
-        let state = Arc::new(Mutex::new(State::default()));
+        let context = Context::new(settings, State::default());
         Self {
-            context,
+            context: Arc::new(Mutex::new(context)),
             commands,
             events,
             power,
-            state,
         }
     }
 
@@ -59,12 +56,12 @@ impl Flow {
         Ok(())
     }
 
-    #[instrument(fields(state = %self.state()), skip(self), name = "runner", target = "flow")]
+    #[instrument(fields(state = %self.context().state().state()), skip(self), name = "run", target = "flow")]
     pub async fn run(mut self) {
         loop {
             tokio::select! {
                 Some(command) = self.commands.recv() => {
-                    self.state.lock().unwrap().set_message(&command);
+                    self.context.lock().unwrap().state_mut().set_message(&command);
                     self.handle_command(&command).await.expect("Command Error");
                 }
                 _ = tokio::signal::ctrl_c() => {
@@ -81,7 +78,4 @@ impl Flow {
         tokio::spawn(self.run())
     }
 
-    pub fn state(&self) -> State {
-        self.state.lock().unwrap().clone()
-    }
 }
