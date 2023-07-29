@@ -149,7 +149,7 @@ impl Logger {
         std::env::set_var("RUST_LOG", self.level.to_string());
         self
     }
-    pub fn subscriber_builder(self) -> fmt::Subscriber<DefaultFields, Format<Compact>> {
+    pub fn subscriber(self) -> fmt::Subscriber<DefaultFields, Format<Compact>> {
         self.setup_env();
         let filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("info"));
         fmt::fmt()

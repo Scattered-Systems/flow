@@ -18,12 +18,19 @@ use std::collections::hash_map::Entry;
 use tokio::sync::{mpsc, watch};
 use tracing::instrument;
 
+#[async_trait::async_trait]
+pub trait NodeSpec {
+    fn swarm(&self) -> Swarm<Mainnet>;
+
+    async fn run(mut self);
+}
+
 pub struct NetworkNode {
-    pub cmds: mpsc::Receiver<NetworkCommand>,
-    pub events: mpsc::Sender<NetworkEvent>,
-    pub power: watch::Receiver<Power>,
-    pub queue: Queue,
-    pub swarm: Swarm<Mainnet>,
+    cmds: mpsc::Receiver<NetworkCommand>,
+    events: mpsc::Sender<NetworkEvent>,
+    power: watch::Receiver<Power>,
+    queue: Queue,
+    swarm: Swarm<Mainnet>,
 }
 
 impl NetworkNode {
@@ -42,7 +49,7 @@ impl NetworkNode {
         }
     }
     #[instrument(skip(self), name = "handle::command", target = "node")]
-    fn handle_command(&mut self, cmd: NetworkCommand) -> Result<()> {
+    async fn handle_command(&mut self, cmd: NetworkCommand) -> Result<()> {
         match cmd {
             NetworkCommand::Dial { addr, pid, tx } => match self.queue.dial.entry(pid) {
                 Entry::Occupied(_) => {
@@ -206,7 +213,7 @@ impl NetworkNode {
         loop {
             tokio::select! {
                 Some(cmd) = self.cmds.recv() => {
-                    self.handle_command(cmd).expect("Command Error");
+                    self.handle_command(cmd).await.expect("Command Error");
                 }
                 Some(event) = self.swarm.next() => {
                     self.handle_event(event).await.expect("Event Error");

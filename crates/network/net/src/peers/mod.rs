@@ -11,7 +11,6 @@ mod peer;
 
 use crate::conduct::Conduct;
 use libp2p::swarm::{Swarm, SwarmBuilder};
-use libp2p::PeerId;
 
 #[macro_export]
 macro_rules! peer {

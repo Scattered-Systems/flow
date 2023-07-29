@@ -11,6 +11,7 @@ mod primitives;
 mod specs;
 mod utils;
 
+pub mod config;
 pub mod errors;
 pub mod events;
 pub mod frames;
@@ -18,6 +19,7 @@ pub mod states;
 pub mod tasks;
 
 pub mod prelude {
+    pub use super::config::*;
     pub use super::errors::*;
     pub use super::events::*;
     pub use super::frames::*;

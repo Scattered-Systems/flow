@@ -2,6 +2,10 @@
     Appellation: events <module>
     Contrib: FL03 <jo3mccain@icloud.com>
 */
+pub use self::power::*;
+
+pub(crate) mod power;
+
 use crate::AsyncResult;
 
 pub trait Event {

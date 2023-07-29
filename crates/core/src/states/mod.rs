@@ -2,9 +2,8 @@
     Appellation: states <module>
     Contrib: FL03 <jo3mccain@icloud.com>
 */
-pub use self::{power::*, state::*};
+pub use self::state::*;
 
-mod power;
 mod state;
 
 pub trait StateSpec<T> {

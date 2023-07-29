@@ -9,7 +9,6 @@ use crate::minis::{self, reqres::RequestResponseEvent};
 use crate::peers::Peer;
 use libp2p::identity::Keypair;
 use libp2p::kad::{self, record::store::MemoryStore};
-use libp2p::request_response::Event as ReqResEvent;
 use libp2p::swarm::NetworkBehaviour;
 use libp2p::{identify, mdns, ping};
 

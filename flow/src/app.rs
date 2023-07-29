@@ -14,11 +14,7 @@ use std::sync::{Arc, Mutex};
 use tokio::sync::{mpsc, watch};
 use tokio::task::JoinHandle;
 use tracing::instrument;
-use tracing_subscriber::{
-    fmt,
-    util::SubscriberInitExt,
-    EnvFilter,
-};
+use tracing_subscriber::{fmt, util::SubscriberInitExt, EnvFilter};
 
 pub trait AppInitializer {
     fn init(self) -> Self;
@@ -93,11 +89,7 @@ impl Flow {
     }
 
     pub fn with_tracing(self) -> Self {
-        self.context()
-            .settings()
-            .logger()
-            .subscriber_builder()
-            .init();
+        self.context().settings().logger().subscriber().init();
         self
     }
 }

@@ -1,19 +1,27 @@
 /*
     Appellation: primitives <module>
     Contrib: FL03 <jo3mccain@icloud.com>
-    Description: ... summary ...
 */
-pub use self::{constants::*, types::*};
+pub use self::{constants::*, statics::*, types::*};
 
 mod constants {
     /// Default address for [libp2p::Multiaddr]
-    pub const DEFAULT_MULTIADDR: &str = "/ip4/0.0.0.0/tcp/0";
+    // pub const DEFAULT_MULTIADDR: &str = "/ip4/0.0.0.0/tcp/0";
 
     pub const DEFAULT_MAINNET_ADDR: &str = "/ip4/0.0.0.0/tcp/9001";
 
     pub const DEFAULT_SUBNET_ADDR: &str = "/ip4/0.0.0.0/tcp/9099";
 }
 
+pub(crate) mod statics {
+    use lazy_static::lazy_static;
+    use libp2p::Multiaddr;
+
+    lazy_static! {
+        /// Default address for [libp2p::Multiaddr]
+        pub static ref DEFAULT_MULTIADDR: Multiaddr = "/ip4/0.0.0.0/tcp/0".parse::<Multiaddr>().unwrap();
+    }
+}
 mod types {
     use crate::NetworkError;
     use libp2p::core::{muxing::StreamMuxerBox, transport::Boxed};
