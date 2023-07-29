@@ -1,7 +1,13 @@
-name: Rust
+name: Nightly
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
 
 on:
   workflow_dispatch:
+
+permissions: write-all
 
 jobs:
   rust:
@@ -18,7 +24,7 @@ jobs:
       - name: upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: nightly-flow-${{ matrix.platform }}
+          name: nightly-${{ matrix.platform }}
           path: target/release/flow
       - name: release
         id: create-release

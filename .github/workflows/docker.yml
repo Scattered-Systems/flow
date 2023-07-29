@@ -1,18 +1,27 @@
 name: Docker
 
-on:
-  push:
-    branches-ignore: [ "dev*", "next*" ]
-    tags: [ "beta*", "nightly*", "prod*", "v*.*.*"]
-  pull_request:
-    branches-ignore: [ "dev*", "next*" ]
-  schedule:
-    - cron: "30 9 * * *" # 9:30 UTC
-  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
 
 env:
   DOCKERHUB_USERNAME: scsys
   IMAGE_NAME: scsys/flow
+
+on:
+  pull_request:
+    branches-ignore: [ "dev*", "next*" ]
+  push:
+    branches-ignore: [ "dev*", "next*" ]
+    tags: [ "beta*", "nightly*", "prod*", "v*.*.*"]
+  release:
+  repository_dispatch:
+    types: [ "docker" ]
+  schedule:
+    - cron: "30 21 * * *" # 9:30 UTC
+  workflow_dispatch:
+
+permissions: write-all
 
 
 jobs:
@@ -20,11 +29,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    - uses: docker/setup-buildx-action@v2
     - name: Publish to Registry
       uses: elgohr/Publish-Docker-Github-Action@v5
       with:
         dockerfile: Dockerfile
-        name: ${{ env.IMAGE_NAME }}
+        name: ${{ env.DOCKERHUB_USERNAME }}/${{ github.repository.name }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
         registry: docker.io
         snapshot: true
