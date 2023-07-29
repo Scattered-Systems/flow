@@ -12,21 +12,62 @@ readme.workspace = true
 repository.workspace = true
 version.workspace = true
 
+[features]
+default = ["std"]
+
+std = [
+    "tokio/full"
+]
+wasi = [
+    "wasi-ext"
+]
+wasm = []
+
+
+wasi-ext = [
+    "tokio",
+    "tokio_wasi/full"
+]
+
+tokio = [
+    "tokio/io-util",
+    "tokio/macros",
+    "tokio/rt",
+    "tokio/sync",
+    "tokio/time"
+]
+
 [[bin]]
 bench = true
 doctest = false
 name = "flow"
+test = true
 
 [build-dependencies]
 
 [dependencies]
-# SDK
-fluidity = { features = [], path = "../crates/fluidity", version = "0.1.12" }
+# Custom
+decanter = { features = ["derive"], git = "https://github.com/FL03/decanter", branch = "v0.1.4", version = "0.1.4" }
+scsys = { features = ["derive"], git = "https://github.com/scattered-systems/scsys", branch = "v0.2.0", version = "0.2.0" }
 
+# Core dependencies
+anyhow.workspace = true
+async-trait.workspace = true
+clap = { features = ["cargo", "derive", "env"], version = "4" }
+config = "0.13"
 serde.workspace = true
 serde_json.workspace = true
-tokio = { features = ["full"], version = "1" }
+smart-default.workspace = true
+strum.workspace = true
 
+tokio = { features = ["full"], optional = true, version = "1" }
+tracing = { features = [], version = "0.1" }
+tracing-subscriber = { features = ["env-filter"], version = "0.3" }
+
+[dependencies.fluidity]
+features = ["full"]
+path = "../crates/fluidity"
+version = "0.1.12"
 
 [dev-dependencies]
 
@@ -36,4 +77,6 @@ rustc-args = ["--cfg", "docsrs"]
 
 [target.wasm32-unknown-unknown]
 
-[target.wasm32-wasi]
+[target.wasm32-wasi.dependencies]
+tokio_wasi = { features = ["full"], optional = true, version = "1" }
+

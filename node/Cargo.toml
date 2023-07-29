@@ -1,0 +1,37 @@
+[package]
+authors.workspace = true
+categories.workspace = true
+default-run = "node"
+description.workspace = true
+edition.workspace = true
+homepage.workspace = true
+keywords.workspace = true
+license.workspace = true
+name = "node"
+readme.workspace = true
+repository.workspace = true
+version.workspace = true
+
+[[bin]]
+bench = false
+name = "node"
+path = "src/main.rs"
+
+[build-dependencies]
+
+[dependencies]
+fluidity = { features = [], path = "../crates/fluidity", version = "0.1.12" }
+
+anyhow.workspace = true
+tokio = { features = ["full"], version = "1" }
+tracing = { features = ["log", "std"], version = "0.1" }
+tracing-subscriber = { features = ["env-filter", "fmt", "registry"], version = "0.3" }
+
+[dependencies.libp2p]
+features = [
+    "tokio",
+]
+version = "0.52"
+
+[dev-dependencies]
+

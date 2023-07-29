@@ -12,41 +12,48 @@ repository.workspace = true
 version.workspace = true
 
 [features]
-default = []
+default = [
+    "core",
+    "net",
+]
+full = ["core", "net"]
 
+core = [
+    "fluidity-core"
+]
+net = [
+    "fluidity-net"
+]
+
+wasi = [
+    
+]
 wasm = []
 
+
+
 [lib]
+bench = true
 crate-type = ["cdylib", "rlib"]
 test = true
 
 [build-dependencies]
 
-
 [dependencies]
-chrono = "0.4"
-gloo = { features = ["futures"], version = "0.8" }
-js-sys = "0.3"
-serde.workspace = true
-serde_json.workspace = true
-tokio = { features = ["macros"], version = "1" }
-wasm-bindgen = { features = ["serde-serialize"], version = "0.2" }
-wasm-bindgen-futures = "0.4"
-
-[dependencies.web-sys]
-features = [
-    "HtmlElement",
-    "Node"
-]
-version = "0.3"
+# SDK
+fluidity-core = { features = [], optional = true, path = "../core", version = "0.1.12" }
+fluidity-net = { features = [], optional = true, path = "../network/net", version = "0.1.12" }
 
 [dev-dependencies]
-wasm-bindgen-test = "0.3"
 
 [package.metadata.docs.rs]
 all-features = true
 rustc-args = ["--cfg", "docsrs"]
 
 [target.wasm32-unknown-unknown]
+
+
+[target.wasm32-unknown-unknown.dev-dependencies]
+wasm-bindgen-test = "0.3"
 
 [target.wasm32-wasi]
