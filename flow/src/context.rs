@@ -5,19 +5,23 @@
 use super::Settings;
 use fluidity::prelude::State;
 use serde::{Deserialize, Serialize};
-
+use tokio::runtime::Handle;
 use tracing_subscriber::{fmt, EnvFilter};
 
-#[derive(Clone, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(Clone, Debug)]
 pub struct Context {
     cnf: Settings,
+    handle: Handle,
     state: State,
-    
 }
 
 impl Context {
-    pub fn new(cnf: Settings, state: State) -> Self {
-        Self { cnf, state }
+    pub fn new(cnf: Settings, handle: Handle, state: State) -> Self {
+        Self { cnf, handle, state }
+    }
+
+    pub fn handle(&self) -> Handle {
+        self.handle.clone()
     }
 
     pub fn settings(&self) -> Settings {
@@ -34,5 +38,14 @@ impl Context {
 
     pub fn set_state(&mut self, state: State) {
         self.state = state;
+    }
+}
+
+impl Default for Context {
+    fn default() -> Self {
+        let cnf = Settings::default();
+        let handle = Handle::current();
+        let state = State::default();
+        Self { cnf, handle, state }
     }
 }

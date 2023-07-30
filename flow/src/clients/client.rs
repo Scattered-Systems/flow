@@ -2,7 +2,7 @@
     Appellation: client <module>
     Contrib: FL03 <jo3mccain@icloud.com>
 */
-use crate::platform::{PlatformArgs, PlatformCommand};
+use crate::platform::PlatformArgs;
 use tokio::sync::mpsc::{self, error::SendError};
 
 #[derive(Clone, Debug)]

@@ -13,7 +13,7 @@ use std::sync::{Arc, Mutex};
 use tokio::sync::{mpsc, watch};
 use tokio::task::JoinHandle;
 use tracing::instrument;
-use tracing_subscriber::{fmt, util::SubscriberInitExt, EnvFilter};
+use tracing_subscriber::util::SubscriberInitExt;
 
 pub trait AppInitializer {
     fn init(self) -> Self;
@@ -35,7 +35,7 @@ impl Flow {
         power: watch::Sender<Power>,
         settings: Settings,
     ) -> Self {
-        let context = Context::new(settings, State::default());
+        let context = Context::new(settings, tokio::runtime::Handle::current(), State::default());
         Self {
             context: Arc::new(Mutex::new(context)),
             commands,
