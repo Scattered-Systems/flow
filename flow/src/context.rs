@@ -12,6 +12,7 @@ use tracing_subscriber::{fmt, EnvFilter};
 pub struct Context {
     cnf: Settings,
     state: State,
+    
 }
 
 impl Context {
