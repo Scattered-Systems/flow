@@ -2,9 +2,8 @@
    Appellation: app <module>
    Contrib: FL03 <jo3mccain@icloud.com>
 */
-use crate::clients::FlowClient;
 use crate::events::FlowEvent;
-use crate::platform::PlatformCommand;
+use crate::platform::{PlatformArgs, PlatformCommand};
 /// # Flow
 ///
 /// The platform agnostic core of the Flow network.
@@ -22,15 +21,16 @@ pub trait AppInitializer {
 }
 
 pub struct Flow {
+
     context: Arc<Mutex<Context>>,
-    commands: mpsc::Receiver<PlatformCommand>,
+    commands: mpsc::Receiver<PlatformArgs>,
     events: mpsc::Sender<FlowEvent>,
     power: watch::Sender<Power>,
 }
 
 impl Flow {
     pub fn new(
-        commands: mpsc::Receiver<PlatformCommand>,
+        commands: mpsc::Receiver<PlatformArgs>,
         events: mpsc::Sender<FlowEvent>,
         power: watch::Sender<Power>,
         settings: Settings,
@@ -53,11 +53,13 @@ impl Flow {
         self
     }
 
-    #[instrument(fields(message = %command), skip(self), name = "handler", target = "flow")]
-    async fn handle_command(&mut self, command: &PlatformCommand) -> AsyncResult<()> {
-        match command {
-            _ => {
-                tracing::warn!("Unhandled Command");
+    #[instrument(fields(message = %args), skip(self), name = "handler", target = "flow")]
+    async fn handle_command(&mut self, args: &PlatformArgs) -> AsyncResult<()> {
+        if let Some(cmd) = &args.command  {
+            match cmd.clone() {
+                PlatformCommand::Connect { target } => {
+                    tracing::info!("Connecting to {}", target.unwrap_or_default());
+                }
             }
         }
         Ok(())

@@ -36,35 +36,33 @@ pub mod rpc;
 use clients::FlowClient;
 use events::FlowEvent;
 use fluidity::prelude::Power;
-use platform::PlatformCommand;
+use platform::PlatformArgs;
 
+use clap::Parser;
 use tokio::sync::{mpsc, watch};
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
+    let cli = cli::FlowCli::parse();
     let (app, client) = starter();
-    let cmd = PlatformCommand::connect("".to_string());
     let _ = app.spawn();
-    let _ = client
-        .commands()
-        .send(cmd)
-        .await
-        .expect("Failed to send command");
-    // let _ = app.spawn().await.expect("Failed to spawn app");
-    // tokio::spawn(async move {
-    //     let mut client = client.clone();
-    //     let _ = client.send(cmd).await.expect("Failed to send command");
-    // }).await;
-
+    match cli.command {
+        cli::Options::Platform(args) => {
+            let _ = client
+                .commands()
+                .send(args)
+                .await
+                .expect("Failed to send command");
+        }
+        _ => {}
+    }
+    
     Ok(())
 }
 
 fn starter() -> (Flow, FlowClient) {
     let buffer: usize = 12;
-    let mut args = std::env::args_os();
-    let _ = args.next().expect("No args");
-    let (_, io_rx) = watch::channel::<std::env::ArgsOs>(args);
-    let (commands_tx, commands_rx) = mpsc::channel::<PlatformCommand>(buffer);
+    let (commands_tx, commands_rx) = mpsc::channel::<PlatformArgs>(buffer);
     let (events_tx, _erx) = mpsc::channel::<FlowEvent>(buffer);
 
     let (power_tx, _) = watch::channel::<Power>(Default::default());

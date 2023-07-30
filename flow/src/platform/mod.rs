@@ -8,11 +8,14 @@ mod cmds;
 mod events;
 mod frame;
 
+
 use fluidity::prelude::Power;
 use tokio::sync::{mpsc, watch};
 
+
+
 pub struct Platform {
-    commands: mpsc::Receiver<PlatformCommand>,
+    commands: mpsc::Receiver<PlatformArgs>,
     events: mpsc::Sender<PlatformEvent>,
     power: watch::Receiver<Power>,
 }
