@@ -2,7 +2,7 @@
     Appellation: opts <module>
     Contrib: FL03 <jo3mccain@icloud.com>
 */
-use crate::platform::PlatformArgs;
+use crate::platform::PlatformCommand;
 use clap::Subcommand;
 use serde::{Deserialize, Serialize};
 use smart_default::SmartDefault;
@@ -22,5 +22,5 @@ use smart_default::SmartDefault;
 )]
 pub enum Options {
     #[default]
-    Platform(PlatformArgs),
+    Platform(PlatformCommand),
 }

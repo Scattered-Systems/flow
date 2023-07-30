@@ -36,7 +36,7 @@ pub mod rpc;
 use clients::FlowClient;
 use events::FlowEvent;
 use fluidity::prelude::Power;
-use platform::PlatformArgs;
+use platform::PlatformCommand;
 
 use clap::Parser;
 use tokio::sync::{mpsc, watch};
@@ -56,13 +56,13 @@ async fn main() -> anyhow::Result<()> {
         }
         _ => {}
     }
-    
+
     Ok(())
 }
 
 fn starter() -> (Flow, FlowClient) {
     let buffer: usize = 12;
-    let (commands_tx, commands_rx) = mpsc::channel::<PlatformArgs>(buffer);
+    let (commands_tx, commands_rx) = mpsc::channel::<PlatformCommand>(buffer);
     let (events_tx, _erx) = mpsc::channel::<FlowEvent>(buffer);
 
     let (power_tx, _) = watch::channel::<Power>(Default::default());

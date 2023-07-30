@@ -4,30 +4,49 @@
 */
 use clap::{Parser, Subcommand};
 use serde::{Deserialize, Serialize};
+use smart_default::SmartDefault;
 use strum::Display;
 
 #[derive(
     Clone, Debug, Default, Deserialize, Eq, Hash, Ord, Parser, PartialEq, PartialOrd, Serialize,
 )]
-pub struct PlatformArgs {
+pub struct PlatformCommand {
     #[clap(subcommand)]
-    pub command: Option<PlatformCommand>,
+    pub args: Option<PlatformOpts>,
 }
 
-impl std::fmt::Display for PlatformArgs {
+impl std::fmt::Display for PlatformCommand {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", serde_json::to_string(self).unwrap())
     }
 }
 
 #[derive(
-    Clone, Debug, Deserialize, Display, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, Subcommand
+    Clone,
+    Debug,
+    Deserialize,
+    Display,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    Serialize,
+    SmartDefault,
+    Subcommand,
 )]
 #[strum(serialize_all = "lowercase")]
-pub enum PlatformCommand {
+pub enum PlatformOpts {
+    #[default]
     Connect {
         #[clap(long, short)]
         target: Option<String>,
+    },
+}
+
+impl PlatformOpts {
+    pub fn connect(target: Option<String>) -> Self {
+        Self::Connect { target }
     }
 }
 
@@ -37,7 +56,9 @@ mod tests {
 
     #[test]
     fn test_platform_command() {
-        let args = PlatformCommand::Connect { target: Some("10".to_string())};
+        let args = PlatformOpts::Connect {
+            target: Some("10".to_string()),
+        };
         assert_eq!(args.to_string(), "connect");
         println!("{}", args);
     }

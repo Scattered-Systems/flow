@@ -6,4 +6,6 @@ pub use self::client::*;
 
 mod client;
 
-pub trait AsyncClient {}
+pub trait ClientSpec<> {
+
+}

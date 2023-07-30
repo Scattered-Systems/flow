@@ -3,7 +3,7 @@
    Contrib: FL03 <jo3mccain@icloud.com>
 */
 use crate::events::FlowEvent;
-use crate::platform::{PlatformArgs, PlatformCommand};
+use crate::platform::{PlatformCommand, PlatformOpts};
 /// # Flow
 ///
 /// The platform agnostic core of the Flow network.
@@ -21,27 +21,34 @@ pub trait AppInitializer {
 }
 
 pub struct Flow {
-
     context: Arc<Mutex<Context>>,
-    commands: mpsc::Receiver<PlatformArgs>,
+    commands: mpsc::Receiver<PlatformCommand>,
     events: mpsc::Sender<FlowEvent>,
     power: watch::Sender<Power>,
 }
 
 impl Flow {
     pub fn new(
-        commands: mpsc::Receiver<PlatformArgs>,
+        commands: mpsc::Receiver<PlatformCommand>,
         events: mpsc::Sender<FlowEvent>,
         power: watch::Sender<Power>,
         settings: Settings,
     ) -> Self {
-        let context = Context::new(settings, tokio::runtime::Handle::current(), State::default());
+        let context = Context::new(
+            settings,
+            tokio::runtime::Handle::current(),
+            State::default(),
+        );
         Self {
             context: Arc::new(Mutex::new(context)),
             commands,
             events,
             power,
         }
+    }
+
+    pub fn commands(&mut self) -> &mut mpsc::Receiver<PlatformCommand> {
+        &mut self.commands
     }
 
     pub fn context(&self) -> Context {
@@ -54,10 +61,10 @@ impl Flow {
     }
 
     #[instrument(fields(message = %args), skip(self), name = "handler", target = "flow")]
-    async fn handle_command(&mut self, args: &PlatformArgs) -> AsyncResult<()> {
-        if let Some(cmd) = &args.command  {
+    async fn handle_command(&mut self, args: &PlatformCommand) -> AsyncResult<()> {
+        if let Some(cmd) = &args.args {
             match cmd.clone() {
-                PlatformCommand::Connect { target } => {
+                PlatformOpts::Connect { target } => {
                     tracing::info!("Connecting to {}", target.unwrap_or_default());
                 }
             }
@@ -69,7 +76,7 @@ impl Flow {
     pub async fn run(mut self) {
         loop {
             tokio::select! {
-                Some(command) = self.commands.recv() => {
+                Some(command) = self.commands().recv() => {
                     self.context.lock().unwrap().state_mut().set_message(&command);
                     if let Err(e) = self.handle_command(&command).await {
                         tracing::error!("Command Error: {:?}", e);
