@@ -8,8 +8,6 @@ env:
   CARGO_TERM_COLOR: always
 
 on:
-  push:
-    tags: [ "nightly*",  "v*.*.*" ]
   release:
     types: [ "created" ]
   repository_dispatch:
@@ -21,7 +19,7 @@ jobs:
     name: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: setup (langspace)
         run: |
           rustup update
@@ -29,7 +27,7 @@ jobs:
       - id: rust-build
         name: Build
         run: cargo build -r -v --workspace
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         id: rust-cache
         name: Cache build
         with:

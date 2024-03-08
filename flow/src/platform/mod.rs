@@ -25,7 +25,6 @@ pub trait Executor {
 
     fn commands(&mut self) -> &mut mpsc::Receiver<Self::Cmd>;
 
-    #[instrument(skip(self), name = "execute", target = "executor")]
     async fn execute(&mut self, command: Self::Cmd) -> Result<(), Self::Error>;
 
     async fn process(mut self) {
