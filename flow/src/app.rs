@@ -2,9 +2,8 @@
    Appellation: app <module>
    Contrib: FL03 <jo3mccain@icloud.com>
 */
-use crate::clients::FlowClient;
 use crate::events::FlowEvent;
-use crate::platform::PlatformCommand;
+use crate::platform::{PlatformCommand, PlatformOpts};
 /// # Flow
 ///
 /// The platform agnostic core of the Flow network.
@@ -14,7 +13,7 @@ use std::sync::{Arc, Mutex};
 use tokio::sync::{mpsc, watch};
 use tokio::task::JoinHandle;
 use tracing::instrument;
-use tracing_subscriber::{fmt, util::SubscriberInitExt, EnvFilter};
+use tracing_subscriber::util::SubscriberInitExt;
 
 pub trait AppInitializer {
     fn init(self) -> Self;
@@ -35,13 +34,21 @@ impl Flow {
         power: watch::Sender<Power>,
         settings: Settings,
     ) -> Self {
-        let context = Context::new(settings, State::default());
+        let context = Context::new(
+            settings,
+            tokio::runtime::Handle::current(),
+            State::default(),
+        );
         Self {
             context: Arc::new(Mutex::new(context)),
             commands,
             events,
             power,
         }
+    }
+
+    pub fn commands(&mut self) -> &mut mpsc::Receiver<PlatformCommand> {
+        &mut self.commands
     }
 
     pub fn context(&self) -> Context {
@@ -53,11 +60,13 @@ impl Flow {
         self
     }
 
-    #[instrument(fields(message = %command), skip(self), name = "handler", target = "flow")]
-    async fn handle_command(&mut self, command: &PlatformCommand) -> AsyncResult<()> {
-        match command {
-            _ => {
-                tracing::warn!("Unhandled Command");
+    #[instrument(fields(message = %args), skip(self), name = "handler", target = "flow")]
+    async fn handle_command(&mut self, args: &PlatformCommand) -> AsyncResult<()> {
+        if let Some(cmd) = &args.args {
+            match cmd.clone() {
+                PlatformOpts::Connect { target } => {
+                    tracing::info!("Connecting to {}", target.unwrap_or_default());
+                }
             }
         }
         Ok(())
@@ -67,7 +76,7 @@ impl Flow {
     pub async fn run(mut self) {
         loop {
             tokio::select! {
-                Some(command) = self.commands.recv() => {
+                Some(command) = self.commands().recv() => {
                     self.context.lock().unwrap().state_mut().set_message(&command);
                     if let Err(e) = self.handle_command(&command).await {
                         tracing::error!("Command Error: {:?}", e);

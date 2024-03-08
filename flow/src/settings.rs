@@ -4,7 +4,7 @@
 */
 use config::{Config, Environment, File};
 use decanter::prelude::Hashable;
-use scsys::prelude::{try_collect_config_files, ConfigResult, SerdeDisplay};
+use scsys::prelude::{ConfigResult, SerdeDisplay};
 use serde::{Deserialize, Serialize};
 use std::str::FromStr;
 use strum::{Display, EnumIter, EnumString, EnumVariantNames};
@@ -145,7 +145,7 @@ impl Logger {
     pub fn set_level(mut self, level: LogLevel) {
         self.level = level;
     }
-    pub fn setup_env(mut self) -> Self {
+    pub fn setup_env(self) -> Self {
         std::env::set_var("RUST_LOG", self.level.to_string());
         self
     }
