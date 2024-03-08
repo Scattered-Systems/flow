@@ -6,3 +6,13 @@ pub use self::environment::Venv;
 
 pub(crate) mod environment;
 
+pub mod packages;
+
+pub trait Environment {
+
+}
+
+#[cfg(test)]
+mod tests {
+    
+}

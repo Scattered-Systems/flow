@@ -11,6 +11,7 @@ pub use fluidity_core as core;
 
 pub mod platform;
 pub mod tasks;
+pub mod venv;
 
 pub mod prelude {
 

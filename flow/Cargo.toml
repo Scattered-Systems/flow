@@ -49,9 +49,7 @@ test = true
 
 [dependencies]
 fluidity = { features = ["full"], path = "../crates/fluidity", version = "0.1.12-alpha" }
-# Custom
-decanter = { features = ["derive"], git = "https://github.com/FL03/decanter.git", branch = "v0.1.7", version = "0.1.7" }
-scsys = { features = ["derive"], git = "https://github.com/scattered-systems/scsys.git", branch = "v0.2.0", version = "0.2.0" }
+
 
 # Core dependencies
 anyhow.workspace = true

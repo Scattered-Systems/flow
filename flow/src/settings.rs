@@ -3,8 +3,6 @@
     Contrib: FL03 <jo3mccain@icloud.com>
 */
 use config::{Config, Environment, File};
-use decanter::prelude::Hashable;
-use scsys::prelude::{ConfigResult, SerdeDisplay};
 use serde::{Deserialize, Serialize};
 use std::str::FromStr;
 use strum::{Display, EnumCount, EnumIs, EnumIter, EnumString, VariantNames};
@@ -28,7 +26,6 @@ use tracing_subscriber::EnvFilter;
     EnumString,
     Eq,
     Hash,
-    Hashable,
     Ord,
     PartialEq,
     PartialOrd,
@@ -57,7 +54,6 @@ pub enum Mode {
     EnumString,
     Eq,
     Hash,
-    Hashable,
     Ord,
     PartialEq,
     PartialOrd,
@@ -122,11 +118,9 @@ impl From<LogLevel> for Level {
     Deserialize,
     Eq,
     Hash,
-    Hashable,
     Ord,
     PartialEq,
     PartialOrd,
-    SerdeDisplay,
     Serialize,
 )]
 pub struct Logger {
@@ -190,11 +184,9 @@ impl From<tracing::Level> for Logger {
     Deserialize,
     Eq,
     Hash,
-    Hashable,
     Ord,
     PartialEq,
     PartialOrd,
-    SerdeDisplay,
     Serialize,
 )]
 pub struct Settings {
