@@ -16,8 +16,10 @@ pub fn new() -> FlowCli {
 }
 
 pub async fn handler(ctx: &mut Context, command: FlowCli) -> anyhow::Result<()> {
-    match command.command {
-        Options::Platform(args) => {}
+    if let Some(opt) = command.command {
+        match opt {
+            Options::Platform(args) => {}
+        }
     }
     Ok(())
 }
@@ -27,7 +29,7 @@ pub async fn handler(ctx: &mut Context, command: FlowCli) -> anyhow::Result<()> 
 #[command(arg_required_else_help(true), allow_missing_positional(true))]
 pub struct FlowCli {
     #[clap(subcommand)]
-    pub command: Options,
+    pub command: Option<Options>,
     #[clap(long, short, default_value_t = String::from("Flow.toml"))]
     pub config: String,
     #[arg(action = clap::ArgAction::SetTrue, long, short)]

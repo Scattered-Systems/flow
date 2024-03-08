@@ -28,15 +28,17 @@ async fn main() -> anyhow::Result<()> {
     let cli = cli::FlowCli::parse();
     let (app, client) = starter();
     let _ = app.spawn();
-    match cli.command {
-        cli::Options::Platform(args) => {
-            let _ = client
-                .commands()
-                .send(args)
-                .await
-                .expect("Failed to send command");
+    if let Some(opt) = cli.command {
+        match opt {
+            cli::Options::Platform(args) => {
+                let _ = client
+                    .commands()
+                    .send(args)
+                    .await
+                    .expect("Failed to send command");
+            }
+            _ => {}
         }
-        _ => {}
     }
 
     Ok(())
