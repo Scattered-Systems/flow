@@ -2,25 +2,9 @@
    Appellation: flow <binary>
    Contrib: FL03 <jo3mccain@icloud.com>
 */
-/// # Flow
-///
-/// Flow describes the core node logic that all network participants must run.
-/// With the extensive integrations with Proton, Flow essentially becomes a
-/// type of headless operating system capable of synchronizing its activites
-/// across devices maximizing the users control and available resources.
-///
-/// ## Harmonics
-///
-/// Flow incorperates the Neo-Riemannian theory of music to describe the
-/// harmonics of the network(s) as well as the execution process of any transactions.
-///
-///
-/// ## Features
-///
-/// - [x] Flow Client
-/// - [x] Flow Cluster
-/// - [x] Flow Network
-/// - [x] Flow Node
+//! # Flow
+//!
+//! Flow is a command line tool for managing the Flow platform.
 pub use self::{app::*, context::*, settings::*};
 
 mod app;
@@ -30,13 +14,11 @@ mod settings;
 pub mod cli;
 pub mod clients;
 pub mod events;
-pub mod platform;
-pub mod rpc;
 
+use cli::args::platform::PlatformCommand;
 use clients::FlowClient;
 use events::FlowEvent;
 use fluidity::prelude::Power;
-use platform::PlatformCommand;
 
 use clap::Parser;
 use tokio::sync::{mpsc, watch};

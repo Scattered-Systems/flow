@@ -1,13 +1,7 @@
 /*
-   Appellation: errors <module>
+   Appellation: kinds <module>
    Contrib: FL03 <jo3mccain@icloud.com>
 */
-pub use self::error::*;
-
-pub(crate) mod error;
-
-pub mod kinds;
-
 use serde::{Deserialize, Serialize};
 use smart_default::SmartDefault;
 use strum::{Display, EnumIter, VariantNames};
@@ -27,17 +21,15 @@ use strum::{Display, EnumIter, VariantNames};
     SmartDefault,
     VariantNames,
 )]
-pub enum FlowError {
-    Connection(String),
+pub enum ErrorKind {
     #[default]
     Error(String),
-    Platform(String),
-    Runtime(String),
+    Unknown,
 }
 
-impl std::error::Error for FlowError {}
+impl std::error::Error for ErrorKind {}
 
-impl From<&str> for FlowError {
+impl From<&str> for ErrorKind {
     fn from(err: &str) -> Self {
         Self::Error(err.to_string())
     }
@@ -48,8 +40,8 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_flow_error() {
-        let err = FlowError::Error("test".to_string());
+    fn test_error_kind() {
+        let err = ErrorKind::Error("test".to_string());
         assert_eq!(err, "test".into());
     }
 }

@@ -6,6 +6,14 @@ pub use self::state::*;
 
 mod state;
 
+pub trait IntoState {}
+
+pub trait Stateful {
+    type State;
+    
+    fn state(&self) -> &Self::State;
+}
+
 pub trait StateSpec<T> {
     fn message(&self) -> &T;
     fn state(&self) -> &Self {

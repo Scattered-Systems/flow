@@ -3,7 +3,7 @@
    Contrib: FL03 <jo3mccain@icloud.com>
 */
 use crate::events::FlowEvent;
-use crate::platform::{PlatformCommand, PlatformOpts};
+use crate::cli::args::platform::{PlatformCommand, PlatformOpts};
 /// # Flow
 ///
 /// The platform agnostic core of the Flow network.

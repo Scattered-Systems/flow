@@ -3,14 +3,17 @@ default-members = [
     "flow",
     "crates/fluidity"
 ]
-exclude = ["xtask"]
+
+exclude = [
+    "xtask"
+]
+
 members = [
     "flow",
-    "node",
     "crates/core",
     "crates/fluidity",
-    "crates/network/*"
 ]
+
 resolver = "2"
 
 [workspace.dependencies]
@@ -20,7 +23,7 @@ chrono = "0.4"
 serde = { features = ["derive"], version = "1" }
 serde_json = "1"
 smart-default = "0.7"
-strum = { features = ["derive"], version = "0.25" }
+strum = { features = ["derive"], version = "0.26" }
 
 [workspace.package]
 authors = ["FL03 <jo3mccain@icloud.com> (https://github.com/FL03)"]
@@ -32,7 +35,7 @@ keywords = ["blockchain", "digital identity", "management", "scsys", "orchestrat
 license = "Apache-2.0"
 readme = "README.md"
 repository = "https://github.com/scattered-systems/flow"
-version = "0.1.12"
+version = "0.1.12-alpha"
 
 
 [profile.dev]

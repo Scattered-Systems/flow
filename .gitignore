@@ -1,35 +1,31 @@
+# Artifacts
+**/.artifacts/data/
+**/.docker/data/
+
 # Config
 **/*.config.*
 
 **/*.env
 **/*.env.*
 
-# Directories
-**/__pycache__/
-**/__sapper__/
+# Development
 
-**/.DS_STORE/
-**/.artifacts/data/
-**/.cache/
-**/.docker/data/
+### atom
+**/.atom/
+
+### IntelliJ
 **/.idea/
-**/.pytest_cache/
-**/.svelte-kit/
+
+*.iml
+
+### Visual Studio
+**/.vs/
 **/.vscode/
 
-**/artifacts/
-**/build/
-**/debug/
-**/dist/
-**/env/
-**/node_modules/
-**/target/
-**/venv/
+# Misc
 
-# File Extensions
-**/*.bk
-**/*.bk.*
 
+### Files
 **/*.csv
 **/*.csv.*
 
@@ -51,6 +47,23 @@
 
 **/*.zip
 **/*.zip.*
+
+# Languages
+
+### Rust
+**/debug/
+**/target/
+
+**/Cargo.lock
+
+*.bk
+*.bk.*
+
+*.pdb
+
+*.rlib
+
+
 
 # Exceptions
 !**/default.config.*

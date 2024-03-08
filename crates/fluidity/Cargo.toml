@@ -14,22 +14,23 @@ version.workspace = true
 [features]
 default = [
     "core",
-    "net",
 ]
-full = ["core", "net"]
+
+full = [
+    "core",
+]
 
 core = [
-    "fluidity-core"
-]
-net = [
-    "fluidity-net"
+    "dep:fluidity-core",
 ]
 
-wasi = [
-    
-]
+wasi = []
+
 wasm = []
 
+# tokio = [
+#     "dep:tokio"
+# ]
 
 
 [lib]
@@ -40,9 +41,22 @@ test = true
 [build-dependencies]
 
 [dependencies]
+anyhow.workspace = true
+async-trait.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+smart-default.workspace = true
+strum.workspace = true
+
+# tokio = { features = ["macros", "sync", "time"], optional = true, version = "1" }
+tokio = { features = ["rt"], version = "1" }
+
 # SDK
-fluidity-core = { features = [], optional = true, path = "../core", version = "0.1.12" }
-fluidity-net = { features = [], optional = true, path = "../network/net", version = "0.1.12" }
+[dependencies.fluidity-core]
+features = []
+optional = true
+path = "../core"
+version = "0.1.12-alpha"
 
 [dev-dependencies]
 

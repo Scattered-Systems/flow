@@ -7,7 +7,7 @@
 ///
 use serde::{Deserialize, Serialize};
 use smart_default::SmartDefault;
-use strum::{Display, EnumIter, EnumString, EnumVariantNames};
+use strum::{Display, EnumCount, EnumIs, EnumIter, EnumString, VariantNames};
 
 #[derive(Clone, Debug, Default, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
 pub struct State {
@@ -75,9 +75,10 @@ impl From<State> for States {
     Debug,
     Deserialize,
     Display,
+    EnumCount,
+    EnumIs,
     EnumIter,
     EnumString,
-    EnumVariantNames,
     Eq,
     Hash,
     Ord,
@@ -85,6 +86,7 @@ impl From<State> for States {
     PartialOrd,
     Serialize,
     SmartDefault,
+    VariantNames
 )]
 #[repr(u8)]
 #[strum(serialize_all = "lowercase")]
@@ -102,10 +104,6 @@ impl States {
     /// [State::Valid] variant constructor
     pub fn valid() -> Self {
         Self::Valid
-    }
-    /// [State::is_valid]
-    pub fn is_valid(&self) -> bool {
-        *self == Self::Valid
     }
     ///
     pub fn update(&mut self, state: Self) {

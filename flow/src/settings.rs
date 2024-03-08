@@ -7,13 +7,14 @@ use decanter::prelude::Hashable;
 use scsys::prelude::{ConfigResult, SerdeDisplay};
 use serde::{Deserialize, Serialize};
 use std::str::FromStr;
-use strum::{Display, EnumIter, EnumString, EnumVariantNames};
+use strum::{Display, EnumCount, EnumIs, EnumIter, EnumString, VariantNames};
 use tracing::Level;
 use tracing_subscriber::fmt::{
     self,
     format::{Compact, DefaultFields, Format},
 };
 use tracing_subscriber::EnvFilter;
+
 #[derive(
     Clone,
     Copy,
@@ -21,9 +22,10 @@ use tracing_subscriber::EnvFilter;
     Default,
     Deserialize,
     Display,
+    EnumCount,
+    EnumIs,
     EnumIter,
     EnumString,
-    EnumVariantNames,
     Eq,
     Hash,
     Hashable,
@@ -31,6 +33,7 @@ use tracing_subscriber::EnvFilter;
     PartialEq,
     PartialOrd,
     Serialize,
+    VariantNames
 )]
 #[repr(u8)]
 #[serde(rename_all = "lowercase")]
@@ -48,9 +51,10 @@ pub enum Mode {
     Default,
     Deserialize,
     Display,
+    EnumCount,
+    EnumIs,
     EnumIter,
     EnumString,
-    EnumVariantNames,
     Eq,
     Hash,
     Hashable,
@@ -58,6 +62,7 @@ pub enum Mode {
     PartialEq,
     PartialOrd,
     Serialize,
+    VariantNames
 )]
 #[repr(u8)]
 #[serde(rename_all = "lowercase")]
@@ -207,7 +212,8 @@ impl Settings {
     pub fn builder() -> config::ConfigBuilder<config::builder::DefaultState> {
         Config::builder()
     }
-    pub fn build() -> ConfigResult<Self> {
+    
+    pub fn build() -> Result<Self, config::ConfigError> {
         let mut builder = Self::builder()
             .set_default("mode", "development")?
             .set_default("logger.level", "info")?;

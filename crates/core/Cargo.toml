@@ -12,17 +12,11 @@ repository.workspace = true
 version.workspace = true
 
 [features]
-default = ["std"]
+default = []
 
-std = ["tokio"]
-wasi = ["tokio"]
+wasi = []
+
 wasm = []
-
-tokio = [
-    "tokio/macros",
-    "tokio/sync",
-    "tokio/time",
-]
 
 [lib]
 bench = true
@@ -41,14 +35,6 @@ serde_json.workspace = true
 smart-default.workspace = true
 strum.workspace = true
 
-[dependencies.tokio]
-features = [
-    "macros",
-    "sync",
-    "time",
-]
-version = "1"
-
 [dev-dependencies]
 
 [package.metadata.docs.rs]
@@ -56,7 +42,7 @@ all-features = true
 rustc-args = ["--cfg", "docsrs"]
 
 [target.wasm32-unknown-unknown.dependencies]
-gloo = { features = ["futures"], version = "0.8" }
+gloo = { features = ["futures"], version = "0.11" }
 js-sys = "0.3"
 wasm-bindgen = { features = ["serde-serialize"], version = "0.2" }
 wasm-bindgen-futures = "0.4"

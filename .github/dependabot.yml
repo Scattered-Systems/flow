@@ -24,11 +24,3 @@ updates:
     directory: /crates/fluidity
     schedule:
       interval: daily
-  - package-ecosystem: cargo
-    directory: /crates/network/minis
-    schedule:
-      interval: daily
-  - package-ecosystem: cargo
-    directory: /crates/network/net
-    schedule:
-      interval: daily
