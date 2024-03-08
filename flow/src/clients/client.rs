@@ -7,7 +7,7 @@ use tokio::sync::mpsc::{self, error::SendError};
 
 #[derive(Clone, Debug)]
 pub struct FlowClient {
-    pub commands: mpsc::Sender<PlatformCommand>,
+    commands: mpsc::Sender<PlatformCommand>,
 }
 
 impl FlowClient {
