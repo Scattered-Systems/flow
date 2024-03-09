@@ -15,6 +15,7 @@ pub mod errors;
 pub mod power;
 pub mod specs;
 pub mod states;
+pub mod stores;
 
 pub mod prelude {
     pub use super::config::*;

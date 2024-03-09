@@ -5,4 +5,5 @@
 //! # Platform
 //! 
 
+pub mod context;
 pub mod rt;
