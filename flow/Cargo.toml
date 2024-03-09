@@ -53,7 +53,6 @@ fluidity = { features = ["full"], path = "../crates/fluidity", version = "0.1.12
 
 # Core dependencies
 anyhow.workspace = true
-async-trait.workspace = true
 clap = { features = ["cargo", "derive", "env"], version = "4" }
 config = "0.14"
 serde.workspace = true
