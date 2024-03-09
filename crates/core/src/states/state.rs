@@ -86,7 +86,7 @@ impl From<State> for States {
     PartialOrd,
     Serialize,
     SmartDefault,
-    VariantNames
+    VariantNames,
 )]
 #[repr(u8)]
 #[strum(serialize_all = "lowercase")]

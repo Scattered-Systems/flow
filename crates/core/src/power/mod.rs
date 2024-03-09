@@ -5,4 +5,3 @@
 pub use self::state::*;
 
 pub(crate) mod state;
-

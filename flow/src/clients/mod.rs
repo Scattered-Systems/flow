@@ -6,6 +6,4 @@ pub use self::client::*;
 
 mod client;
 
-pub trait ClientSpec<> {
-
-}
+pub trait ClientSpec {}

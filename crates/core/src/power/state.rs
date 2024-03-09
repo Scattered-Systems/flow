@@ -41,7 +41,6 @@ impl Power {
     pub fn on() -> Self {
         Self::On
     }
-
 }
 
 impl From<Power> for u8 {

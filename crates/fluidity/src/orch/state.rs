@@ -4,7 +4,6 @@
 */
 use serde::{Deserialize, Serialize};
 
-
 #[derive(Clone, Debug, Default, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
 pub struct State<T = ()> {
     pub output: Option<T>,
@@ -20,9 +19,4 @@ impl<T> State<T> {
             stage: Vec::from_iter(stage),
         }
     }
-
-
 }
-
-
-

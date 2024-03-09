@@ -3,5 +3,4 @@
     Contrib: FL03 <jo3mccain@icloud.com>
 */
 
-pub struct Driver {
-}
+pub struct Driver {}

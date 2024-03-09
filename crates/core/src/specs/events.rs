@@ -5,7 +5,6 @@
 use crate::AsyncResult;
 use async_trait::async_trait;
 
-
 pub trait Event {
     fn event(&self) -> &Self;
 }

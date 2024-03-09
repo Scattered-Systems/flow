@@ -8,11 +8,7 @@ pub(crate) mod environment;
 
 pub mod packages;
 
-pub trait Environment {
-
-}
+pub trait Environment {}
 
 #[cfg(test)]
-mod tests {
-    
-}
+mod tests {}

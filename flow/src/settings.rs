@@ -30,7 +30,7 @@ use tracing_subscriber::EnvFilter;
     PartialEq,
     PartialOrd,
     Serialize,
-    VariantNames
+    VariantNames,
 )]
 #[repr(u8)]
 #[serde(rename_all = "lowercase")]
@@ -58,7 +58,7 @@ pub enum Mode {
     PartialEq,
     PartialOrd,
     Serialize,
-    VariantNames
+    VariantNames,
 )]
 #[repr(u8)]
 #[serde(rename_all = "lowercase")]
@@ -111,18 +111,7 @@ impl From<LogLevel> for Level {
     }
 }
 
-#[derive(
-    Clone,
-    Copy,
-    Debug,
-    Deserialize,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    Serialize,
-)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
 pub struct Logger {
     level: LogLevel,
 }
@@ -178,17 +167,7 @@ impl From<tracing::Level> for Logger {
     }
 }
 
-#[derive(
-    Clone,
-    Debug,
-    Deserialize,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    Serialize,
-)]
+#[derive(Clone, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
 pub struct Settings {
     pub logger: Logger,
     pub mode: Mode,
@@ -204,7 +183,7 @@ impl Settings {
     pub fn builder() -> config::ConfigBuilder<config::builder::DefaultState> {
         Config::builder()
     }
-    
+
     pub fn build() -> Result<Self, config::ConfigError> {
         let mut builder = Self::builder()
             .set_default("mode", "development")?

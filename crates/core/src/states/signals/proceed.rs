@@ -5,13 +5,31 @@
 use serde::{Deserialize, Serialize};
 use strum::{Display, EnumCount, EnumIs, EnumIter, EnumString, VariantNames};
 
-#[derive(Clone, Copy, Debug, Default, Deserialize, Display, EnumCount, EnumIs, EnumIter, EnumString, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, VariantNames)]
+#[derive(
+    Clone,
+    Copy,
+    Debug,
+    Default,
+    Deserialize,
+    Display,
+    EnumCount,
+    EnumIs,
+    EnumIter,
+    EnumString,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    Serialize,
+    VariantNames,
+)]
 #[serde(rename_all = "snake_case")]
 #[strum(serialize_all = "snake_case")]
 pub enum Proceed {
     #[default]
     Proceed,
-    Stop
+    Stop,
 }
 
 impl Proceed {
@@ -37,14 +55,13 @@ impl From<usize> for Proceed {
             _ => Proceed::Stop,
         }
     }
-
 }
 
 impl From<Proceed> for bool {
     fn from(proceed: Proceed) -> Self {
         match proceed {
             Proceed::Proceed => true,
-            Proceed::Stop => false
+            Proceed::Stop => false,
         }
     }
 }

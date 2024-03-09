@@ -2,8 +2,8 @@
    Appellation: app <module>
    Contrib: FL03 <jo3mccain@icloud.com>
 */
-use crate::events::FlowEvent;
 use crate::cli::args::platform::{PlatformCommand, PlatformOpts};
+use crate::events::FlowEvent;
 /// # Flow
 ///
 /// The platform agnostic core of the Flow network.

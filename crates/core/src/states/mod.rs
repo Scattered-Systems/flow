@@ -12,6 +12,6 @@ pub trait IntoState {}
 
 pub trait Stateful {
     type State;
-    
+
     fn state(&self) -> &Self::State;
 }
