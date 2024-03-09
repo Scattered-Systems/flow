@@ -8,7 +8,8 @@ use crate::events::FlowEvent;
 ///
 /// The platform agnostic core of the Flow network.
 use crate::{Context, Settings};
-use fluidity::prelude::{AsyncResult, Power, State};
+use fluidity::core::signals::power::Power;
+use fluidity::prelude::{AsyncResult, State};
 use std::sync::{Arc, Mutex};
 use tokio::sync::{mpsc, watch};
 use tokio::task::JoinHandle;

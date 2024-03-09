@@ -2,8 +2,6 @@
    Appellation: primitives <module>
    Contrib: FL03 <jo3mccain@icloud.com>
 */
-#[cfg(any(feature = "wasm", all(target_family = "wasm", not(target_os = "wasi"))))]
-pub use self::wasm::*;
 pub use self::{constants::*, statics::*, types::*};
 
 mod constants {
@@ -18,6 +16,9 @@ mod constants {
 mod statics {}
 
 mod types {
+
+    pub type Result<T = ()> = std::result::Result<T, crate::errors::Error>;
+
     /// [AsyncError] is a simple type alias for a [Box]ed [dyn std::error::Error] that is [Send] and [Sync].
     pub type AsyncError = Box<dyn std::error::Error + Send + Sync>;
     /// [AsyncResult] is a simple type alias for a [Result] with a [Box]ed [dyn std::error::Error] as its [Err] variant.
@@ -26,11 +27,4 @@ mod types {
     pub type BoxError = Box<dyn std::error::Error>;
     /// [BoxResult] is a simple type alias for a [Result] with a [Box]ed [dyn std::error::Error] as its [Err] variant.
     pub type BoxResult<T = ()> = std::result::Result<T, BoxError>;
-}
-
-#[cfg(any(feature = "wasm", all(target_family = "wasm", not(target_os = "wasi"))))]
-mod wasm {
-    use wasm_bindgen::prelude::JsError;
-
-    pub type JsResult<T = ()> = Result<T, JsError>;
 }

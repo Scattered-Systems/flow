@@ -6,9 +6,11 @@ pub use self::state::*;
 
 mod state;
 
-pub mod signals;
+pub trait IntoState {
+    type State;
 
-pub trait IntoState {}
+    fn into_state(self) -> Self::State;
+}
 
 pub trait Stateful {
     type State;

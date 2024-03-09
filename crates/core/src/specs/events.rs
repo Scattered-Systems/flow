@@ -2,7 +2,7 @@
     Appellation: events <module>
     Contrib: FL03 <jo3mccain@icloud.com>
 */
-use crate::AsyncResult;
+use crate::Result;
 use async_trait::async_trait;
 
 pub trait Event {
@@ -26,5 +26,5 @@ where
 
 #[async_trait]
 pub trait EventHandle<T: Event>: Send + Sync + 'static {
-    async fn handle_event(&self, event: T) -> AsyncResult<()>;
+    async fn handle_event(&self, event: T) -> Result<()>;
 }

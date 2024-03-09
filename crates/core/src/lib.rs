@@ -10,19 +10,17 @@ pub use self::{primitives::*, utils::*};
 mod primitives;
 mod utils;
 
-pub mod config;
 pub mod errors;
-pub mod power;
+pub mod signals;
 pub mod specs;
 pub mod states;
 pub mod stores;
 
 pub mod prelude {
-    pub use super::config::*;
-    pub use super::errors::*;
-    pub use super::power::*;
-    pub use super::primitives::*;
-    pub use super::specs::*;
-    pub use super::states::*;
-    pub use super::utils::*;
+    pub use crate::errors::*;
+    pub use crate::primitives::*;
+    pub use crate::signals::{power::*, proceed::*};
+    pub use crate::specs::*;
+    pub use crate::states::*;
+    pub use crate::utils::*;
 }

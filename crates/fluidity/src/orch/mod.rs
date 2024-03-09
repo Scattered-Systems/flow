@@ -9,15 +9,19 @@ pub(crate) mod state;
 
 pub mod chain;
 
+use crate::core::prelude::Result;
+
+pub(crate) type StateFn<T> = fn(State<T>) -> Result<State<T>>;
+pub(crate) type FnStateSpace<T> = Vec<StateFn<T>>;
+
 pub trait Orchestrate {
     type State;
 
     fn execute(&self, state: Self::State) -> Self::State;
 }
 
-impl<T, E> Orchestrate for Vec<fn(State<T>) -> Result<State<T>, E>>
+impl<T> Orchestrate for FnStateSpace<T>
 where
-    E: std::fmt::Debug,
     T: Clone,
 {
     type State = State<T>;
