@@ -19,6 +19,11 @@ where
     }
 }
 
+pub trait Registry<K, V> {
+    fn register(&mut self, key: K, value: V);
+
+}
+
 pub(crate) type RegistryStore<K = Task, V = usize> = Arc<Mutex<HashMap<K, V>>>;
 
 #[derive(Clone, Debug)]
