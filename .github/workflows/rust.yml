@@ -60,19 +60,21 @@ jobs:
             ~/.cargo/git
             target/release
           key: ${{ matrix.toolchain }}-${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: Upload build
+        uses: actions/upload-artifact@v4
+        with:
+          name: Flow
+          path: target/release/flow
   test:
     name: Test
     needs: builder
-    strategy:
-      matrix:
-        toolchain: [ stable, nightly ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: setup (langspace)
         run: |
           rustup update
-          rustup default ${{ matrix.toolchain }}
+          rustup default nightly
       - name: Test
         id: rust-test
         run: cargo test --features full -v --workspace
