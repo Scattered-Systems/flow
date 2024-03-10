@@ -45,11 +45,11 @@ impl From<&str> for FlowError {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use super::kinds::ErrorKind;
 
     #[test]
-    fn test_flow_error() {
-        let err = FlowError::Error("test".to_string());
+    fn test_error_kind() {
+        let err = ErrorKind::custom("test".to_string());
         assert_eq!(err, "test".into());
     }
 }

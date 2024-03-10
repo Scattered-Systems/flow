@@ -4,9 +4,7 @@
 */
 use super::Settings;
 use fluidity::prelude::State;
-use serde::{Deserialize, Serialize};
 use tokio::runtime::Handle;
-use tracing_subscriber::{fmt, EnvFilter};
 
 #[derive(Clone, Debug)]
 pub struct Context {

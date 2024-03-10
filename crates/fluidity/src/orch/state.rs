@@ -3,6 +3,15 @@
     Contrib: FL03 <jo3mccain@icloud.com>
 */
 use serde::{Deserialize, Serialize};
+use std::ops::ControlFlow;
+
+pub(crate) type TaskFlow = ControlFlow<(), ()>;
+
+pub trait TaskState<T> {
+    fn output(&self) -> Option<T>;
+
+    fn flow(&self) -> TaskFlow;
+}
 
 #[derive(Clone, Debug, Default, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
 pub struct State<T = ()> {

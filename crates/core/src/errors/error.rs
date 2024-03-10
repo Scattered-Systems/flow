@@ -62,6 +62,6 @@ impl std::error::Error for Error {}
 
 impl From<String> for Error {
     fn from(message: String) -> Self {
-        Self::new(ErrorKind::Unknown, message)
+        Self::new(ErrorKind::unknown(), message)
     }
 }

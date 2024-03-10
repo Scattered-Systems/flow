@@ -14,7 +14,11 @@ pub struct TaskManager {
 
 impl TaskManager {
     pub fn new() -> Self {
-        Self::default()
+        Self {
+            children: Vec::new(),
+            handle: Handle::current(),
+            registry: TaskRegistry::new(),
+        }
     }
 
     pub fn children(&self) -> Vec<TaskManager> {
@@ -36,11 +40,7 @@ impl TaskManager {
 
 impl Default for TaskManager {
     fn default() -> Self {
-        Self {
-            children: Vec::new(),
-            handle: Handle::current(),
-            registry: TaskRegistry::new(),
-        }
+        Self::new()
     }
 }
 

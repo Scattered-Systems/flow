@@ -4,5 +4,5 @@
 */
 
 pub struct Venv {
-    modules: String,
+    pub modules: Vec<String>,
 }

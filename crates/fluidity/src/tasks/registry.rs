@@ -21,7 +21,6 @@ where
 
 pub trait Registry<K, V> {
     fn register(&mut self, key: K, value: V);
-
 }
 
 pub(crate) type RegistryStore<K = Task, V = usize> = Arc<Mutex<HashMap<K, V>>>;
@@ -37,17 +36,20 @@ impl TaskRegistry {
             tasks: Arc::new(Mutex::new(HashMap::new())),
         }
     }
+    /// Returns the number of tasks in the registry
+    pub fn len(&self) -> usize {
+        self.tasks.lock().unwrap().len()
+    }
+
+    pub fn snapshot(&self) -> HashMap<Task, usize> {
+        self.tasks.lock().unwrap().clone()
+    }
+
     pub fn register(&mut self, task: Task) {
-        let mut tasks = self.tasks();
+        let mut tasks = self.tasks.lock().unwrap();
         let count = tasks.entry(task.clone()).or_insert(0);
         *count += 1;
         self.tasks.lock().unwrap().insert(task, *count);
-    }
-    pub fn len(&self) -> usize {
-        self.tasks().len()
-    }
-    pub fn tasks(&self) -> HashMap<Task, usize> {
-        self.tasks.lock().unwrap().clone()
     }
 }
 
@@ -79,7 +81,7 @@ mod tests {
         let mut registry = TaskRegistry::new();
         let task = Task::new("test", "test");
         registry.register(task.clone());
-        let tasks = registry.tasks();
+        let tasks = registry.snapshot();
         assert_eq!(tasks.get(&task), Some(&1));
     }
 }

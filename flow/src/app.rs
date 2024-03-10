@@ -9,7 +9,7 @@ use crate::events::FlowEvent;
 /// The platform agnostic core of the Flow network.
 use crate::{Context, Settings};
 use fluidity::core::signals::power::Power;
-use fluidity::prelude::{AsyncResult, State};
+use fluidity::prelude::{Result, State};
 use std::sync::{Arc, Mutex};
 use tokio::sync::{mpsc, watch};
 use tokio::task::JoinHandle;
@@ -62,7 +62,7 @@ impl Flow {
     }
 
     #[instrument(fields(message = %args), skip(self), name = "handler", target = "flow")]
-    async fn handle_command(&mut self, args: &PlatformCommand) -> AsyncResult<()> {
+    async fn handle_command(&mut self, args: &PlatformCommand) -> Result<()> {
         if let Some(cmd) = &args.args {
             match cmd.clone() {
                 PlatformOpts::Connect { target } => {
