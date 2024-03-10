@@ -3,9 +3,16 @@
     Contrib: FL03 <jo3mccain@icloud.com>
 */
 use super::context::PlatformContext;
-use super::rt::engine::Engine;
+use std::collections::HashMap;
+
+pub enum PlatformMode {
+    AccessPoint,
+    Node,
+}
 
 pub struct Platform {
-    pub(crate) ctx: PlatformContext,
-    pub(crate) engine: Engine,
+    ctx: PlatformContext,
+    mode: PlatformMode,
+    state: String,
+    tasks: HashMap<String, String>,
 }

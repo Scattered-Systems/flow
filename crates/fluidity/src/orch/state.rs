@@ -28,4 +28,42 @@ impl<T> State<T> {
             stage: Vec::from_iter(stage),
         }
     }
+
+    pub fn output(&self) -> Option<&T> {
+        self.output.as_ref()
+    }
+
+    pub fn flow(&self) -> TaskFlow {
+        if self.proceed {
+            TaskFlow::Continue(())
+        } else {
+            TaskFlow::Break(())
+        }
+    }
+
+    pub fn proceed(&self) -> bool {
+        self.proceed
+    }
+
+    pub fn stage(&self) -> &[bool] {
+        &self.stage
+    }
+}
+
+pub struct Stage {
+    pub(crate) stage: bool,
+}
+
+impl Stage {
+    pub fn new(stage: bool) -> Self {
+        Self { stage }
+    }
+
+    pub fn stage(&self) -> bool {
+        self.stage
+    }
+
+    pub fn set_stage(&mut self, stage: bool) {
+        self.stage = stage
+    }
 }

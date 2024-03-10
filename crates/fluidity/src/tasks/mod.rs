@@ -2,58 +2,34 @@
    Appellation: tasks <module>
    Contrib: FL03 <jo3mccain@icloud.com>
 */
-pub use self::{manager::*, registry::*, task::*};
+pub use self::{groups::*, manager::*, registry::*, task::*};
 
-mod manager;
-mod registry;
-mod task;
+pub(crate) mod groups;
+pub(crate) mod manager;
+pub(crate) mod registry;
+pub(crate) mod task;
 
 pub const DEFAULT_GROUP_NAME: &str = "default";
 
-use serde::{Deserialize, Serialize};
-use smart_default::SmartDefault;
-use strum::{Display, EnumCount, EnumIs, EnumIter, EnumString, VariantNames};
 
-#[derive(
-    Clone,
-    Copy,
-    Debug,
-    Deserialize,
-    Display,
-    EnumCount,
-    EnumIs,
-    EnumIter,
-    EnumString,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    Serialize,
-    SmartDefault,
-    VariantNames,
-)]
-#[serde(rename_all = "snake_case")]
-pub enum GroupName {
-    #[default]
-    Default,
-    Custom(&'static str),
-}
-
-impl GroupName {
-    pub fn as_str(&self) -> &'static str {
-        match self {
-            Self::Default => DEFAULT_GROUP_NAME,
-            Self::Custom(name) => name,
-        }
+#[cfg(test)]
+mod tests {
+    use super::*;
+    
+    #[test]
+    fn test_task_registry() {
+        let mut registry = TaskRegistry::new();
+        let task = Task::new("test".into(), "test");
+        registry.register(task.clone());
+        assert_eq!(registry.snapshot().get(&task), Some(&1));
     }
-}
 
-impl AsRef<str> for GroupName {
-    fn as_ref(&self) -> &str {
-        match self {
-            Self::Default => DEFAULT_GROUP_NAME,
-            Self::Custom(name) => name,
-        }
+    #[tokio::test]
+    async fn test_task_manager() {
+        let mut manager = TaskManager::new();
+        let mut child = TaskManager::new();
+        child.push(TaskManager::new());
+        manager.push(child);
+        assert_eq!(manager.children().len(), 1);
     }
 }

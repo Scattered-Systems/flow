@@ -31,21 +31,22 @@ where
         self.into_iter()
             .enumerate()
             .fold(state, |output, (i, func)| {
-                let new_state = output.clone();
-                if new_state.stage.len() > i {
-                    if new_state.stage[i] {
-                        return new_state;
+                if output.stage().len() > i {
+                    if output.stage[i] {
+                        return output;
                     }
-                    let mut next_state = func(new_state).unwrap();
-                    next_state.stage[i] = next_state.proceed;
-                    return next_state;
+                    let mut next = func(output).unwrap();
+                    next.stage[i] = next.proceed();
+                    return next;
                 }
-                let mut next_state = func(new_state).unwrap();
-                next_state.stage.push(next_state.proceed);
-                next_state
+                let mut next = func(output).unwrap();
+                next.stage.push(next.proceed());
+                next
             })
     }
 }
+
+
 
 #[cfg(test)]
 mod tests {}

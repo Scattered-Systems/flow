@@ -4,7 +4,7 @@
 */
 //! # Platform
 //!
-pub use self::platform::Platform;
+pub use self::platform::*;
 
 pub(crate) mod platform;
 

@@ -4,6 +4,7 @@
 */
 
 pub mod queue;
+pub mod registry;
 
 pub trait KeyValueStore<K, V> {
     fn get(&self, key: &K) -> Option<&V>;

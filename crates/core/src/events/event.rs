@@ -24,6 +24,11 @@ impl Event {
         self.timestamp
     }
 
+    pub fn set_message(&mut self, message: String) {
+        self.message = message;
+        self.on_update();
+    }
+
     fn on_update(&mut self) {
         self.timestamp = crate::utils::systime();
     }

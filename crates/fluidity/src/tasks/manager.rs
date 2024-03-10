@@ -49,17 +49,3 @@ impl IntoRegistry for TaskManager {
         self.registry
     }
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[tokio::test]
-    async fn test_task_manager() {
-        let mut manager = TaskManager::new();
-        let mut child = TaskManager::new();
-        child.push(TaskManager::new());
-        manager.push(child);
-        assert_eq!(manager.children().len(), 1);
-    }
-}

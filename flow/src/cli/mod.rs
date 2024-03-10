@@ -18,7 +18,7 @@ pub fn new() -> FlowCli {
 pub async fn handler(ctx: &mut Context, command: FlowCli) -> anyhow::Result<()> {
     if let Some(opt) = command.command {
         match opt {
-            Options::Platform(args) => {}
+            Options::Platform(_args) => {}
         }
     }
     Ok(())

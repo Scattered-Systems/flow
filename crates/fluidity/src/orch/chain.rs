@@ -20,7 +20,7 @@ impl<T> Registery<T> {
         space
             .into_iter()
             .map(|name| {
-                if let Some(task) = self.store.get(&name) {
+                if let Some(task) = self.get(&name) {
                     return *task;
                 }
                 panic!("Task not found: {}", name);
