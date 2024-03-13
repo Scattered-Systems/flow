@@ -40,7 +40,7 @@ tokio = [
 ]
 
 [[bin]]
-bench = true
+bench = false
 doctest = false
 name = "flow"
 test = true
