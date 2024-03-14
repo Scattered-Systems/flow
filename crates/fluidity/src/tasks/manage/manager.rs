@@ -2,7 +2,7 @@
    Appellation: manager <module>
    Contrib: FL03 <jo3mccain@icloud.com>
 */
-use super::stores::{IntoRegistry, TaskRegistry};
+use crate::tasks::stores::{IntoRegistry, TaskRegistry};
 use tokio::runtime::Handle;
 
 #[derive(Clone, Debug)]

@@ -4,15 +4,21 @@
 */
 //! # Power
 //!
+//!
+#[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 use strum::{Display, EnumCount, EnumIs, EnumIter, EnumString, VariantNames};
 
+#[cfg_attr(
+    feature = "serde",
+    derive(Deserialize, Serialize,),
+    serde(rename_all = "lowercase", untagged)
+)]
 #[derive(
     Clone,
     Copy,
     Debug,
     Default,
-    Deserialize,
     Display,
     EnumCount,
     EnumIs,
@@ -23,7 +29,6 @@ use strum::{Display, EnumCount, EnumIs, EnumIter, EnumString, VariantNames};
     Ord,
     PartialEq,
     PartialOrd,
-    Serialize,
     VariantNames,
 )]
 #[repr(u8)]

@@ -13,6 +13,24 @@ pub trait KeyValueStore<K, V> {
 
     fn remove(&self, key: &K) -> Option<V>;
 }
+pub trait Entry {
+    type Key;
+    type Value;
+}
+
+pub trait Store {
+    type Entry: Entry;
+
+    fn get(&self, key: &<Self::Entry as Entry>::Key) -> Option<&<Self::Entry as Entry>::Value>;
+
+    fn insert(
+        &self,
+        key: <Self::Entry as Entry>::Key,
+        value: <Self::Entry as Entry>::Value,
+    ) -> Option<<Self::Entry as Entry>::Value>;
+
+    fn remove(&self, key: &<Self::Entry as Entry>::Key) -> Option<<Self::Entry as Entry>::Value>;
+}
 
 #[cfg(test)]
 mod tests {}

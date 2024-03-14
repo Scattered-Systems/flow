@@ -8,3 +8,9 @@ pub(crate) mod events;
 pub(crate) mod execute;
 pub(crate) mod funcs;
 pub(crate) mod handler;
+
+pub trait IntoInner {
+    type Item;
+
+    fn into_inner(self) -> Self::Item;
+}

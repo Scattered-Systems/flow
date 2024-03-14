@@ -14,8 +14,6 @@ use crate::core::prelude::Result;
 pub(crate) type StateFn<T> = fn(State<T>) -> Result<State<T>>;
 pub(crate) type FnStateSpace<T> = Vec<StateFn<T>>;
 
-
-
 pub trait Orchestrate {
     type State;
 
@@ -47,8 +45,6 @@ where
             })
     }
 }
-
-
 
 #[cfg(test)]
 mod tests {}

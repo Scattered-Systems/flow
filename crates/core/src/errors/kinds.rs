@@ -2,14 +2,22 @@
    Appellation: kinds <module>
    Contrib: FL03 <jo3mccain@icloud.com>
 */
+//! # Error Kinds
+//!
+//!
+#[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 use smart_default::SmartDefault;
 use strum::{Display, EnumCount, EnumIs, EnumIter, VariantNames};
 
+#[cfg_attr(
+    feature = "serde",
+    derive(Deserialize, Serialize,),
+    serde(rename_all = "snake_case", untagged)
+)]
 #[derive(
     Clone,
     Debug,
-    Deserialize,
     Display,
     EnumCount,
     EnumIs,
@@ -19,11 +27,9 @@ use strum::{Display, EnumCount, EnumIs, EnumIter, VariantNames};
     Ord,
     PartialEq,
     PartialOrd,
-    Serialize,
     SmartDefault,
     VariantNames,
 )]
-#[serde(rename_all = "snake_case", untagged)]
 #[strum(serialize_all = "snake_case")]
 pub enum ErrorKind {
     #[default]
@@ -42,17 +48,23 @@ impl ErrorKind {
 
 impl std::error::Error for ErrorKind {}
 
-impl From<&str> for ErrorKind {
-    fn from(err: &str) -> Self {
-        Self::custom(err.to_string())
-    }
+macro_rules! impl_from_error {
+    ($ty:ty) => {
+        impl From<$ty> for ErrorKind {
+            fn from(err: $ty) -> Self {
+                Self::Error(err.into())
+            }
+        }
+    };
+    ($($ty:ty),*) => {
+        $(
+            impl_from_error!($ty);
+        )*
+    };
 }
 
-impl From<String> for ErrorKind {
-    fn from(err: String) -> Self {
-        Self::custom(err)
-    }
-}
+impl_from_error!(String, &str);
+impl_from_error!(ExternalError);
 
 #[derive(
     Clone,

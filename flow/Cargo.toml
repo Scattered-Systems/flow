@@ -16,6 +16,7 @@ version.workspace = true
 default = ["std"]
 
 std = [
+    "tokio1",
     "tokio/full"
 ]
 
@@ -26,17 +27,21 @@ wasm = []
 
 
 wasi-ext = [
-    "tokio",
+    "tokio1",
+    "tokio-ext",
     "tokio_wasi/full"
 ]
 
-tokio = [
+tokio1 = [
+    "dep:tokio",
+]
+
+tokio-ext = [
     "tokio/io-util",
     "tokio/macros",
     "tokio/rt",
     "tokio/sync",
     "tokio/time",
-    "dep:tokio"
 ]
 
 [[bin]]
@@ -55,10 +60,10 @@ fluidity = { features = ["full"], path = "../crates/fluidity", version = "0.1.12
 anyhow.workspace = true
 clap = { features = ["cargo", "derive", "env"], version = "4" }
 config = "0.14"
-serde.workspace = true
-serde_json.workspace = true
+serde = { features = ["derive"], version = "1" }
+serde_json = "1"
 smart-default.workspace = true
-strum.workspace = true
+strum = { features = ["derive"], version = "0.26" }
 tokio = { features = ["full"], optional = true, version = "1" }
 tracing = { features = [], version = "0.1" }
 tracing-subscriber = { features = ["env-filter"], version = "0.3" }

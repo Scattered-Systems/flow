@@ -18,6 +18,7 @@ default = [
 
 full = [
     "core",
+    "serde",
 ]
 
 core = [
@@ -27,6 +28,21 @@ core = [
 wasi = []
 
 wasm = []
+
+# serde = [
+#     "fluidity-core/serde",
+# ]
+
+serde = [
+    "dep:serde",
+    "serde-ext",
+    "fluidity-core/serde",
+    "petgraph/serde-1",
+]
+
+serde-ext = [
+    "dep:serde_json",
+]
 
 # tokio = [
 #     "dep:tokio"
@@ -43,10 +59,11 @@ test = true
 [dependencies]
 anyhow.workspace = true
 async-trait = "0.1"
-serde.workspace = true
-serde_json.workspace = true
+petgraph = "0.6"
+serde = { optional = true, features = ["derive"], version = "1" }
+serde_json = { optional = true, version = "1" }
 smart-default.workspace = true
-strum.workspace = true
+strum = { features = ["derive"], version = "0.26" }
 
 # tokio = { features = ["macros", "sync", "time"], optional = true, version = "1" }
 tokio = { features = ["rt"], version = "1" }

@@ -6,7 +6,6 @@ use crate::tasks::Task;
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 
-
 pub(crate) type RegistryStore<K = Task, V = usize> = Arc<Mutex<HashMap<K, V>>>;
 
 #[derive(Clone, Debug)]
