@@ -5,16 +5,23 @@
 use super::WorkloadStatus;
 use crate::core::prelude::AtomicId;
 use crate::tasks::GroupName;
+use petgraph::graph::{EdgeIndex, NodeIndex};
 
-pub(crate) type TaskGraph<N = Workload, E = Option<String>> = petgraph::prelude::DiGraph<N, E>;
+pub(crate) type TaskGraph<N = Task, E = Option<String>> = petgraph::prelude::DiGraph<N, E>;
+
+pub struct Task {
+    index: NodeIndex,
+    module: Vec<u8>,
+    name: String,
+    status: WorkloadStatus,
+}
 
 pub struct Workload {
     id: AtomicId,
     group: GroupName,
-    module: Vec<u8>,
     name: String,
     status: WorkloadStatus,
-    tasks: TaskGraph<Workload>,
+    tasks: TaskGraph,
 }
 
 impl Workload {
@@ -22,16 +29,18 @@ impl Workload {
         Self {
             id: AtomicId::new(),
             group,
-            module: Vec::new(),
             name,
             status: WorkloadStatus::Initialized,
             tasks: TaskGraph::new(),
         }
     }
 
-    pub fn with_module(mut self, module: Vec<u8>) -> Self {
-        self.module = module;
-        self
+    pub fn register(&mut self, task: Task) -> NodeIndex {
+        self.tasks.add_node(task)
+    }
+
+    pub fn link(&mut self, from: &Task, to: &Task) -> EdgeIndex {
+        self.tasks.add_edge(from.index, to.index, None)
     }
 
     pub fn id(&self) -> AtomicId {
@@ -42,10 +51,6 @@ impl Workload {
         self.group
     }
 
-    pub fn module(&self) -> &[u8] {
-        &self.module
-    }
-
     pub fn name(&self) -> &str {
         &self.name
     }
@@ -54,7 +59,7 @@ impl Workload {
         self.status
     }
 
-    pub fn tasks(&self) -> &TaskGraph<Workload> {
+    pub fn tasks(&self) -> &TaskGraph {
         &self.tasks
     }
 
