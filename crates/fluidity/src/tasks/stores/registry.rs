@@ -2,26 +2,10 @@
    Appellation: registry <module>
    Contrib: FL03 <jo3mccain@icloud.com>
 */
-use super::Task;
+use crate::tasks::Task;
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 
-pub trait IntoRegistry {
-    fn into_registry(self) -> TaskRegistry;
-}
-
-impl<T> IntoRegistry for T
-where
-    T: Into<TaskRegistry>,
-{
-    fn into_registry(self) -> TaskRegistry {
-        self.into()
-    }
-}
-
-pub trait Registry<K, V> {
-    fn register(&mut self, key: K, value: V);
-}
 
 pub(crate) type RegistryStore<K = Task, V = usize> = Arc<Mutex<HashMap<K, V>>>;
 
@@ -52,6 +36,10 @@ impl TaskRegistry {
         self.tasks.lock().unwrap().insert(task, *count);
     }
 }
+
+unsafe impl Send for TaskRegistry {}
+
+unsafe impl Sync for TaskRegistry {}
 
 impl Default for TaskRegistry {
     fn default() -> Self {

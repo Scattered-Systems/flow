@@ -2,12 +2,14 @@
    Appellation: tasks <module>
    Contrib: FL03 <jo3mccain@icloud.com>
 */
-pub use self::{groups::*, manager::*, registry::*, task::*};
+pub use self::{groups::*, manager::*, task::*};
 
 pub(crate) mod groups;
 pub(crate) mod manager;
-pub(crate) mod registry;
 pub(crate) mod task;
+
+pub mod stores;
+pub mod workloads;
 
 pub const DEFAULT_GROUP_NAME: &str = "default";
 
@@ -15,6 +17,7 @@ pub const DEFAULT_GROUP_NAME: &str = "default";
 #[cfg(test)]
 mod tests {
     use super::*;
+    use super::stores::TaskRegistry;
     
     #[test]
     fn test_task_registry() {
