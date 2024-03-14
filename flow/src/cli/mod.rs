@@ -11,23 +11,14 @@ use crate::Context;
 use clap::Parser;
 use serde::{Deserialize, Serialize};
 
-pub fn new() -> FlowCli {
-    FlowCli::parse()
-}
-
-pub async fn handler(ctx: &mut Context, command: FlowCli) -> anyhow::Result<()> {
-    if let Some(opt) = command.command {
-        match opt {
-            Options::Platform(_args) => {}
-        }
-    }
-    Ok(())
+pub fn new() -> Cli {
+    Cli::parse()
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, Hash, Ord, Parser, PartialEq, PartialOrd, Serialize)]
 #[clap(about, author, long_about = None, version)]
 #[command(arg_required_else_help(true), allow_missing_positional(true))]
-pub struct FlowCli {
+pub struct Cli {
     #[clap(subcommand)]
     pub command: Option<Options>,
     #[clap(long, short, default_value_t = String::from("Flow.toml"))]
@@ -38,4 +29,30 @@ pub struct FlowCli {
     pub verbose: bool,
 }
 
-impl FlowCli {}
+impl Cli {
+    pub fn new() -> Self {
+        Self::parse()
+    }
+
+    pub fn command(&self) -> Option<&Options> {
+        self.command.as_ref()
+    }
+
+    pub fn config(&self) -> &str {
+        &self.config
+    }
+
+    pub fn update(&self) -> bool {
+        self.update
+    }
+
+    pub fn verbose(&self) -> bool {
+        self.verbose
+    }
+}
+
+impl Default for Cli {
+    fn default() -> Self {
+        Self::new()
+    }
+}

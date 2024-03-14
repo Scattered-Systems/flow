@@ -25,11 +25,11 @@ use tokio::sync::{mpsc, watch};
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    let cli = cli::FlowCli::parse();
+    let cli = cli::Cli::parse();
     let (app, client) = starter();
     let _ = app.spawn();
-    if let Some(opt) = cli.command {
-        match opt {
+    if let Some(opt) = cli.command() {
+        match opt.clone() {
             cli::Options::Platform(args) => {
                 let _ = client
                     .commands()
