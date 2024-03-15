@@ -22,6 +22,7 @@ exclude = [
 
 members = [
     "flow",
+    "bin/api",
     "crates/core",
     "crates/fluidity",
 ]

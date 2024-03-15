@@ -6,15 +6,22 @@ use super::Settings;
 use fluidity::prelude::State;
 use tokio::runtime::Handle;
 
+pub type PlatformState = State<StateData>;
+
+#[derive(Clone, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub struct StateData {
+    pub command: String,
+}
+
 #[derive(Clone, Debug)]
 pub struct Context {
     cnf: Settings,
     handle: Handle,
-    state: State,
+    state: PlatformState,
 }
 
 impl Context {
-    pub fn new(cnf: Settings, handle: Handle, state: State) -> Self {
+    pub fn new(cnf: Settings, handle: Handle, state: PlatformState) -> Self {
         Self { cnf, handle, state }
     }
 
@@ -26,15 +33,15 @@ impl Context {
         self.cnf.clone()
     }
 
-    pub fn state(&self) -> State {
+    pub fn state(&self) -> PlatformState {
         self.state.clone()
     }
 
-    pub fn state_mut(&mut self) -> &mut State {
+    pub fn state_mut(&mut self) -> &mut PlatformState {
         &mut self.state
     }
 
-    pub fn set_state(&mut self, state: State) {
+    pub fn set_state(&mut self, state: PlatformState) {
         self.state = state;
     }
 }

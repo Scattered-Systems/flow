@@ -9,6 +9,7 @@
 #[cfg(feature = "core")]
 pub use fluidity_core as core;
 
+pub mod ctrl;
 pub mod orch;
 pub mod platform;
 pub mod tasks;

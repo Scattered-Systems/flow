@@ -2,9 +2,8 @@
     Appellation: orch <module>
     Contrib: FL03 <jo3mccain@icloud.com>
 */
-pub use self::{orchestrator::*, state::*};
+pub use self::state::*;
 
-pub(crate) mod orchestrator;
 pub(crate) mod state;
 
 pub mod chain;

@@ -1,71 +1,40 @@
 [package]
 authors.workspace = true
 categories.workspace = true
-default-run = "flow"
+default-run = "api"
 description.workspace = true
 edition.workspace = true
 homepage.workspace = true
 keywords.workspace = true
 license.workspace = true
-name = "flow"
+name = "flow-api"
 readme.workspace = true
 repository.workspace = true
 version.workspace = true
 
 [features]
-default = ["std"]
-
-std = [
-    "tokio1",
-    "tokio/full"
-]
-
-wasi = [
-    "wasi-ext"
-]
-wasm = []
-
-
-wasi-ext = [
-    "tokio1",
-    "tokio-ext",
-    "tokio_wasi/full"
-]
-
-tokio1 = [
-    "dep:tokio",
-]
-
-tokio-ext = [
-    "tokio/io-util",
-    "tokio/macros",
-    "tokio/rt",
-    "tokio/sync",
-    "tokio/time",
-]
+default = []
 
 [[bin]]
 bench = false
 doctest = false
-name = "flow"
+name = "api"
+path = "src/main.rs"
 test = false
 
 [build-dependencies]
 
 [dependencies]
-fluidity = { features = ["full"], path = "../crates/fluidity", version = "0.1.12-alpha" }
+fluidity = { features = ["full"], path = "../../crates/fluidity", version = "0.1.12-alpha" }
 
-
-# Core dependencies
 anyhow.workspace = true
-clap = { features = ["cargo", "derive", "env"], version = "4" }
 config = "0.14"
 serde = { features = ["derive"], version = "1" }
 serde_json = "1"
 smart-default.workspace = true
 strum = { features = ["derive"], version = "0.26" }
-tokio = { features = ["full"], optional = true, version = "1" }
-tracing = { features = [], version = "0.1" }
+tokio = { features = ["full"], version = "1" }
+tracing = { features = ["log"], version = "0.1" }
 tracing-subscriber = { features = ["env-filter"], version = "0.3" }
 
 [dev-dependencies]

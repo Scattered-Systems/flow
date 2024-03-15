@@ -2,12 +2,12 @@
    Appellation: app <module>
    Contrib: FL03 <jo3mccain@icloud.com>
 */
+//! # App
+//!
+//!
 use crate::cli::args::platform::{PlatformCommand, PlatformOpts};
 use crate::events::FlowEvent;
-/// # Flow
-///
-/// The platform agnostic core of the Flow network.
-use crate::{Context, Settings};
+use crate::{Context, Settings, StateData};
 use fluidity::core::signals::power::Power;
 use fluidity::prelude::{Result, State};
 use std::sync::{Arc, Mutex};
@@ -78,7 +78,7 @@ impl Flow {
         loop {
             tokio::select! {
                 Some(command) = self.commands().recv() => {
-                    self.context.lock().unwrap().state_mut().set_message(&command);
+                    self.context.lock().unwrap().state_mut().set_data(StateData { command: command.to_string() });
                     if let Err(e) = self.handle_command(&command).await {
                         tracing::error!("Command Error: {:?}", e);
                         self.context.lock().unwrap().state_mut().invalidate();

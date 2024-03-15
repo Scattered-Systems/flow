@@ -13,7 +13,6 @@ mod primitives;
 mod utils;
 
 pub mod errors;
-pub mod events;
 pub mod id;
 pub mod signals;
 pub mod specs;
@@ -26,9 +25,8 @@ pub mod prelude {
     pub use crate::utils::*;
 
     pub use crate::errors::*;
-    pub use crate::events::*;
     pub use crate::id::prelude::*;
     pub use crate::signals::prelude::*;
-    pub use crate::specs::*;
+    pub use crate::specs::prelude::*;
     pub use crate::states::*;
 }

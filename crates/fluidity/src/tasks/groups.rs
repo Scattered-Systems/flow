@@ -15,7 +15,6 @@ use strum::{Display, EnumCount, EnumIs, EnumIter, VariantNames};
 )]
 #[derive(
     Clone,
-    Copy,
     Debug,
     Display,
     EnumCount,
@@ -31,16 +30,16 @@ use strum::{Display, EnumCount, EnumIs, EnumIter, VariantNames};
 )]
 #[strum(serialize_all = "lowercase")]
 pub enum GroupName {
-    Custom(&'static str),
+    Custom(String),
     #[default]
     Default,
 }
 
 impl GroupName {
-    pub fn as_str(&self) -> &'static str {
+    pub fn as_str(&self) -> &str {
         match self {
             Self::Default => DEFAULT_GROUP_NAME,
-            Self::Custom(name) => name,
+            Self::Custom(name) => name.as_str(),
         }
     }
 }
@@ -54,11 +53,12 @@ impl AsRef<str> for GroupName {
     }
 }
 
-impl From<&'static str> for GroupName {
-    fn from(name: &'static str) -> Self {
-        match name {
-            DEFAULT_GROUP_NAME => Self::Default,
-            _ => Self::Custom(name),
+impl From<&str> for GroupName {
+    fn from(name: &str) -> Self {
+        if name == DEFAULT_GROUP_NAME {
+            Self::Default
+        } else {
+            Self::Custom(name.to_string())
         }
     }
 }

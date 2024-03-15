@@ -35,6 +35,14 @@ impl Workload {
         }
     }
 
+    pub fn get_task(&self, index: NodeIndex) -> Option<&Task> {
+        self.tasks.node_weight(index)
+    }
+
+    pub fn get_task_mut(&mut self, index: NodeIndex) -> Option<&mut Task> {
+        self.tasks.node_weight_mut(index)
+    }
+
     pub fn link(&mut self, from: &Task, to: &Task) -> EdgeIndex {
         self.tasks.add_edge(from.index, to.index, None)
     }
@@ -47,8 +55,8 @@ impl Workload {
         self.id
     }
 
-    pub fn group(&self) -> GroupName {
-        self.group
+    pub fn group(&self) -> &GroupName {
+        &self.group
     }
 
     pub fn name(&self) -> &str {

@@ -6,19 +6,30 @@ use super::GroupName;
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
-#[cfg_attr(feature = "serde", derive(Deserialize, Serialize,))]
 #[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[cfg_attr(feature = "serde", derive(Deserialize, Serialize,))]
 pub struct Task {
-    pub group: GroupName,
-    pub name: &'static str,
+    group: GroupName,
+    name: String,
 }
 
 impl Task {
-    pub fn new(group: GroupName, name: &'static str) -> Self {
-        Self { group, name }
+    pub fn new(group: GroupName, name: impl ToString) -> Self {
+        Self {
+            group,
+            name: name.to_string(),
+        }
+    }
+
+    pub fn group(&self) -> &str {
+        self.group.as_ref()
     }
 
     pub fn is_default(&self) -> bool {
         self.group.is_default()
+    }
+
+    pub fn name(&self) -> &str {
+        &self.name
     }
 }

@@ -15,3 +15,5 @@ pub trait Eventful {
 pub trait EventHandle<T>: Send + Sync + 'static {
     async fn handle_event(&self, event: T) -> Result<()>;
 }
+
+pub trait Event: Send + Sync {}
