@@ -5,7 +5,7 @@
 //! # Event
 //!
 //!
-use crate::id::atomic::AtomicId;
+use crate::prelude::{systime, AtomicId, Ts};
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
@@ -14,17 +14,15 @@ use serde::{Deserialize, Serialize};
 pub struct Event {
     id: AtomicId,
     message: String,
-    timestamp: u64,
+    timestamp: Ts,
 }
 
 impl Event {
     pub fn new(message: String) -> Self {
-        let id = AtomicId::new();
-        let timestamp = crate::utils::systime();
         Self {
-            id,
+            id: AtomicId::new(),
             message,
-            timestamp,
+            timestamp: systime(),
         }
     }
 
@@ -32,7 +30,7 @@ impl Event {
         &self.message
     }
 
-    pub fn timestamp(&self) -> u64 {
+    pub fn timestamp(&self) -> Ts {
         self.timestamp
     }
 

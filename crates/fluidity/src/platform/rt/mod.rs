@@ -9,7 +9,6 @@ pub use self::runtime::Runtime;
 
 pub(crate) mod runtime;
 
-pub mod context;
 pub mod drivers;
 pub mod engine;
 

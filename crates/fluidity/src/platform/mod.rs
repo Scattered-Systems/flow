@@ -8,5 +8,10 @@ pub use self::platform::*;
 
 pub(crate) mod platform;
 
+pub mod clients;
+pub mod config;
 pub mod context;
 pub mod rt;
+
+#[cfg(test)]
+mod tests {}

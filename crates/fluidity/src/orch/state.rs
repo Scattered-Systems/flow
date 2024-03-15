@@ -10,7 +10,15 @@ pub(crate) type TaskFlow = ControlFlow<(), ()>;
 pub trait TaskState<T> {
     fn output(&self) -> Option<T>;
 
-    fn flow(&self) -> TaskFlow;
+    fn flow(&self) -> TaskFlow {
+        if self.proceed() {
+            TaskFlow::Continue(())
+        } else {
+            TaskFlow::Break(())
+        }
+    }
+
+    fn proceed(&self) -> bool;
 }
 
 #[derive(Clone, Debug, Default, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]

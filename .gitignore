@@ -3,10 +3,10 @@
 **/.docker/data/
 
 # Config
-**/*.config.*
+*.config.*
 
-**/*.env
-**/*.env.*
+*.env
+*.env.*
 
 # Development
 
@@ -26,27 +26,27 @@
 
 
 ### Files
-**/*.csv
-**/*.csv.*
+*.csv
+*.csv.*
 
-**/*.db
-**/*.db.*
+*.db
+*.db.*
 
-**/*.db-*.*
+*.db-*.*
 
-**/*.lock
-**/*.lock.*
+*.lock
+*.lock.*
 
-**/*-lock.*
+*-lock.*
 
-**/*.log
-**/*.log.*
+*.log
+*.log.*
 
-**/*.whl
-**/*.whl.*
+*.whl
+*.whl.*
 
-**/*.zip
-**/*.zip.*
+*.zip
+*.zip.*
 
 # Languages
 
@@ -66,9 +66,3 @@
 **/rustc-ice*
 
 
-
-# Exceptions
-!**/default.config.*
-!**/*.env.example
-!**/*.config.js
-!**/*.config.cjs

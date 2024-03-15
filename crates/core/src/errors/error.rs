@@ -3,6 +3,7 @@
    Contrib: FL03 <jo3mccain@icloud.com>
 */
 use super::kinds::{ErrorKind, ExternalError};
+use crate::prelude::{systime, Ts};
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
@@ -11,16 +12,15 @@ use serde::{Deserialize, Serialize};
 pub struct Error {
     kind: ErrorKind,
     message: String,
-    timestamp: u64,
+    timestamp: Ts,
 }
 
 impl Error {
     pub fn new(kind: ErrorKind, message: String) -> Self {
-        let timestamp = crate::utils::systime();
         Self {
             kind,
             message,
-            timestamp,
+            timestamp: systime(),
         }
     }
 
@@ -32,7 +32,7 @@ impl Error {
         &self.message
     }
 
-    pub fn timestamp(&self) -> u64 {
+    pub fn timestamp(&self) -> Ts {
         self.timestamp
     }
 
@@ -42,7 +42,7 @@ impl Error {
     }
 
     fn on_update(&mut self) {
-        self.timestamp = crate::utils::systime();
+        self.timestamp = systime();
     }
 }
 

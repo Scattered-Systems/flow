@@ -67,6 +67,7 @@ strum = { features = ["derive"], version = "0.26" }
 
 # tokio = { features = ["macros", "sync", "time"], optional = true, version = "1" }
 tokio = { features = ["rt"], version = "1" }
+tracing = { features = ["log"], version = "0.1" }
 
 # SDK
 [dependencies.fluidity-core]

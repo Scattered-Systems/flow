@@ -3,7 +3,7 @@
    Contrib: FL03 <jo3mccain@icloud.com>
 */
 use super::WorkloadStatus;
-use crate::core::prelude::AtomicId;
+use crate::prelude::AtomicId;
 use crate::tasks::GroupName;
 use petgraph::graph::{EdgeIndex, NodeIndex};
 
@@ -35,12 +35,12 @@ impl Workload {
         }
     }
 
-    pub fn register(&mut self, task: Task) -> NodeIndex {
-        self.tasks.add_node(task)
-    }
-
     pub fn link(&mut self, from: &Task, to: &Task) -> EdgeIndex {
         self.tasks.add_edge(from.index, to.index, None)
+    }
+
+    pub fn register(&mut self, task: Task) -> NodeIndex {
+        self.tasks.add_node(task)
     }
 
     pub fn id(&self) -> AtomicId {

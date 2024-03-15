@@ -5,3 +5,11 @@
 
 pub mod power;
 pub mod proceed;
+
+pub(crate) mod prelude {
+    pub use super::power::Power;
+    pub use super::proceed::Proceed;
+}
+
+#[cfg(test)]
+mod tests {}

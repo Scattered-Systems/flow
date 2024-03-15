@@ -16,4 +16,6 @@ pub(crate) mod statics {}
 pub(crate) mod types {
     /// A type alias for [std::result::Result] that uses [crate::errors::Error] as the error type.
     pub type Result<T = ()> = std::result::Result<T, crate::errors::Error>;
+
+    pub type Ts = u128;
 }

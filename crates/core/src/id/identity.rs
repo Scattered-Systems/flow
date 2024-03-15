@@ -3,7 +3,7 @@
     Contrib: FL03 <jo3mccain@icloud.com>
 */
 use super::atomic::AtomicId;
-use crate::prelude::systime;
+use crate::prelude::{systime, Ts};
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 use std::ops::Deref;
@@ -12,7 +12,7 @@ use std::ops::Deref;
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize,))]
 pub struct Id<T = AtomicId> {
     id: T,
-    timestamp: u64,
+    timestamp: Ts,
 }
 
 impl<T> Id<T> {
@@ -32,7 +32,7 @@ impl<T> Id<T> {
         self.on_update();
     }
 
-    pub fn timestamp(&self) -> u64 {
+    pub fn timestamp(&self) -> Ts {
         self.timestamp
     }
 
