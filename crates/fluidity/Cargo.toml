@@ -59,6 +59,8 @@ test = true
 [dependencies]
 anyhow.workspace = true
 async-trait = "0.1"
+crossbeam = "0.8"
+futures = "0.3"
 petgraph = "0.6"
 serde = { optional = true, features = ["derive"], version = "1" }
 serde_json = { optional = true, version = "1" }

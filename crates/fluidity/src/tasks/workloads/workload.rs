@@ -4,51 +4,52 @@
 */
 use super::WorkloadStatus;
 use crate::prelude::AtomicId;
-use crate::tasks::GroupName;
-use petgraph::graph::{EdgeIndex, NodeIndex};
+use crate::tasks::{GroupName, Task, TaskId};
+use std::collections::{btree_map, BTreeMap};
 
-pub(crate) type TaskGraph<N = Task, E = Option<String>> = petgraph::prelude::DiGraph<N, E>;
-
-pub struct Task {
-    index: NodeIndex,
-    module: Vec<u8>,
-    name: String,
-    status: WorkloadStatus,
-}
+pub(crate) type Tasks = BTreeMap<TaskId, Task>;
 
 pub struct Workload {
     id: AtomicId,
     group: GroupName,
     name: String,
     status: WorkloadStatus,
-    tasks: TaskGraph,
+    tasks: Tasks,
 }
 
 impl Workload {
     pub fn new(group: GroupName, name: String) -> Self {
         Self {
-            id: AtomicId::new(),
+            id: AtomicId::default(),
             group,
             name,
             status: WorkloadStatus::Initialized,
-            tasks: TaskGraph::new(),
+            tasks: Tasks::new(),
         }
     }
 
-    pub fn get_task(&self, index: NodeIndex) -> Option<&Task> {
-        self.tasks.node_weight(index)
+    pub fn entry(&mut self, index: TaskId) -> btree_map::Entry<'_, TaskId, Task> {
+        self.tasks.entry(index)
     }
 
-    pub fn get_task_mut(&mut self, index: NodeIndex) -> Option<&mut Task> {
-        self.tasks.node_weight_mut(index)
+    pub fn get(&self, index: &TaskId) -> Option<&Task> {
+        self.tasks.get(index)
     }
 
-    pub fn link(&mut self, from: &Task, to: &Task) -> EdgeIndex {
-        self.tasks.add_edge(from.index, to.index, None)
+    pub fn get_mut(&mut self, index: &TaskId) -> Option<&mut Task> {
+        self.tasks.get_mut(index)
     }
 
-    pub fn register(&mut self, task: Task) -> NodeIndex {
-        self.tasks.add_node(task)
+    pub fn insert(&mut self, task: Task) -> Option<Task> {
+        self.tasks.insert(task.id(), task)
+    }
+
+    pub fn or_insert(&mut self, task: Task) -> &mut Task {
+        self.entry(task.id()).or_insert(task)
+    }
+
+    pub fn remove(&mut self, index: &TaskId) -> Option<Task> {
+        self.tasks.remove(index)
     }
 
     pub fn id(&self) -> AtomicId {
@@ -67,7 +68,7 @@ impl Workload {
         self.status
     }
 
-    pub fn tasks(&self) -> &TaskGraph {
+    pub fn tasks(&self) -> &Tasks {
         &self.tasks
     }
 

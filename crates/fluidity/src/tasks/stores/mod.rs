@@ -35,4 +35,15 @@ pub trait Registry<K, V> {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::TaskRegistry;
+    use crate::tasks::Task;
+
+    #[test]
+    fn test_task_registry() {
+        let mut registry = TaskRegistry::new();
+        let task = Task::new("test".into(), "test");
+        registry.register(task.clone());
+        assert_eq!(registry.snapshot().get(&task), Some(&1));
+    }
+}

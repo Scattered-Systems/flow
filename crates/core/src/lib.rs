@@ -19,6 +19,7 @@ pub mod specs;
 pub mod states;
 pub mod status;
 pub mod stores;
+pub mod sync;
 
 pub mod prelude {
     pub use crate::primitives::*;

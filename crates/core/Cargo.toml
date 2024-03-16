@@ -41,7 +41,7 @@ bytes = "1"
 futures = "0.3"
 rand = "0.8"
 serde = { optional = true, features = ["derive"], version = "1" }
-serde_json = {optional = true, version = "1"}
+serde_json = { optional = true, version = "1" }
 smart-default.workspace = true
 strum = { features = ["derive"], version = "0.26" }
 

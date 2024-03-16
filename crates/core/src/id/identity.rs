@@ -3,6 +3,7 @@
     Contrib: FL03 <jo3mccain@icloud.com>
 */
 use super::atomic::AtomicId;
+use super::Identifier;
 use crate::prelude::{systime, Ts};
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
@@ -23,7 +24,11 @@ impl<T> Id<T> {
         }
     }
 
-    pub fn id(&self) -> &T {
+    pub fn into_inner(self) -> T {
+        self.id
+    }
+
+    pub fn get(&self) -> &T {
         &self.id
     }
 
@@ -41,6 +46,10 @@ impl<T> Id<T> {
     }
 }
 
+impl<T> Identifier for Id<T> {
+    type Id = T;
+}
+
 impl<T> AsRef<T> for Id<T> {
     fn as_ref(&self) -> &T {
         &self.id
@@ -52,5 +61,29 @@ impl<T> Deref for Id<T> {
 
     fn deref(&self) -> &Self::Target {
         &self.id
+    }
+}
+
+impl<T> Default for Id<T>
+where
+    T: Default,
+{
+    fn default() -> Self {
+        Self::new(T::default())
+    }
+}
+
+impl<T> std::fmt::Display for Id<T>
+where
+    T: std::fmt::Display,
+{
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "{}", self.id)
+    }
+}
+
+impl<T> From<T> for Id<T> {
+    fn from(id: T) -> Self {
+        Self::new(id)
     }
 }

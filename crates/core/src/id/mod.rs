@@ -12,9 +12,13 @@ pub(crate) mod identity;
 pub mod atomic;
 
 pub trait Identity {
-    type Id;
+    type Id: Identifier;
 
-    fn get_id(&self) -> Self::Id;
+    fn get_id(&self) -> <Self::Id as Identifier>::Id;
+}
+
+pub trait Identifier {
+    type Id;
 }
 
 pub(crate) mod prelude {
@@ -28,10 +32,10 @@ mod tests {
 
     #[test]
     fn test_atomic() {
-        let id = AtomicId::new();
+        let id = AtomicId::relaxed();
         assert_eq!(id.get(), 1);
         assert_eq!(*id.next(), 2);
-        let id = AtomicId::new();
+        let id = AtomicId::relaxed();
         assert_eq!(id.get(), 3);
     }
 }

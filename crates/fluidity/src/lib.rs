@@ -5,7 +5,7 @@
 //! # Fluidity
 //!
 //!
-
+#![feature(fn_traits, trivial_bounds, unboxed_closures)]
 #[cfg(feature = "core")]
 pub use fluidity_core as core;
 
