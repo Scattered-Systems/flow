@@ -37,6 +37,7 @@ serde = [
     "dep:serde",
     "serde-ext",
     "fluidity-core/serde",
+    "scsys/serde",
     "petgraph/serde-1",
 ]
 
@@ -57,6 +58,7 @@ test = true
 [build-dependencies]
 
 [dependencies]
+scsys = { features = ["derive"], version = "0.2" }
 anyhow.workspace = true
 async-trait = "0.1"
 crossbeam = "0.8"
